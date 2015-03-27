@@ -35,8 +35,8 @@ BaseApp.prototype.init = function(container) {
 };
 
 BaseApp.prototype.createRenderer = function() {
-    this.renderer = new THREE.WebGLRenderer( {antialias : true});
-    this.renderer.setClearColor(0x666666, 1.0);
+    this.renderer = new THREE.WebGLRenderer( {antialias : true, alpha: true});
+    this.renderer.setClearColor(0x000000, 0);
     this.renderer.shadowMapEnabled = true;
     var isMSIE = /*@cc_on!@*/0;
 
@@ -45,7 +45,7 @@ BaseApp.prototype.createRenderer = function() {
         // do IE-specific things
         width = window.innerWidth;
     }
-    this.renderer.setSize(width * 0.3, window.innerHeight * 0.5);
+    this.renderer.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
     this.container.appendChild( this.renderer.domElement );
     var _this = this;
 
@@ -118,7 +118,7 @@ BaseApp.prototype.windowResize = function(event) {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
 
-    this.renderer.setSize( this.container.clientWidth, window.innerHeight);
+    this.renderer.setSize( window.innerWidth * 0.5, window.innerHeight * 0.5);
     //console.log('Size =', )
 };
 
@@ -152,7 +152,7 @@ BaseApp.prototype.createScene = function() {
 BaseApp.prototype.createCamera = function() {
 
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 5000 );
-    this.camera.position.set(0, 200, 600 );
+    this.camera.position.set(0, 0, 100 );
 
     console.log('dom =', this.renderer.domElement);
 };

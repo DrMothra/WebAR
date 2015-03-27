@@ -29,16 +29,35 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     font-weight: normal;
     font-style: normal;
 }
+.quicksand {
+    font-family: 'quicksandregular';
+    letter-spacing: normal;
+}
+html {
+    background: url("../images/rock1.jpg") no-repeat center center fixed;
+    background-size: cover;
+}
 body {
-    background-color: darkgray;
-    background: url("../images/Ploughing.png") no-repeat center;
-    background-size: 640px 480px;
-    color: darkslateblue;
+
 }
 #WebGL-output {
     /* set margin to 0 and overflow to hidden, to go fullscreen */
     margin: 0;
     overflow: hidden;
+}
+#notSupported {
+    position: fixed;
+    top: 40%;
+    left: 35%;
+    width: 25%;
+}
+.errorMessage {
+    padding: 3%;
+    border-radius: 15px;
+    background: #444444;
+}
+.hide {
+    display: none;
 }
 .title {
     font-size: 2em;
@@ -55,18 +74,14 @@ body {
 .heavy {
     font-weight: bold;
 }
-.quicksand {
-    font-family: 'quicksandregular';
-    letter-spacing: normal;
-}
 .smallText {
     font-size: 0.7em;
 }
-.normalText {
-    font-size: 1.2em;
-}
 .smallMediumText {
     font-size: 1.8em;
+}
+.normalText {
+    font-size: 1.2em;
 }
 .mediumText {
     font-size: 2.5em;
@@ -83,4 +98,18 @@ body {
 }
 .centred {
     text-align: center;
+}
+
+
+/* id's */
+#mainTitle {
+    margin: 3% 0 5% 0;
+}
+#mainTitle img {
+    width: 75%;
+}
+#WebGL-output {
+    position: fixed;
+    top: 40%;
+    left: 25%;
 }

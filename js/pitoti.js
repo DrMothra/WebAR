@@ -3,40 +3,38 @@
  */
 //Visualisation framework
 
-
-
-
 //Init this app from base
-function Framework() {
+function Pitoti() {
     BaseApp.call(this);
 }
 
-Framework.prototype = new BaseApp();
+Pitoti.prototype = new BaseApp();
 
-Framework.prototype.init = function(container) {
+Pitoti.prototype.init = function(container) {
     BaseApp.prototype.init.call(this, container);
     //GUI
     this.guiControls = null;
     this.gui = null;
+    this.rotPerSec = 1;
 };
 
-Framework.prototype.createScene = function() {
+Pitoti.prototype.createScene = function() {
     //Create scene
     BaseApp.prototype.createScene.call(this);
 
     //Load floor grid
     var width = 420;
     var height = 640;
-    var gridGeom = new THREE.PlaneGeometry(width, height);
-    var texture = THREE.ImageUtils.loadTexture("images/grid.png");
-    var gridMaterial = new THREE.MeshLambertMaterial({ map : texture, transparent: true, opacity: 0.9});
-    var grid = new THREE.Mesh(gridGeom, gridMaterial);
-    grid.name = 'grid';
-    grid.rotation.x = -Math.PI/2;
-    this.scene.add(grid);
+    //var gridGeom = new THREE.PlaneGeometry(width, height);
+    var sphereGeom = new THREE.SphereGeometry(30, 16, 16);
+    var texture = THREE.ImageUtils.loadTexture("images/IZIR.png");
+    var sphereMaterial = new THREE.MeshPhongMaterial({ map : texture, transparent: true, opacity: 1});
+    this.sphere = new THREE.Mesh(sphereGeom, sphereMaterial);
+    this.sphere.name = 'IZIR';
+    this.scene.add(this.sphere);
 };
 
-Framework.prototype.createGUI = function() {
+Pitoti.prototype.createGUI = function() {
     //GUI - using dat.GUI
     this.guiControls = new function() {
 
@@ -50,21 +48,29 @@ Framework.prototype.createGUI = function() {
     this.gui = gui;
 };
 
-Framework.prototype.update = function() {
+Pitoti.prototype.update = function() {
     //Perform any updates
+    this.delta = this.clock.getDelta();
+
+    this.sphere.rotation.y += this.delta * this.rotPerSec;
 
     BaseApp.prototype.update.call(this);
 };
 
 $(document).ready(function() {
     //Initialise app
-    var container = document.getElementById("WebGL-output");
-    var app = new Framework();
-    app.init(container);
-    app.createScene();
-    //app.createGUI();
+    if(!Detector.webgl) {
+        $('#notSupported').show();
+    } else {
+        var container = document.getElementById("WebGL-output");
+        var app = new Pitoti();
+        app.init(container);
+        app.createScene();
+        //app.createGUI();
 
-    //GUI callbacks
+        //GUI callbacks
 
-    app.run();
+        app.run();
+    }
+
 });
