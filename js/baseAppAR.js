@@ -4,6 +4,7 @@
 //Common baseline for visualisation app
 
 function BaseApp() {
+    /*
     this.renderer = null;
     this.scene = null;
     this.camera = null;
@@ -19,6 +20,7 @@ function BaseApp() {
     this.startTime = 0;
     this.elapsedTime = 0;
     this.clock = new THREE.Clock();
+    */
 }
 
 BaseApp.prototype.init = function(container) {
@@ -115,7 +117,7 @@ BaseApp.prototype.mouseMoved = function(event) {
 
 BaseApp.prototype.windowResize = function(event) {
     //Handle window resize
-    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.aspect = 640 / 480;
     this.camera.updateProjectionMatrix();
 
     //this.renderer.setSize( window.innerWidth * 0.5, window.innerHeight * 0.5);
@@ -178,13 +180,13 @@ BaseApp.prototype.createControls = function() {
 
 BaseApp.prototype.update = function() {
     //Do any updates
-    this.controls.update();
+    //this.controls.update();
 };
 
 BaseApp.prototype.run = function() {
     var self = this;
     this.update();
-    this.renderer.render( this.scene, this.camera );
+    //this.renderer.render( this.scene, this.camera );
     if(this.stats) this.stats.update();
     requestAnimationFrame(function() {
         self.run();

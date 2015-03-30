@@ -35,10 +35,14 @@ Pitoti.prototype.createScene = function() {
     this.sphere.name = 'IZIR';
     this.scene.add(this.sphere);
     */
-    //Load brain model
+    //Load model
     this.modelLoader = new THREE.OBJMTLLoader();
     var _this = this;
     this.modelLoader.load( 'models/Morph.obj', 'models/Morph.mtl', function ( object ) {
+        //object.rotation.x = Math.PI/2;
+        object.position.y = 7;
+        object.position.z = 10;
+        object.scale.set(20, 20, 20);
         _this.scene.add(object);
         _this.loadedModel = object;
     }, null, null)

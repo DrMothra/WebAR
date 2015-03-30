@@ -3,8 +3,8 @@
     <script src="js/JSARToolKit.js"></script>
     <script src="js/three68.js"></script>
     <script>
-        <!--
-        threshold = 128;
+
+        var threshold = 128;
         DEBUG = false;
 
         var video = document.createElement('video');
@@ -46,7 +46,6 @@
         );
 
         window.onload = function() {
-            document.getElementById('loading').style.display = 'none';
             //document.body.appendChild(video);
 
 
@@ -61,9 +60,6 @@
             videoCanvas.height = video.width*3/4;
 
             var ctx = canvas.getContext('2d');
-            ctx.font = "24px URW Gothic L, Arial, Sans-serif";
-
-
 
             var raster = new NyARRgbRaster_Canvas2D(canvas);
             var param = new FLARParam(320,240);
@@ -166,9 +162,10 @@
                     if (!m.model) {
                         m.model = new THREE.Object3D();
                         var cube = new THREE.Mesh(
-                                new THREE.CubeGeometry(100,100,100),
-                                new THREE.MeshLambertMaterial({color: 0|(0xffffff*Math.random())})
+                                new THREE.BoxGeometry(100,100,100),
+                                new THREE.MeshLambertMaterial({color: 0x0000ff})
                         );
+                        console.log("Triggered");
                         cube.position.z = -50;
                         cube.doubleSided = true;
                         m.model.matrixAutoUpdate = false;
@@ -226,15 +223,10 @@
             margin-top: 20px;
             text-align: center;
         }
-        #loading {
-            font-size: 80px;
-            font-weight: bold;
-            font-family: Times;
-        }
     </style>
 
 </head>
 <body>
-<div id="loading">loading...</div>
+
 </body>
 </html>
