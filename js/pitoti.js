@@ -16,6 +16,7 @@ Pitoti.prototype.init = function(container) {
     this.guiControls = null;
     this.gui = null;
     this.rotPerSec = 1;
+    this.loadedModel = null;
 };
 
 Pitoti.prototype.createScene = function() {
@@ -26,12 +27,21 @@ Pitoti.prototype.createScene = function() {
     var width = 420;
     var height = 640;
     //var gridGeom = new THREE.PlaneGeometry(width, height);
+    /*
     var sphereGeom = new THREE.SphereGeometry(30, 16, 16);
     var texture = THREE.ImageUtils.loadTexture("images/IZIR.png");
     var sphereMaterial = new THREE.MeshPhongMaterial({ map : texture, transparent: true, opacity: 1});
     this.sphere = new THREE.Mesh(sphereGeom, sphereMaterial);
     this.sphere.name = 'IZIR';
     this.scene.add(this.sphere);
+    */
+    //Load brain model
+    this.modelLoader = new THREE.OBJMTLLoader();
+    var _this = this;
+    this.modelLoader.load( 'models/Morph.obj', 'models/Morph.mtl', function ( object ) {
+        _this.scene.add(object);
+        _this.loadedModel = object;
+    }, null, null)
 };
 
 Pitoti.prototype.createGUI = function() {
@@ -52,7 +62,9 @@ Pitoti.prototype.update = function() {
     //Perform any updates
     this.delta = this.clock.getDelta();
 
-    this.sphere.rotation.y += this.delta * this.rotPerSec;
+    if(this.loadedModel) {
+        this.loadedModel.rotation.y += this.delta * this.rotPerSec;
+    }
 
     BaseApp.prototype.update.call(this);
 };
