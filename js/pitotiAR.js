@@ -222,6 +222,7 @@ PitotiAR.prototype.createScene = function() {
 
     this.modelLoader = new THREE.OBJMTLLoader();
     var _this = this;
+    /*
     this.modelLoader.load( 'models/Morph.obj', 'models/Morph.mtl', function ( object ) {
         //object.rotation.x = Math.PI/2;
         //object.position.y = 7;
@@ -230,6 +231,35 @@ PitotiAR.prototype.createScene = function() {
         //_this.scene.add(object);
         _this.loadedModel = object;
     }, null, null);
+    */
+
+    //Load video
+    var videoImage = document.createElement('canvas');
+    videoImage.width = 480;
+    videoImage.height = 360;
+    var videoImageContext = videoImage.getContext('2d');
+    var videoTexture = new THREE.Texture(videoImage);
+    videoTexture.needsUpdate = true;
+    videoTexture.minFilter = THREE.LinearFilter;
+    videoTexture.magFilter = THREE.LinearFilter;
+
+    var spriteMaterial = new THREE.SpriteMaterial({
+            overdraw: true,
+            side:THREE.DoubleSide,
+            useScreenCoordinates: false,
+            map: videoTexture}
+    );
+    var sprite = new THREE.Sprite(spriteMaterial);
+    //Give sprite name
+    sprite.name = 'sprite';
+    sprite.scale.set(100, 100, 1);
+    this.loadedModel = sprite;
+    //Create video
+    this.loadedVideo = document.getElementById('video1');
+    this.loadedVideo.load();
+    this.loadedVideo.videoContext = videoImageContext;
+    this.loadedVideo.videoTexture = videoTexture;
+    this.loadedVideo.volume = 1.0;
 
     /*
     var sphereGeom = new THREE.SphereGeometry(50, 12, 12);
@@ -319,12 +349,15 @@ PitotiAR.prototype.update = function() {
             m.model = this.loadedModel;
             m.model.matrixAutoUpdate = false;
             this.scene.add(m.model);
+            this.loadedVideo.play();
         }
         copyMatrix(m.transform, this.tmp);
         m.model.matrix.setFromArray(this.tmp);
         m.model.matrix.scale(this.scaleFactor);
         m.model.matrixWorldNeedsUpdate = true;
     }
+
+    this.loadedVideo.videoTexture.needsUpdate = true;
 
     this.renderer.render(this.videoScene, this.videoCam);
     this.renderer.render(this.scene, this.camera);
