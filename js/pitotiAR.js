@@ -233,33 +233,37 @@ PitotiAR.prototype.createScene = function() {
     }, null, null);
     */
 
-    //Load video
-    var videoImage = document.createElement('canvas');
-    videoImage.width = 480;
-    videoImage.height = 360;
-    var videoImageContext = videoImage.getContext('2d');
-    var videoTexture = new THREE.Texture(videoImage);
-    videoTexture.needsUpdate = true;
-    videoTexture.minFilter = THREE.LinearFilter;
-    videoTexture.magFilter = THREE.LinearFilter;
-
-    var spriteMaterial = new THREE.SpriteMaterial({
-            overdraw: true,
-            side:THREE.DoubleSide,
-            useScreenCoordinates: false,
-            map: videoTexture}
-    );
-    var sprite = new THREE.Sprite(spriteMaterial);
-    //Give sprite name
-    sprite.name = 'sprite';
-    sprite.scale.set(100, 100, 1);
-    this.loadedModel = sprite;
-    //Create video
-    this.loadedVideo = document.getElementById('video1');
-    this.loadedVideo.load();
-    this.loadedVideo.videoContext = videoImageContext;
-    this.loadedVideo.videoTexture = videoTexture;
-    this.loadedVideo.volume = 1.0;
+    //Load videos
+    this.videos = [];
+    this.videoPlanes = [];
+    var videoImage, videoImageContext, videoTexture, planeMaterial, plane, planeMesh, currentVideo;
+    for(var i=0; i<1; ++i) {
+        videoImage = document.createElement('canvas');
+        videoImage.width = 320;
+        videoImage.height = 240;
+        videoImageContext = videoImage.getContext('2d');
+        videoTexture = new THREE.Texture(videoImage);
+        videoTexture.minFilter = THREE.LinearFilter;
+        videoTexture.magFilter = THREE.LinearFilter;
+        planeMaterial = new THREE.MeshBasicMaterial( {map: videoTexture, overdraw: true, side:THREE.DoubleSide});
+        //planeMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff});
+        plane = new THREE.PlaneGeometry(100, 100, 4, 4);
+        planeMesh = new THREE.Mesh(plane, planeMaterial);
+        planeMesh.doubleSided = true;
+        this.videoPlanes.push(planeMesh);
+        planeMesh.visible = true;
+        //this.scene.add(planeMesh);
+        planeMesh.name = 'plane' + i;
+        currentVideo = document.getElementById('video'+i);
+        currentVideo.load();
+        currentVideo.videoContext = videoImageContext;
+        currentVideo.videoTexture = videoTexture;
+        currentVideo.volume = 1.0;
+        currentVideo.triggered = false;
+        currentVideo.playing = false;
+        this.videos.push(currentVideo);
+        //this.loadedModel = planeMesh;
+    }
 
     /*
     var sphereGeom = new THREE.SphereGeometry(50, 12, 12);
@@ -346,18 +350,39 @@ PitotiAR.prototype.update = function() {
             m.model.add(cube);
             this.scene.add(m.model);
             */
-            m.model = this.loadedModel;
-            m.model.matrixAutoUpdate = false;
+            m.model = this.videoPlanes[0];
             this.scene.add(m.model);
-            this.loadedVideo.play();
+            m.model.matrixAutoUpdate = false;
+            this.videos[0].triggered = true;
         }
         copyMatrix(m.transform, this.tmp);
         m.model.matrix.setFromArray(this.tmp);
-        m.model.matrix.scale(this.scaleFactor);
+        //m.model.matrix.scale(this.scaleFactor);
         m.model.matrixWorldNeedsUpdate = true;
     }
 
-    this.loadedVideo.videoTexture.needsUpdate = true;
+    //See if any videos triggered
+    for(var i= 0, len = this.videos.length; i<len; ++i) {
+        if(this.videos[i].triggered) {
+            var currentVid = this.videos[i];
+            if(!currentVid.playing) {
+                var plane = this.scene.getObjectByName('plane'+i, true);
+                if(plane) {
+                    plane.visible = true;
+                }
+                currentVid.play();
+                currentVid.playing = true;
+            }
+
+            if(currentVid.readyState === currentVid.HAVE_ENOUGH_DATA) {
+                currentVid.videoContext.drawImage(currentVid, 0, 0);
+                if(currentVid.videoTexture) {
+                    currentVid.videoTexture.needsUpdate = true;
+                }
+            }
+            break;
+        }
+    }
 
     this.renderer.render(this.videoScene, this.videoCam);
     this.renderer.render(this.scene, this.camera);
