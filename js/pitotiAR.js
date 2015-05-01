@@ -1,6 +1,8 @@
 /**
  * Created by DrTone on 30/03/2015.
  */
+var NUM_VIDEOS = 3;
+
 //Augmented reality app for 3D Pitoti
 function copyMatrix(mat, cm) {
     cm[0] = mat.m00;
@@ -237,7 +239,7 @@ PitotiAR.prototype.createScene = function() {
     this.videos = [];
     this.videoPlanes = [];
     var videoImage, videoImageContext, videoTexture, planeMaterial, plane, planeMesh, currentVideo;
-    for(var i=0; i<1; ++i) {
+    for(var i=0; i<NUM_VIDEOS; ++i) {
         videoImage = document.createElement('canvas');
         videoImage.width = 320;
         videoImage.height = 240;
@@ -350,10 +352,11 @@ PitotiAR.prototype.update = function() {
             m.model.add(cube);
             this.scene.add(m.model);
             */
-            m.model = this.videoPlanes[0];
+            if(i >= NUM_VIDEOS) continue;
+            m.model = this.videoPlanes[i];
             this.scene.add(m.model);
             m.model.matrixAutoUpdate = false;
-            this.videos[0].triggered = true;
+            this.videos[i].triggered = true;
         }
         copyMatrix(m.transform, this.tmp);
         m.model.matrix.setFromArray(this.tmp);
@@ -372,12 +375,19 @@ PitotiAR.prototype.update = function() {
                 }
                 currentVid.play();
                 currentVid.playing = true;
-            }
-
-            if(currentVid.readyState === currentVid.HAVE_ENOUGH_DATA) {
-                currentVid.videoContext.drawImage(currentVid, 0, 0);
-                if(currentVid.videoTexture) {
-                    currentVid.videoTexture.needsUpdate = true;
+            } else {
+                if(!currentVid.ended) {
+                    if(currentVid.readyState === currentVid.HAVE_ENOUGH_DATA) {
+                        currentVid.videoContext.drawImage(currentVid, 0, 0);
+                        if(currentVid.videoTexture) {
+                            currentVid.videoTexture.needsUpdate = true;
+                        }
+                    }
+                } else {
+                    currentVid.triggered = false;
+                    currentVid.playing = false;
+                    //DEBUG
+                    console.log("Stopped");
                 }
             }
             break;
