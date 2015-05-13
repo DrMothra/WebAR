@@ -163,7 +163,7 @@ PitotiAR.prototype.init = function(container) {
     this.loadedModel = null;
 
     this.lastTime = 0;
-
+    this.currentVideo = null;
     this.container = document.getElementById(container);
 
     //Matrix store
@@ -295,15 +295,23 @@ PitotiAR.prototype.createGUI = function() {
 
 PitotiAR.prototype.drag = function(event) {
     //Dragged video clip
-    var icon = 'videoIcon';
+    if(this.currentVideo === null) return;
+
+    var icon = 'snapShot' + this.currentVideo;
     event.originalEvent.dataTransfer.setData("text", icon);
 };
 
 PitotiAR.prototype.drop = function(event) {
     //Dragged video clip
+    if(this.currentVideo === null) return;
+
     event.preventDefault();
-    var data = event.originalEvent.dataTransfer.getData("text");
-    event.target.appendChild(document.getElementById(data));
+    var snapShotId = event.originalEvent.dataTransfer.getData("text");
+    $('#'+snapShotId).show();
+    var elem = document.getElementById(snapShotId);
+    elem.style.width = event.target.clientWidth + 'px';
+    elem.style.height = event.target.clientHeight + 'px';
+    event.target.appendChild(elem);
 };
 
 PitotiAR.prototype.allowDrop = function(event) {
@@ -373,6 +381,7 @@ PitotiAR.prototype.update = function() {
             this.scene.add(m.model);
             */
             if(i >= NUM_VIDEOS) continue;
+            this.currentVideo = i;
             m.model = this.videoPlanes[i];
             this.scene.add(m.model);
             m.model.matrixAutoUpdate = false;
@@ -406,6 +415,7 @@ PitotiAR.prototype.update = function() {
                 } else {
                     currentVid.triggered = false;
                     currentVid.playing = false;
+                    this.currentVideo = null;
                     //DEBUG
                     console.log("Stopped");
                 }

@@ -131,10 +131,15 @@ html {
 }
 .filmStrip {
     background: white;
-    min-height: 200px;
 }
 .filmStrip div {
     border: 1px solid black;
+}
+.filmStrip {
+    min-height: 200px;
+}
+#spacer {
+    margin-left: 11%;
 }
 .strip img {
     width: 100%;
