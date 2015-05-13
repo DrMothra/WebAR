@@ -121,19 +121,21 @@ html {
 
 /* AR stuff */
 .goRight {
-    position: fixed;
-    top: 40%;
-    right: 0%;
     text-align: right;
 }
 .goLeft {
-    position: fixed;
-    top: 40%;
-    left: 0%;
+    text-align: left;
 }
 .navigate {
     width: 50%;
 }
-#filmStrip img {
-    width: 50%;
+.filmStrip {
+    background: white;
+    min-height: 200px;
+}
+.filmStrip div {
+    border: 1px solid black;
+}
+.strip img {
+    width: 100%;
 }

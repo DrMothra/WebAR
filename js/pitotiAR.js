@@ -151,6 +151,7 @@ function PitotiAR() {
 }
 
 PitotiAR.prototype = new BaseApp();
+var DEFAULT_RENDER_WIDTH = 640, DEFAULT_RENDER_HEIGHT = 480;
 
 PitotiAR.prototype.init = function(container) {
     //BaseApp.prototype.init.call(this, container);
@@ -163,6 +164,8 @@ PitotiAR.prototype.init = function(container) {
 
     this.lastTime = 0;
 
+    this.container = document.getElementById(container);
+
     //Matrix store
     this.tmp = new Float32Array(16);
 
@@ -170,9 +173,9 @@ PitotiAR.prototype.init = function(container) {
     this.resultMat = ARSystem.getResultsMat();
 
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(640, 480);
+    this.renderer.setSize(DEFAULT_RENDER_WIDTH, DEFAULT_RENDER_HEIGHT);
     var glCanvas = this.renderer.domElement;
-    document.body.appendChild(glCanvas);
+    this.container.appendChild(glCanvas);
 
     this.scene = new THREE.Scene();
     var light = new THREE.PointLight(0xffffff);
@@ -288,6 +291,23 @@ PitotiAR.prototype.createGUI = function() {
     this.guiAppear = gui.addFolder("Appearance");
     this.guiData = gui.addFolder("Data");
     this.gui = gui;
+};
+
+PitotiAR.prototype.drag = function(event) {
+    //Dragged video clip
+    var icon = 'videoIcon';
+    event.originalEvent.dataTransfer.setData("text", icon);
+};
+
+PitotiAR.prototype.drop = function(event) {
+    //Dragged video clip
+    event.preventDefault();
+    var data = event.originalEvent.dataTransfer.getData("text");
+    event.target.appendChild(document.getElementById(data));
+};
+
+PitotiAR.prototype.allowDrop = function(event) {
+    event.preventDefault();
 };
 
 PitotiAR.prototype.update = function() {
@@ -407,12 +427,23 @@ $(document).ready(function() {
     } else {
         //var container = document.getElementById("WebGLAR-output");
         var app = new PitotiAR();
-        app.init(null);
+        app.init('ARoutput');
         app.createScene();
         //app.createGUI();
 
         //GUI callbacks
+        var dragElem = $('#ARoutput');
+        dragElem.on('dragstart', function(event) {
+            app.drag(event);
+        });
 
+        var targetElem = $('.filmStrip div');
+        targetElem.on('drop', function(event) {
+           app.drop(event);
+        });
+        targetElem.on('dragover', function(event) {
+           app.allowDrop(event);
+        });
         app.run();
     }
 
