@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Record Audio Track</title>
+
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/recorder.js"></script>
+    <script type="text/javascript" src="js/pitotiRecord.js"></script>
+
+    <link rel="stylesheet" href="css/pure-min.css">
+    <link href="css/pitotiStyles.css?v=0.2" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class="pure-g">
+    <div class="pure-u-1-8 goLeft">
+        <a href="pitoti.html"><img class="navigate" src="images/arrow-left.png"></a>
+    </div>
+    <div id="" class="pure-u-3-4 centred">
+        <video id="videoPlayer" width="640" height="480 "controls>
+
+        </video>
+    </div>
+    <div class="pure-u-1-8 goRight">
+        <a href="pitoti.html"><img class="navigate" src="images/arrow-right.png"></a>
+    </div>
+</div>
+
+<div id="recorderContainer" class="pure-g">
+    <div class="pure-u-1-3 centred">
+        <img id="audioRecord" src="images/recordOff.png">
+    </div>
+    <div class="pure-u-2-3">
+        <ul id="audioRecordings">
+
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

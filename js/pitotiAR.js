@@ -154,21 +154,18 @@ PitotiAR.prototype = new BaseApp();
 var DEFAULT_RENDER_WIDTH = 640, DEFAULT_RENDER_HEIGHT = 480;
 
 PitotiAR.prototype.init = function(container) {
-    //BaseApp.prototype.init.call(this, container);
+    //Setup AR system
     ARSystem.setupSystem();
-    //GUI
-    this.guiControls = null;
-    this.gui = null;
-    this.rotPerSec = 1;
-    this.loadedModel = null;
-
-    this.lastTime = 0;
-    this.currentVideo = null;
     this.container = document.getElementById(container);
+
+    //Video clips
+    this.lastTime = 0;
+    this.videoClips = [];
+    this.currentVideo = null;
+    this.videoPlaying = false;
 
     //Matrix store
     this.tmp = new Float32Array(16);
-
     this.markers = {};
     this.resultMat = ARSystem.getResultsMat();
 
@@ -226,20 +223,10 @@ PitotiAR.prototype.createScene = function() {
     this.renderer.autoClear = false;
 
     this.modelLoader = new THREE.OBJMTLLoader();
-    var _this = this;
-    /*
-    this.modelLoader.load( 'models/Morph.obj', 'models/Morph.mtl', function ( object ) {
-        //object.rotation.x = Math.PI/2;
-        //object.position.y = 7;
-        //object.position.z = 10;
-        //object.scale.set(1000, 1000, 1000);
-        //_this.scene.add(object);
-        _this.loadedModel = object;
-    }, null, null);
-    */
 
     //Load videos
     this.videos = [];
+    this.videoNames = [];
     this.videoPlanes = [];
     var videoImage, videoImageContext, videoTexture, planeMaterial, plane, planeMesh, currentVideo;
     for(var i=0; i<NUM_VIDEOS; ++i) {
@@ -267,6 +254,8 @@ PitotiAR.prototype.createScene = function() {
         currentVideo.triggered = false;
         currentVideo.playing = false;
         this.videos.push(currentVideo);
+        //Save source
+        this.videoNames.push(currentVideo.children[0].attributes[0].nodeValue);
         //this.loadedModel = planeMesh;
     }
 
@@ -277,20 +266,6 @@ PitotiAR.prototype.createScene = function() {
     sphere.position.z = -37.5;
     this.scene.add(sphere);
     */
-};
-
-PitotiAR.prototype.createGUI = function() {
-    //GUI - using dat.GUI
-    this.guiControls = new function() {
-
-    };
-
-    var gui = new dat.GUI();
-
-    //Add some folders
-    this.guiAppear = gui.addFolder("Appearance");
-    this.guiData = gui.addFolder("Data");
-    this.gui = gui;
 };
 
 PitotiAR.prototype.drag = function(event) {
@@ -312,6 +287,9 @@ PitotiAR.prototype.drop = function(event) {
     elem.style.width = event.target.clientWidth + 'px';
     elem.style.height = event.target.clientHeight + 'px';
     event.target.appendChild(elem);
+    this.videoClips.push(snapShotId);
+    //Store video name
+    sessionStorage.setItem('video' + this.currentVideo, this.videoNames[this.currentVideo]);
 };
 
 PitotiAR.prototype.allowDrop = function(event) {
@@ -368,24 +346,25 @@ PitotiAR.prototype.update = function() {
         var m = this.markers[i];
         if (!m.model) {
             /*
-            m.model = new THREE.Object3D();
-            var cube = new THREE.Mesh(
-                new THREE.BoxGeometry(100,100,100),
-                new THREE.MeshLambertMaterial({color: 0x0000ff})
-            );
-            console.log("Triggered");
-            cube.position.z = -50;
-            //cube.doubleSided = true;
-            m.model.matrixAutoUpdate = false;
-            m.model.add(cube);
-            this.scene.add(m.model);
-            */
+             m.model = new THREE.Object3D();
+             var cube = new THREE.Mesh(
+             new THREE.BoxGeometry(100,100,100),
+             new THREE.MeshLambertMaterial({color: 0x0000ff})
+             );
+             console.log("Triggered");
+             cube.position.z = -50;
+             //cube.doubleSided = true;
+             m.model.matrixAutoUpdate = false;
+             m.model.add(cube);
+             this.scene.add(m.model);
+             */
             if(i >= NUM_VIDEOS) continue;
             this.currentVideo = i;
             m.model = this.videoPlanes[i];
             this.scene.add(m.model);
             m.model.matrixAutoUpdate = false;
             this.videos[i].triggered = true;
+            this.videoPlaying = true;
         }
         copyMatrix(m.transform, this.tmp);
         m.model.matrix.setFromArray(this.tmp);
@@ -416,6 +395,7 @@ PitotiAR.prototype.update = function() {
                     currentVid.triggered = false;
                     currentVid.playing = false;
                     this.currentVideo = null;
+                    this.videoPlaying = false;
                     //DEBUG
                     console.log("Stopped");
                 }

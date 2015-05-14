@@ -144,3 +144,6 @@ html {
 .strip img {
     width: 100%;
 }
+#recorderContainer {
+    margin-top: 5%;
+}
