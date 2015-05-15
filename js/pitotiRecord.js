@@ -6,6 +6,10 @@
 var audio_context, recorder, recording = false;
 var linkNumber = 0;
 
+function __log(e, data) {
+    log.innerHTML += "\n" + e + " " + (data || '');
+}
+
 var videoPlayer = (function() {
     var player;
     var numVideos = sessionStorage.length;

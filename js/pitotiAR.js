@@ -145,13 +145,17 @@ var ARSystem = (function() {
     }
 })();
 
+function __log(e, data) {
+    log.innerHTML += "\n" + e + " " + (data || '');
+}
+
 //Init this app from base
 function PitotiAR() {
     BaseApp.call(this);
 }
 
 PitotiAR.prototype = new BaseApp();
-var DEFAULT_RENDER_WIDTH = 640, DEFAULT_RENDER_HEIGHT = 480;
+var DEFAULT_RENDER_WIDTH = 320, DEFAULT_RENDER_HEIGHT = 240;
 
 PitotiAR.prototype.init = function(container) {
     //Setup AR system
@@ -273,7 +277,7 @@ PitotiAR.prototype.drag = function(event) {
     if(this.currentVideo === null) return;
 
     var icon = 'snapShot' + this.currentVideo;
-    event.originalEvent.dataTransfer.setData("text", icon);
+    event.originalEvent.originalEvent.dataTransfer.setData("text", icon);
 };
 
 PitotiAR.prototype.drop = function(event) {
@@ -281,13 +285,13 @@ PitotiAR.prototype.drop = function(event) {
     if(this.currentVideo === null) return;
 
     event.preventDefault();
-    var snapShotId = event.originalEvent.dataTransfer.getData("text");
-    $('#'+snapShotId).show();
-    var elem = document.getElementById(snapShotId);
+    var id = 'snapShot'+this.currentVideo;
+    $('#'+id).show();
+    var elem = document.getElementById(id);
     elem.style.width = event.target.clientWidth + 'px';
     elem.style.height = event.target.clientHeight + 'px';
     event.target.appendChild(elem);
-    this.videoClips.push(snapShotId);
+    this.videoClips.push(id);
     //Store video name
     sessionStorage.setItem('video' + this.currentVideo, this.videoNames[this.currentVideo]);
 };
@@ -425,17 +429,39 @@ $(document).ready(function() {
 
         //GUI callbacks
         var dragElem = $('#ARoutput');
-        dragElem.on('dragstart', function(event) {
-            app.drag(event);
+        dragElem.draggable( {
+            revert: "valid"
         });
 
+        /*
+        dragElem.on('touchstart', function(event) {
+            __log('Touch start');
+            app.drag(event);
+        });
+        */
+
         var targetElem = $('.filmStrip div');
-        targetElem.on('drop', function(event) {
+        targetElem.droppable( {
+            drop: function( event, ui) {
+                app.drop(event);
+            }
+        });
+
+        /*
+        targetElem.on('touchmove', function(event) {
+            __log('touchmove');
            app.drop(event);
+        });
+
+        targetElem.on('release', function(event) {
+            __log('Release');
+            app.drop(event);
         });
         targetElem.on('dragover', function(event) {
            app.allowDrop(event);
         });
+        */
+
         app.run();
     }
 
