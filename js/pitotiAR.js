@@ -334,6 +334,7 @@ PitotiAR.prototype.update = function() {
         this.markers[currId].age = 0;
         this.markers[currId].transform = Object.asCopy(this.resultMat);
     }
+
     for (var i in this.markers) {
         var r = this.markers[i];
         if (r.age > 1) {
@@ -342,6 +343,7 @@ PitotiAR.prototype.update = function() {
         }
         r.age++;
     }
+
     for (var i in this.markers) {
         var m = this.markers[i];
         if (!m.model) {

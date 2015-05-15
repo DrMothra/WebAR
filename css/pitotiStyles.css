@@ -145,5 +145,11 @@ html {
     width: 100%;
 }
 #recorderContainer {
-    margin-top: 5%;
+    margin-top: 2%;
+}
+#audioRecordings {
+    list-style-type: none;
+}
+#audioRecordings img {
+    padding: 0 5px 5px 0;
 }
