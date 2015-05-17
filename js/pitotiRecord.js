@@ -5,6 +5,7 @@
 
 var audio_context, recorder, recording = false;
 var linkNumber = 0;
+var audioClips = [];
 
 function __log(e, data) {
     log.innerHTML += "\n" + e + " " + (data || '');
@@ -12,27 +13,32 @@ function __log(e, data) {
 
 var videoPlayer = (function() {
     var player;
-    var numVideos = sessionStorage.length;
+    var numVideos = sessionStorage.getItem('numVideos');
     var currentVideo = 0;
     var checkInterval = 500;
     var videoTitle;
     var videoSource;
+    var videoTimer;
 
     return {
-        init: function() {
-            videoTitle = sessionStorage.getItem('video'+currentVideo);
+        init: function(videoId) {
+            player = document.getElementById(videoId);
+            for(currentVideo= 0; currentVideo<numVideos; ++currentVideo) {
+                videoTitle = sessionStorage.getItem('video'+currentVideo);
+                if(videoTitle) break;
+            }
+
             if(videoTitle) {
-                player = document.getElementById('videoPlayer');
                 if(player) {
                     videoSource = document.createElement("source");
                     videoSource.setAttribute("src", videoTitle);
                     player.appendChild(videoSource);
                 }
             }
-            var videoTimer = setInterval(function() {
-                console.log("Checking");
+            videoTimer = setInterval(function() {
+                //console.log("Checking");
                 if(player.ended) {
-                    if(++currentVideo >= numVideos) return;
+                    if(++currentVideo >= numVideos) currentVideo = 0;
                     player.removeChild(videoSource);
                     //Get next video
                     videoTitle = sessionStorage.getItem('video'+currentVideo);
@@ -45,6 +51,18 @@ var videoPlayer = (function() {
                     }
                 }
             }, checkInterval);
+        },
+
+        reset: function() {
+            clearInterval(videoTimer);
+            if(player) {
+                player.pause();
+            }
+        },
+
+        playBack: function() {
+            player = document.getElementById('videoPlayback');
+            player.play();
         }
     }
 })();
@@ -70,12 +88,14 @@ function createLink() {
 
         au.controls = true;
         au.src = url;
+        audioClips.push(url);
         status.src = "images/redCircle.png";
         status.id = "audioSelect" + linkNumber;
         status.onclick = function() {
             $('#audioRecordings img').attr('src', 'images/redCircle.png');
             this.setAttribute('src', 'images/greenCircle.png');
-            sessionStorage.setItem('audioSelection', this.id);
+            var index = this.id.substr(this.id.length - 1);
+            sessionStorage.setItem('audioSelection', audioClips[index]);
         };
         li.appendChild(status);
         li.appendChild(au);
@@ -103,7 +123,7 @@ function toggleRecording() {
 
 $(document).ready(function() {
     //Play videos
-    videoPlayer.init();
+    videoPlayer.init('videoPlayer');
 
     //Set up audio recording
     try {
@@ -126,5 +146,27 @@ $(document).ready(function() {
     //Callbacks
     $('#audioRecord').on('click', function() {
         toggleRecording();
+    });
+
+    var audioPlayer = null;
+
+    $('#gotoFinal').on('click', function() {
+        $('#pitRecord').hide();
+        $('#pitVideo').show();
+
+        //Play selected video/audio
+        videoPlayer.reset();
+        videoPlayer.init('videoPlayback');
+
+        audioPlayer = document.createElement('audio');
+        audioPlayer.src = sessionStorage.getItem('audioSelection');
+    });
+
+    $('#finalClip').on('click', function() {
+        if(audioPlayer != null) {
+            videoPlayer.playBack();
+            audioPlayer.play();
+        }
+
     });
 });

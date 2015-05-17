@@ -162,6 +162,10 @@ PitotiAR.prototype.init = function(container) {
     ARSystem.setupSystem();
     this.container = document.getElementById(container);
 
+    //Clear videos from film clips
+    sessionStorage.clear();
+    sessionStorage.setItem('numVideos', NUM_VIDEOS);
+
     //Video clips
     this.lastTime = 0;
     this.videoClips = [];

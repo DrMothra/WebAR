@@ -111,7 +111,7 @@ html {
     margin: 3% 0 5% 0;
 }
 #mainTitle img {
-    width: 75%;
+    width: 50%;
 }
 #WebGL-output {
     position: fixed;
@@ -152,4 +152,7 @@ html {
 }
 #audioRecordings img {
     padding: 0 5px 5px 0;
+}
+#gotoFinal {
+    margin-top: 45%;
 }
