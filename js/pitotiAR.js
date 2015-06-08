@@ -169,13 +169,15 @@ PitotiAR.prototype.init = function(container) {
     //Video clips
     this.lastTime = 0;
     this.videoClips = [];
-    this.currentVideo = null;
+    this.currentVideo= null;
     this.videoPlaying = false;
+    this.currentMarker = -1;
 
     //Matrix store
     this.tmp = new Float32Array(16);
     this.markers = {};
     this.resultMat = ARSystem.getResultsMat();
+    this.fixedMatrix = new THREE.Matrix4().identity();
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(DEFAULT_RENDER_WIDTH, DEFAULT_RENDER_HEIGHT);
@@ -237,6 +239,7 @@ PitotiAR.prototype.createScene = function() {
     this.videoNames = [];
     this.videoPlanes = [];
     var videoImage, videoImageContext, videoTexture, planeMaterial, plane, planeMesh, currentVideo;
+    var size = 100;
     for(var i=0; i<NUM_VIDEOS; ++i) {
         videoImage = document.createElement('canvas');
         videoImage.width = 320;
@@ -245,10 +248,12 @@ PitotiAR.prototype.createScene = function() {
         videoTexture = new THREE.Texture(videoImage);
         videoTexture.minFilter = THREE.LinearFilter;
         videoTexture.magFilter = THREE.LinearFilter;
-        planeMaterial = new THREE.MeshBasicMaterial( {map: videoTexture, overdraw: true, side:THREE.DoubleSide});
-        //planeMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff});
-        plane = new THREE.PlaneGeometry(100, 100, 4, 4);
+        //planeMaterial = new THREE.MeshBasicMaterial( {map: videoTexture, overdraw: true, side:THREE.DoubleSide});
+        planeMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff});
+        //plane = new THREE.PlaneGeometry(100, 100, 4, 4);
+        plane = new THREE.BoxGeometry(size, size, size);
         planeMesh = new THREE.Mesh(plane, planeMaterial);
+        planeMesh.position.z = -50;
         planeMesh.doubleSided = true;
         this.videoPlanes.push(planeMesh);
         planeMesh.visible = true;
@@ -323,63 +328,45 @@ PitotiAR.prototype.update = function() {
     this.ARCanvas.changed = true;
     this.videoTex.needsUpdate = true;
 
-    var detected = this.detector.detectMarkerLite(this.raster, ARSystem.getThreshold());
-    for (var idx = 0; idx<detected; idx++) {
-        var id = this.detector.getIdMarkerData(idx);
-        var currId;
-        if (id.packetLength > 4) {
-            currId = -1;
-        }else{
-            currId=0;
-            for (var i = 0; i < id.packetLength; i++ ) {
-                currId = (currId << 8) | id.getPacketData(i);
+    //Don't do detection if videos playing
+    if(!this.videoPlaying) {
+        this.currentMarker = -1;
+        var detected = this.detector.detectMarkerLite(this.raster, ARSystem.getThreshold());
+        for (var idx = 0; idx < detected; idx++) {
+            var id = this.detector.getIdMarkerData(idx);
+            var currId;
+            if (id.packetLength > 4) {
+                currId = -1;
+            } else {
+                currId = 0;
+                for (var i = 0; i < id.packetLength; i++) {
+                    currId = (currId << 8) | id.getPacketData(i);
+                }
             }
+            if (!this.markers[currId]) {
+                this.markers[currId] = {};
+            }
+            this.currentMarker = currId;
+            break;
         }
-        if (!this.markers[currId]) {
-            this.markers[currId] = {};
-        }
-        this.detector.getTransformMatrix(idx, this.resultMat);
-        this.markers[currId].age = 0;
-        this.markers[currId].transform = Object.asCopy(this.resultMat);
     }
 
-    for (var i in this.markers) {
-        var r = this.markers[i];
-        if (r.age > 1) {
-            delete this.markers[i];
-            this.scene.remove(r.model);
-        }
-        r.age++;
-    }
-
-    for (var i in this.markers) {
-        var m = this.markers[i];
+    if(this.currentMarker >= 0) {
+        var m = this.markers[this.currentMarker];
         if (!m.model) {
-            /*
-             m.model = new THREE.Object3D();
-             var cube = new THREE.Mesh(
-             new THREE.BoxGeometry(100,100,100),
-             new THREE.MeshLambertMaterial({color: 0x0000ff})
-             );
-             console.log("Triggered");
-             cube.position.z = -50;
-             //cube.doubleSided = true;
-             m.model.matrixAutoUpdate = false;
-             m.model.add(cube);
-             this.scene.add(m.model);
-             */
-            if(i >= NUM_VIDEOS) continue;
-            this.currentVideo = i;
-            m.model = this.videoPlanes[i];
+            if(this.currentMarker >= NUM_VIDEOS) return;
+            this.currentVideo = this.currentMarker;
+            m.model = this.videoPlanes[this.currentMarker];
             this.scene.add(m.model);
-            m.model.matrixAutoUpdate = false;
-            this.videos[i].triggered = true;
+            //m.model.matrixAutoUpdate = false;
+            this.videos[this.currentMarker].triggered = true;
             this.videoPlaying = true;
         }
-        copyMatrix(m.transform, this.tmp);
-        m.model.matrix.setFromArray(this.tmp);
+        //copyMatrix(m.transform, this.tmp);
+        //m.model.matrix.setFromArray(this.tmp);
+        //m.model.matrix.identity();
         //m.model.matrix.scale(this.scaleFactor);
-        m.model.matrixWorldNeedsUpdate = true;
+        //m.model.matrixWorldNeedsUpdate = true;
     }
 
     //See if any videos triggered
@@ -406,6 +393,7 @@ PitotiAR.prototype.update = function() {
                     currentVid.playing = false;
                     this.currentVideo = null;
                     this.videoPlaying = false;
+                    this.currentMarker = -1;
                     //DEBUG
                     console.log("Stopped");
                 }
