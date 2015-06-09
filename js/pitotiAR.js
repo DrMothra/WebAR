@@ -155,7 +155,7 @@ function PitotiAR() {
 }
 
 PitotiAR.prototype = new BaseApp();
-var DEFAULT_RENDER_WIDTH = 320, DEFAULT_RENDER_HEIGHT = 240;
+var DEFAULT_RENDER_WIDTH = 640, DEFAULT_RENDER_HEIGHT = 480;
 
 PitotiAR.prototype.init = function(container) {
     //Setup AR system
@@ -169,7 +169,6 @@ PitotiAR.prototype.init = function(container) {
     //Video clips
     this.lastTime = 0;
     this.videoClips = [];
-    this.currentVideo= null;
     this.videoPlaying = false;
     this.currentMarker = -1;
 
@@ -177,13 +176,27 @@ PitotiAR.prototype.init = function(container) {
     this.tmp = new Float32Array(16);
     this.markers = {};
     this.resultMat = ARSystem.getResultsMat();
-    this.fixedMatrix = new THREE.Matrix4().identity();
+
+    //Triggered video parameters
+    this.videoWidth = window.innerWidth/3;
+    this.videoHeight = window.innerHeight * 0.4;
+    this.triggerElem = $("#triggerVideo");
+    this.triggerElem.width(this.videoWidth * 0.9);
+    this.triggerElem.height(this.videoHeight * 0.9);
+    var elem = $('#'+container);
+    var pos = elem.position();
+    var width = elem.width();
+    var triggerLeft = pos.left + ((width-this.videoWidth)/2) + (this.videoWidth*0.05);
+    this.triggerElem.css("left", triggerLeft + "px");
+
+    this.triggerVideo = document.getElementById("triggerVideo");
 
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(DEFAULT_RENDER_WIDTH, DEFAULT_RENDER_HEIGHT);
+    this.renderer.setSize(this.videoWidth, this.videoHeight);
     var glCanvas = this.renderer.domElement;
     this.container.appendChild(glCanvas);
 
+    //Don't strictly need these anymore
     this.scene = new THREE.Scene();
     var light = new THREE.PointLight(0xffffff);
     light.position.set(400, 500, 100);
@@ -195,8 +208,6 @@ PitotiAR.prototype.init = function(container) {
     // Create a camera and a marker root object for your Three.js scene.
     this.camera = new THREE.Camera();
     this.scene.add(this.camera);
-
-    this.scaleFactor = new THREE.Vector3(120, 120, 120);
 };
 
 PitotiAR.prototype.createScene = function() {
@@ -234,75 +245,33 @@ PitotiAR.prototype.createScene = function() {
 
     this.modelLoader = new THREE.OBJMTLLoader();
 
-    //Load videos
-    this.videos = [];
-    this.videoNames = [];
-    this.videoPlanes = [];
-    var videoImage, videoImageContext, videoTexture, planeMaterial, plane, planeMesh, currentVideo;
-    var size = 100;
-    for(var i=0; i<NUM_VIDEOS; ++i) {
-        videoImage = document.createElement('canvas');
-        videoImage.width = 320;
-        videoImage.height = 240;
-        videoImageContext = videoImage.getContext('2d');
-        videoTexture = new THREE.Texture(videoImage);
-        videoTexture.minFilter = THREE.LinearFilter;
-        videoTexture.magFilter = THREE.LinearFilter;
-        //planeMaterial = new THREE.MeshBasicMaterial( {map: videoTexture, overdraw: true, side:THREE.DoubleSide});
-        planeMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff});
-        //plane = new THREE.PlaneGeometry(100, 100, 4, 4);
-        plane = new THREE.BoxGeometry(size, size, size);
-        planeMesh = new THREE.Mesh(plane, planeMaterial);
-        planeMesh.position.z = -50;
-        planeMesh.doubleSided = true;
-        this.videoPlanes.push(planeMesh);
-        planeMesh.visible = true;
-        //this.scene.add(planeMesh);
-        planeMesh.name = 'plane' + i;
-        currentVideo = document.getElementById('video'+i);
-        currentVideo.load();
-        currentVideo.videoContext = videoImageContext;
-        currentVideo.videoTexture = videoTexture;
-        currentVideo.volume = 1.0;
-        currentVideo.triggered = false;
-        currentVideo.playing = false;
-        this.videos.push(currentVideo);
-        //Save source
-        this.videoNames.push(currentVideo.children[0].attributes[0].nodeValue);
-        //this.loadedModel = planeMesh;
-    }
-
-    /*
-    var sphereGeom = new THREE.SphereGeometry(50, 12, 12);
-    var sphereMat = new THREE.MeshLambertMaterial( {color: 0x0000ff});
-    var sphere = new THREE.Mesh(sphereGeom, sphereMat);
-    sphere.position.z = -37.5;
-    this.scene.add(sphere);
-    */
+    //Load video sources
+    this.videoSources = ['videos/HuntSmall.mp4', 'videos/deersSmall.mp4', 'videos/HouseSmall.mp4'];
 };
 
 PitotiAR.prototype.drag = function(event) {
     //Dragged video clip
-    if(this.currentVideo === null) return;
+    if(this.currentMarker < 0) return;
 
-    var icon = 'snapShot' + this.currentVideo;
+    var icon = 'snapShot' + this.currentMarker;
     event.originalEvent.originalEvent.dataTransfer.setData("text", icon);
 };
 
 PitotiAR.prototype.drop = function(event) {
     //Dragged video clip
-    if(this.currentVideo === null) return;
+    if(this.currentMarker < 0 || event.target.occupied) return;
 
     event.preventDefault();
-    var id = 'snapShot'+this.currentVideo;
-    $('#'+id).show();
-    var elem = document.getElementById(id);
-    elem.style.width = event.target.clientWidth + 'px';
-    elem.style.height = event.target.clientHeight + 'px';
-    event.target.appendChild(elem);
-    this.videoClips.push(id);
+    var image = document.createElement("img");
+    image.src = "images/video0.jpg";
+
+    image.style.width = event.target.clientWidth + 'px';
+    image.style.height = event.target.clientHeight + 'px';
+    event.target.appendChild(image);
+    event.target.occupied = true;
+    //this.videoClips.push(id);
     //Store video name
-    sessionStorage.setItem('video' + this.currentVideo, this.videoNames[this.currentVideo]);
+    sessionStorage.setItem('video' + this.currentMarker, this.videoSources[this.currentMarker]);
 };
 
 PitotiAR.prototype.allowDrop = function(event) {
@@ -332,8 +301,8 @@ PitotiAR.prototype.update = function() {
     if(!this.videoPlaying) {
         this.currentMarker = -1;
         var detected = this.detector.detectMarkerLite(this.raster, ARSystem.getThreshold());
-        for (var idx = 0; idx < detected; idx++) {
-            var id = this.detector.getIdMarkerData(idx);
+        if(detected) {
+            var id = this.detector.getIdMarkerData(0);
             var currId;
             if (id.packetLength > 4) {
                 currId = -1;
@@ -347,58 +316,38 @@ PitotiAR.prototype.update = function() {
                 this.markers[currId] = {};
             }
             this.currentMarker = currId;
-            break;
         }
     }
 
     if(this.currentMarker >= 0) {
         var m = this.markers[this.currentMarker];
-        if (!m.model) {
+        if (!m.video) {
             if(this.currentMarker >= NUM_VIDEOS) return;
-            this.currentVideo = this.currentMarker;
-            m.model = this.videoPlanes[this.currentMarker];
-            this.scene.add(m.model);
-            //m.model.matrixAutoUpdate = false;
-            this.videos[this.currentMarker].triggered = true;
+            this.triggerVideo.src = this.videoSources[this.currentMarker];
             this.videoPlaying = true;
+            m.video = true;
         }
-        //copyMatrix(m.transform, this.tmp);
-        //m.model.matrix.setFromArray(this.tmp);
-        //m.model.matrix.identity();
-        //m.model.matrix.scale(this.scaleFactor);
-        //m.model.matrixWorldNeedsUpdate = true;
     }
 
     //See if any videos triggered
-    for(var i= 0, len = this.videos.length; i<len; ++i) {
-        if(this.videos[i].triggered) {
-            var currentVid = this.videos[i];
-            if(!currentVid.playing) {
-                var plane = this.scene.getObjectByName('plane'+i, true);
-                if(plane) {
-                    plane.visible = true;
-                }
-                currentVid.play();
-                currentVid.playing = true;
-            } else {
-                if(!currentVid.ended) {
-                    if(currentVid.readyState === currentVid.HAVE_ENOUGH_DATA) {
-                        currentVid.videoContext.drawImage(currentVid, 0, 0);
-                        if(currentVid.videoTexture) {
-                            currentVid.videoTexture.needsUpdate = true;
-                        }
-                    }
-                } else {
-                    currentVid.triggered = false;
-                    currentVid.playing = false;
-                    this.currentVideo = null;
-                    this.videoPlaying = false;
-                    this.currentMarker = -1;
-                    //DEBUG
-                    console.log("Stopped");
-                }
+    if(this.videoPlaying) {
+        if(!this.triggerVideo.playing) {
+            //Show video pane
+            this.triggerElem.show();
+            this.triggerVideo.play();
+            this.triggerVideo.playing = true;
+            //DEBUG
+            console.log("Playing");
+        } else {
+            if(this.triggerVideo.ended) {
+                this.triggerVideo.playing = false;
+                this.videoPlaying = false;
+                this.markers[this.currentMarker].video = false;
+                this.currentMarker = -1;
+                this.triggerElem.hide();
+                //DEBUG
+                console.log("Stopped");
             }
-            break;
         }
     }
 
@@ -413,24 +362,15 @@ $(document).ready(function() {
     if(!Detector.webgl) {
         $('#notSupported').show();
     } else {
-        //var container = document.getElementById("WebGLAR-output");
         var app = new PitotiAR();
         app.init('ARoutput');
         app.createScene();
-        //app.createGUI();
 
         //GUI callbacks
-        var dragElem = $('#ARoutput');
+        var dragElem = $('#triggerVideo');
         dragElem.draggable( {
             revert: "valid"
         });
-
-        /*
-        dragElem.on('touchstart', function(event) {
-            __log('Touch start');
-            app.drag(event);
-        });
-        */
 
         var targetElem = $('.filmStrip div');
         targetElem.droppable( {
@@ -438,21 +378,6 @@ $(document).ready(function() {
                 app.drop(event);
             }
         });
-
-        /*
-        targetElem.on('touchmove', function(event) {
-            __log('touchmove');
-           app.drop(event);
-        });
-
-        targetElem.on('release', function(event) {
-            __log('Release');
-            app.drop(event);
-        });
-        targetElem.on('dragover', function(event) {
-           app.allowDrop(event);
-        });
-        */
 
         app.run();
     }

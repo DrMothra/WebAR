@@ -156,3 +156,9 @@ html {
 #gotoFinal {
     margin-top: 45%;
 }
+#triggerVideo {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
