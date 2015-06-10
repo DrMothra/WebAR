@@ -188,8 +188,11 @@ PitotiAR.prototype.init = function(container) {
     var width = elem.width();
     var triggerLeft = pos.left + ((width-this.videoWidth)/2) + (this.videoWidth*0.05);
     this.triggerElem.css("left", triggerLeft + "px");
+    this.triggerElem.defaultLeft = triggerLeft;
 
     this.triggerVideo = document.getElementById("triggerVideo");
+
+    this.numVideos = 0;
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(this.videoWidth, this.videoHeight);
@@ -259,23 +262,37 @@ PitotiAR.prototype.drag = function(event) {
 
 PitotiAR.prototype.drop = function(event) {
     //Dragged video clip
-    if(this.currentMarker < 0 || event.target.occupied) return;
+    if(this.currentMarker < 0 || event.target.occupied) {
+        this.restoreVideoPlayer();
+        return;
+    }
+
+    //DEBUG
+    console.log("Target =", event.target);
 
     event.preventDefault();
     var image = document.createElement("img");
-    image.src = "images/video0.jpg";
+    image.src = "images/video" + this.currentMarker + ".jpg";
 
     image.style.width = event.target.clientWidth + 'px';
     image.style.height = event.target.clientHeight + 'px';
     event.target.appendChild(image);
     event.target.occupied = true;
-    //this.videoClips.push(id);
+
+    this.restoreVideoPlayer();
+
     //Store video name
-    sessionStorage.setItem('video' + this.currentMarker, this.videoSources[this.currentMarker]);
+    sessionStorage.setItem('video' + this.numVideos++, this.videoSources[this.currentMarker]);
 };
 
 PitotiAR.prototype.allowDrop = function(event) {
     event.preventDefault();
+};
+
+PitotiAR.prototype.restoreVideoPlayer = function() {
+    //Put video player back in default position
+    this.triggerElem.css("left", this.triggerElem.defaultLeft + "px");
+    this.triggerElem.css("top", 0);
 };
 
 PitotiAR.prototype.update = function() {
@@ -369,11 +386,12 @@ $(document).ready(function() {
         //GUI callbacks
         var dragElem = $('#triggerVideo');
         dragElem.draggable( {
-            revert: "valid"
+            revert: "invalid"
         });
 
         var targetElem = $('.filmStrip div');
         targetElem.droppable( {
+            accept: "#triggerVideo",
             drop: function( event, ui) {
                 app.drop(event);
             }
