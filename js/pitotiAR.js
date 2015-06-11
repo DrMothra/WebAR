@@ -186,7 +186,8 @@ PitotiAR.prototype.init = function(container) {
     var elem = $('#'+container);
     var pos = elem.position();
     var width = elem.width();
-    var triggerLeft = pos.left + ((width-this.videoWidth)/2) + (this.videoWidth*0.05);
+    var defaultPadding = 40;
+    var triggerLeft = pos.left + defaultPadding + ((width-this.videoWidth)/2) + (this.videoWidth*0.05);
     this.triggerElem.css("left", triggerLeft + "px");
     this.triggerElem.defaultLeft = triggerLeft;
 
@@ -246,8 +247,6 @@ PitotiAR.prototype.createScene = function() {
 
     this.renderer.autoClear = false;
 
-    this.modelLoader = new THREE.OBJMTLLoader();
-
     //Load video sources
     this.videoSources = ['videos/HuntSmall.mp4', 'videos/deersSmall.mp4', 'videos/HouseSmall.mp4'];
 };
@@ -267,11 +266,14 @@ PitotiAR.prototype.drop = function(event) {
         return;
     }
 
-    //DEBUG
-    console.log("Target =", event.target);
-
     event.preventDefault();
     var image = document.createElement("img");
+    image.className = "imgDraggable";
+
+    $(image).draggable( {
+        revert: "invalid"
+    });
+
     image.src = "images/video" + this.currentMarker + ".jpg";
 
     image.style.width = event.target.clientWidth + 'px';
@@ -281,8 +283,30 @@ PitotiAR.prototype.drop = function(event) {
 
     this.restoreVideoPlayer();
 
+    $('#' + event.target.id + 'drop').hide();
+
     //Store video name
-    sessionStorage.setItem('video' + this.numVideos++, this.videoSources[this.currentMarker]);
+    sessionStorage.setItem(event.target.id, this.videoSources[this.currentMarker]);
+};
+
+PitotiAR.prototype.dropVideo = function(event, ui) {
+    //Either delete or stop video
+    if($(ui.draggable).hasClass("imgDraggable")) {
+        console.log("Draggable");
+    }else {
+        this.stopVideo();
+    }
+};
+
+PitotiAR.prototype.stopVideo = function() {
+    //Stop video playing
+    this.triggerVideo.playing = false;
+    this.videoPlaying = false;
+    this.markers[this.currentMarker].video = false;
+    this.currentMarker = -1;
+    this.triggerElem.hide();
+
+    this.restoreVideoPlayer();
 };
 
 PitotiAR.prototype.allowDrop = function(event) {
@@ -357,11 +381,7 @@ PitotiAR.prototype.update = function() {
             console.log("Playing");
         } else {
             if(this.triggerVideo.ended) {
-                this.triggerVideo.playing = false;
-                this.videoPlaying = false;
-                this.markers[this.currentMarker].video = false;
-                this.currentMarker = -1;
-                this.triggerElem.hide();
+                this.stopVideo();
                 //DEBUG
                 console.log("Stopped");
             }
@@ -379,6 +399,8 @@ $(document).ready(function() {
     if(!Detector.webgl) {
         $('#notSupported').show();
     } else {
+        skel.init();
+
         var app = new PitotiAR();
         app.init('ARoutput');
         app.createScene();
@@ -394,6 +416,14 @@ $(document).ready(function() {
             accept: "#triggerVideo",
             drop: function( event, ui) {
                 app.drop(event);
+            }
+        });
+
+        var trashElem = $('.trash');
+        trashElem.droppable( {
+            accept: "#triggerVideo, .imgDraggable",
+            drop: function( event, ui) {
+                app.dropVideo(event, ui);
             }
         });
 

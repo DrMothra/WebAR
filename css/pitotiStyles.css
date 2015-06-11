@@ -138,6 +138,9 @@ html {
 .filmStrip {
     min-height: 200px;
 }
+.filmStrip img {
+    min-height: 200px;
+}
 #space0 {
     margin-left: 11%;
 }
@@ -161,4 +164,8 @@ html {
     top: 0;
     left: 0;
 }
+.trash {
+    margin-top: 5%;
+}
+
 

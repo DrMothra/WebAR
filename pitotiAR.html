@@ -11,53 +11,59 @@
 
     <script type="text/javascript" src="js/detector.js"></script>
     <script type="text/javascript" src="js/three68.js"></script>
-    <script type="text/javascript" src="js/MTLLoader.js"></script>
-    <script type="text/javascript" src="js/OBJMTLLoader.js"></script>
-    <script type="text/javascript" src="js/TrackballControls.js"></script>
-    <script type="text/javascript" src="js/dat.gui.js"></script>
-    <script type="text/javascript" src="js/stats.js"></script>
     <script type="text/javascript" src="js/baseAppAR.js?v=0.2"></script>
+    <script type="text/javascript" src="js/skel.min.js"></script>
+
     <script type="text/javascript" src="js/JSARToolKit.js"></script>
     <script type="text/javascript" src="js/pitotiAR.js?v=0.2"></script>
 
-    <link rel="stylesheet" href="css/pure-min.css">
     <link href="css/pitotiStyles.css?v=0.4" rel="stylesheet" type="text/css">
 
 </head>
 <body>
 
-<div class="pure-g">
-    <div class="pure-u-1-8 goLeft">
+<div class="row">
+    <div class="1u goLeft">
         <a href="pitoti.html"><img class="navigate" src="images/arrow-left.png"></a>
     </div>
-    <div id="ARoutput" class="pure-u-3-4 centred ui-widget-content">
+    <div class="10u ui-widget-content">
+        <div class="row centred">
+            <div class="3u trash">
+                <img src="images/delete.png">
+            </div>
+            <div id="ARoutput" class="6u">
 
+            </div>
+            <div class="3u trash">
+                <img src="images/delete.png">
+            </div>
+        </div>
     </div>
-    <div class="pure-u-1-8 goRight">
+    <div class="1u goRight">
         <a href="pitotiRecord.html"><img class="navigate" src="images/arrow-right.png"></a>
     </div>
 </div>
 
-<div class="pure-g strip">
-    <div class="pure-u-1-1">
+<div class="row strip">
+    <div class="12u">
         <img src="images/filmStripTop.jpg">
     </div>
 </div>
 
-<div class="pure-g filmStrip ui-widget-content">
-    <div id="space0" class="pure-u-1-4">
-
+<div class="row 0% filmStrip centred">
+    <div id="space0" class="3u">
+        <img id="space0drop" src="images/drop.png">
     </div>
-    <div id="space1" class="pure-u-1-4">
-
+    <div id="space1" class="3u">
+        <img id="space1drop" src="images/drop.png">
     </div>
-    <div id="space2" class="pure-u-1-4">
-
+    <div id="space2" class="3u">
+        <img id="space2drop" src="images/drop.png">
     </div>
 </div>
 
-<div class="pure-g strip">
-    <div class="pure-u-1-1">
+<div class="row strip">
+    <div class="12u">
         <img src="images/filmStripBottom.jpg">
     </div>
 </div>

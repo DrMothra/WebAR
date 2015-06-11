@@ -24,7 +24,7 @@ var videoPlayer = (function() {
         init: function(videoId) {
             player = document.getElementById(videoId);
             for(currentVideo= 0; currentVideo<numVideos; ++currentVideo) {
-                videoTitle = sessionStorage.getItem('video'+currentVideo);
+                videoTitle = sessionStorage.getItem('space'+currentVideo);
                 if(videoTitle) break;
             }
 
@@ -41,7 +41,7 @@ var videoPlayer = (function() {
                     if(++currentVideo >= numVideos) currentVideo = 0;
                     player.removeChild(videoSource);
                     //Get next video
-                    videoTitle = sessionStorage.getItem('video'+currentVideo);
+                    videoTitle = sessionStorage.getItem('space'+currentVideo);
                     if(videoTitle) {
                         videoSource = document.createElement("source");
                         videoSource.setAttribute("src", videoTitle);
