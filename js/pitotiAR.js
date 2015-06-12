@@ -2,6 +2,7 @@
  * Created by DrTone on 30/03/2015.
  */
 var NUM_VIDEOS = 3;
+var NUM_CONTAINERS = 3;
 
 //Augmented reality app for 3D Pitoti
 function copyMatrix(mat, cm) {
@@ -165,6 +166,10 @@ PitotiAR.prototype.init = function(container) {
     //Clear videos from film clips
     sessionStorage.clear();
     sessionStorage.setItem('numVideos', NUM_VIDEOS);
+    this.occupied = new Array(NUM_CONTAINERS);
+    for(var i=0; i<NUM_CONTAINERS; ++i) {
+        this.occupied[i] = false;
+    }
 
     //Video clips
     this.lastTime = 0;
@@ -189,6 +194,7 @@ PitotiAR.prototype.init = function(container) {
     var defaultPadding = 40;
     var triggerLeft = pos.left + defaultPadding + ((width-this.videoWidth)/2) + (this.videoWidth*0.05);
     this.triggerElem.css("left", triggerLeft + "px");
+    this.triggerElem.css("top", "0px");
     this.triggerElem.defaultLeft = triggerLeft;
 
     this.triggerVideo = document.getElementById("triggerVideo");
@@ -261,7 +267,10 @@ PitotiAR.prototype.drag = function(event) {
 
 PitotiAR.prototype.drop = function(event) {
     //Dragged video clip
-    if(this.currentMarker < 0 || event.target.occupied) {
+    var id = event.target.id;
+    var slot = parseInt(id.charAt(id.length-1));
+    if(isNaN(slot)) return;
+    if(this.currentMarker < 0 || this.occupied[slot]) {
         this.restoreVideoPlayer();
         return;
     }
@@ -279,7 +288,7 @@ PitotiAR.prototype.drop = function(event) {
     image.style.width = event.target.clientWidth + 'px';
     image.style.height = event.target.clientHeight + 'px';
     event.target.appendChild(image);
-    event.target.occupied = true;
+    this.occupied[slot] = true;
 
     this.restoreVideoPlayer();
 
@@ -291,8 +300,16 @@ PitotiAR.prototype.drop = function(event) {
 
 PitotiAR.prototype.dropVideo = function(event, ui) {
     //Either delete or stop video
-    if($(ui.draggable).hasClass("imgDraggable")) {
-        console.log("Draggable");
+    var dragged = $(ui.draggable);
+    if(dragged.hasClass("imgDraggable")) {
+        var id = dragged.parent().attr('id');
+        $('#'+id+'drop').show();
+        dragged.remove();
+        sessionStorage.removeItem(id);
+        var slot = parseInt(id.charAt(id.length-1));
+        if(!isNaN(slot)) {
+            this.occupied[slot] = false;
+        }
     }else {
         this.stopVideo();
     }
@@ -365,6 +382,7 @@ PitotiAR.prototype.update = function() {
         if (!m.video) {
             if(this.currentMarker >= NUM_VIDEOS) return;
             this.triggerVideo.src = this.videoSources[this.currentMarker];
+            this.triggerVideo.load();
             this.videoPlaying = true;
             m.video = true;
         }
@@ -375,8 +393,10 @@ PitotiAR.prototype.update = function() {
         if(!this.triggerVideo.playing) {
             //Show video pane
             this.triggerElem.show();
-            this.triggerVideo.play();
-            this.triggerVideo.playing = true;
+            if(this.triggerVideo.readyState === 4) {
+                this.triggerVideo.play();
+                this.triggerVideo.playing = true;
+            }
             //DEBUG
             console.log("Playing");
         } else {
