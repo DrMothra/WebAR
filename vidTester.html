@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script type="text/javascript">
+
+        function vidplay() {
+            var video = document.getElementById("Video1");
+            var button = document.getElementById("play");
+
+                video.play();
+
+        }
+
+        function restart() {
+            var video = document.getElementById("Video1");
+            video.currentTime = 0;
+        }
+
+        function skip(value) {
+            var video = document.getElementById("Video1");
+            video.currentTime += value;
+        }
+    </script>
+
+</head>
+<body>
+
+<video id="Video1" >
+    //  Replace these with your own video files.
+    <source src="videos/HuntSmall.mp4" type="video/mp4" />
+    HTML5 Video is required for this example.
+</video>
+
+<div id="buttonbar">
+    <button id="restart" onclick="restart();">[]</button>
+    <button id="rew" onclick="skip(-10)">&lt;&lt;</button>
+    <button id="play" onclick="vidplay()">&gt;</button>
+    <button id="fastFwd" onclick="skip(10)">&gt;&gt;</button>
+</div>
+
+</body>
+</html>

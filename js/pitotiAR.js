@@ -179,7 +179,8 @@ PitotiAR.prototype.init = function(container) {
 
     //Matrix store
     this.tmp = new Float32Array(16);
-    this.markers = {};
+    this.markers = [];
+
     this.resultMat = ARSystem.getResultsMat();
 
     //Triggered video parameters
@@ -255,6 +256,9 @@ PitotiAR.prototype.createScene = function() {
 
     //Load video sources
     this.videoSources = ['videos/HuntSmall.mp4', 'videos/deersSmall.mp4', 'videos/HouseSmall.mp4'];
+
+    this.triggerVideo.src = this.videoSources[0];
+    this.triggerVideo.load();
 };
 
 PitotiAR.prototype.drag = function(event) {
@@ -319,7 +323,6 @@ PitotiAR.prototype.stopVideo = function() {
     //Stop video playing
     this.triggerVideo.playing = false;
     this.videoPlaying = false;
-    this.markers[this.currentMarker].video = false;
     this.currentMarker = -1;
     this.triggerElem.hide();
 
@@ -334,6 +337,10 @@ PitotiAR.prototype.restoreVideoPlayer = function() {
     //Put video player back in default position
     this.triggerElem.css("left", this.triggerElem.defaultLeft + "px");
     this.triggerElem.css("top", 0);
+};
+
+PitotiAR.prototype.playVideo = function() {
+    this.triggerVideo.play();
 };
 
 PitotiAR.prototype.update = function() {
@@ -370,22 +377,14 @@ PitotiAR.prototype.update = function() {
                     currId = (currId << 8) | id.getPacketData(i);
                 }
             }
-            if (!this.markers[currId]) {
-                this.markers[currId] = {};
-            }
             this.currentMarker = currId;
         }
     }
 
-    if(this.currentMarker >= 0) {
-        var m = this.markers[this.currentMarker];
-        if (!m.video) {
-            if(this.currentMarker >= NUM_VIDEOS) return;
-            this.triggerVideo.src = this.videoSources[this.currentMarker];
-            this.triggerVideo.load();
-            this.videoPlaying = true;
-            m.video = true;
-        }
+    if(this.currentMarker >= 0 && !this.videoPlaying) {
+        if(this.currentMarker >= NUM_VIDEOS) return;
+
+        this.videoPlaying = true;
     }
 
     //See if any videos triggered
@@ -393,12 +392,10 @@ PitotiAR.prototype.update = function() {
         if(!this.triggerVideo.playing) {
             //Show video pane
             this.triggerElem.show();
-            if(this.triggerVideo.readyState === 4) {
-                this.triggerVideo.play();
-                this.triggerVideo.playing = true;
-            }
+            this.triggerVideo.play();
+            this.triggerVideo.playing = true;
             //DEBUG
-            console.log("Playing");
+            //console.log("Playing");
         } else {
             if(this.triggerVideo.ended) {
                 this.stopVideo();
