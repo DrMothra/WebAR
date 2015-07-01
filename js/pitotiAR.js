@@ -256,9 +256,6 @@ PitotiAR.prototype.createScene = function() {
 
     //Load video sources
     this.videoSources = ['videos/HuntSmall.mp4', 'videos/deersSmall.mp4', 'videos/HouseSmall.mp4'];
-
-    this.triggerVideo.src = this.videoSources[0];
-    this.triggerVideo.load();
 };
 
 PitotiAR.prototype.drag = function(event) {
