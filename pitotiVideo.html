@@ -2,31 +2,41 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Selected Video Clip</title>
+    <title>Video</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="js/pitotiVideo.js"></script>
+    <script type="text/javascript" src="js/skel.min.js"></script>
+    <script type="text/javascript" src="js/pitotiVideo.js?v=0.1"></script>
 
-    <link rel="stylesheet" href="css/pure-min.css">
-    <link href="css/pitotiStyles.css?v=0.2" rel="stylesheet" type="text/css">
+    <link href="css/pitotiStyles.css?v=0.4" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div class="pure-g">
-    <div class="pure-u-1-8 goLeft">
-        <a href="pitotiRecord.html"><img class="navigate" src="images/arrow-left.png"></a>
+<div class="page">
+    <div class="row">
+        <div class="2u">
+            Back
+        </div>
+        <div class="8u">
+            What is 3D-PITOTI?
+        </div>
+        <div class="2u">
+            &nbsp;
+        </div>
     </div>
-    <div class="pure-u-3-4 centred">
-        <button id="finalClip">Play clip</button>
-        <video id="videoPlayer" width="640" height="480">
 
-        </video>
-        <audio id="audioPlayer">
-
-        </audio>
-    </div>
-    <div class="pure-u-1-8 goRight">
-        <a href="pitoti.html"><img class="navigate" src="images/arrow-right.png"></a>
+    <div class="row">
+        <div class="2u">
+            &nbsp;
+        </div>
+        <div class="8u">
+            <video controls>
+                <source src="videos/HuntSmall.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="2u">
+            &nbsp;
+        </div>
     </div>
 </div>
 

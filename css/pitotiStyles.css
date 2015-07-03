@@ -34,28 +34,29 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     letter-spacing: normal;
 }
 
-html {
+/* Common page styles */
+body {
     background: url("../images/rock1.jpg") no-repeat center center fixed;
     background-size: cover;
 }
 
+.page {
+    text-align: center;
+}
+
+/* Start page */
+
+#stories {
+    background: none;
+    background-color: #ffffff;
+}
 #AR{
     margin: 0;
     padding: 0;
     margin-top: 20px;
     text-align: center;
 }
-#WebGL-output {
-    /* set margin to 0 and overflow to hidden, to go fullscreen */
-    margin: 0;
-    overflow: hidden;
-}
-#notSupported {
-    position: fixed;
-    top: 40%;
-    left: 35%;
-    width: 25%;
-}
+
 .errorMessage {
     padding: 3%;
     border-radius: 15px;
@@ -106,19 +107,112 @@ html {
 }
 
 
-/* id's */
-#mainTitle {
-    margin: 3% 0 5% 0;
+/* Main page */
+
+#logo img {
+    width: 35%;
 }
-#mainTitle img {
-    width: 50%;
+#logoMenu img {
+    width: 70%;
+}
+#start {
+    margin-top: 5%;
+}
+/* Animations */
+@-webkit-keyframes bounce {
+    0% {
+        -webkit-transform: translate(0px, 0px);
+    }
+
+    50% {
+        -webkit-transform: translate(0px, 15%);
+    }
+
+    100% {
+        -webkit-transform: translate(0px, 0px);
+    }
+}
+.intro {
+    -webkit-animation-name: bounce;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-iteration-count: infinite;
+}
+
+/* Welcome */
+.bubble {
+    position: relative;
+}
+.contents {
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    width: 100%;
+    margin-left: -50%;
+}
+.contents p {
+    font-family: "Calibri", sans-serif;
+    font-size: 1.3vw;
+}
+#seradina {
+    margin-left: -10%;
+    margin-top: 30%;
+}
+#seradina img {
+    width: 100%;
+}
+#rockFace {
+    margin-top: 1%;
+}
+#rockFace img {
+    width: 80%;
 }
 #WebGL-output {
     position: fixed;
     top: 40%;
     left: 25%;
 }
-
+.back {
+    margin-top: 1%;
+}
+.back img {
+    width: 50%;
+}
+.actionButton {
+    -moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
+    -webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
+    box-shadow: 0px 0px 0px 2px #9fb4f2;
+    background-color:#7892c2;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+    border:1px solid #4e6096;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:19px;
+    padding:12px 37px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #283966;
+}
+.actionButton:hover {
+    background-color:#476e9e;
+}
+.actionButton:active {
+    position:relative;
+    top:1px;
+}
+#scan {
+    margin-top: 60%;
+}
+#area3 {
+    margin-top: 20%;
+}
+#listen {
+    margin-left: -50%;
+    margin-top: 150%;
+}
 /* AR stuff */
 .goRight {
     text-align: right;
@@ -126,7 +220,7 @@ html {
 .goLeft {
     text-align: left;
 }
-.navigate {
+.navigate img {
     width: 75%;
 }
 .filmStrip {
