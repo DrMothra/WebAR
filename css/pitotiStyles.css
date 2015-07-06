@@ -43,8 +43,79 @@ body {
 .page {
     text-align: center;
 }
-
+.bubble {
+    position: relative;
+}
+.contents {
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    width: 100%;
+    margin-left: -50%;
+}
+.contents p {
+    font-family: "Calibri", sans-serif;
+    font-size: 1.3vw;
+}
 /* Start page */
+#startPage img {
+    width: 35%;
+}
+/* Animations */
+@-webkit-keyframes bounce {
+    0% {
+        -webkit-transform: translate(0px, 0px);
+    }
+
+    50% {
+        -webkit-transform: translate(0px, 15%);
+    }
+
+    100% {
+        -webkit-transform: translate(0px, 0px);
+    }
+}
+.intro {
+    -webkit-animation-name: bounce;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-iteration-count: infinite;
+}
+#start {
+    margin-top: 5%;
+}
+
+/* Welcome page */
+#welcomePage img {
+    width: 65%;
+}
+#welcomeAzir {
+    margin-top: -10%;
+}
+#welcomeAzir img {
+    width: 40%;
+}
+#nextPage img {
+    width: 50%
+}
+
+/* Menu page */
+#logoMenu img {
+    width: 70%;
+}
+#aboutOption {
+    margin-top: 70%;
+}
+#createOption {
+    margin-top: 10%;
+}
+
+/* About page */
+
+
+
+
+
 
 #stories {
     background: none;
@@ -109,51 +180,13 @@ body {
 
 /* Main page */
 
-#logo img {
-    width: 35%;
-}
-#logoMenu img {
-    width: 70%;
-}
-#start {
-    margin-top: 5%;
-}
-/* Animations */
-@-webkit-keyframes bounce {
-    0% {
-        -webkit-transform: translate(0px, 0px);
-    }
 
-    50% {
-        -webkit-transform: translate(0px, 15%);
-    }
 
-    100% {
-        -webkit-transform: translate(0px, 0px);
-    }
-}
-.intro {
-    -webkit-animation-name: bounce;
-    -webkit-animation-timing-function: linear;
-    -webkit-animation-duration: 1.5s;
-    -webkit-animation-iteration-count: infinite;
-}
+
 
 /* Welcome */
-.bubble {
-    position: relative;
-}
-.contents {
-    position: absolute;
-    top: 2%;
-    left: 50%;
-    width: 100%;
-    margin-left: -50%;
-}
-.contents p {
-    font-family: "Calibri", sans-serif;
-    font-size: 1.3vw;
-}
+
+
 #seradina {
     margin-left: -10%;
     margin-top: 30%;
@@ -261,5 +294,6 @@ body {
 .trash {
     margin-top: 5%;
 }
+
 
 
