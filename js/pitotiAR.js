@@ -2,7 +2,7 @@
  * Created by DrTone on 30/03/2015.
  */
 var NUM_VIDEOS = 3;
-var NUM_CONTAINERS = 3;
+var NUM_CONTAINERS = 8;
 
 //Augmented reality app for 3D Pitoti
 function copyMatrix(mat, cm) {
@@ -277,18 +277,19 @@ PitotiAR.prototype.drop = function(event) {
     }
 
     event.preventDefault();
-    var image = document.createElement("img");
+    var image = document.getElementById(id);
     image.className = "imgDraggable";
 
     $(image).draggable( {
-        revert: "invalid"
+        revert: "invalid",
+        helper: "clone"
     });
 
     image.src = "images/video" + this.currentMarker + ".jpg";
 
     image.style.width = event.target.clientWidth + 'px';
     image.style.height = event.target.clientHeight + 'px';
-    event.target.appendChild(image);
+
     this.occupied[slot] = true;
 
     this.restoreVideoPlayer();
@@ -303,6 +304,14 @@ PitotiAR.prototype.dropVideo = function(event, ui) {
     //Either delete or stop video
     var dragged = $(ui.draggable);
     if(dragged.hasClass("imgDraggable")) {
+        var id = dragged.attr('id');
+        var slot = parseInt(id.charAt(id.length-1));
+        if(!isNaN(slot)) {
+            this.occupied[slot] = false;
+        }
+        ++slot;
+        dragged.attr('src', 'images/clip'+slot+'.png');
+        /*
         var id = dragged.parent().attr('id');
         $('#'+id+'drop').show();
         dragged.remove();
@@ -311,6 +320,7 @@ PitotiAR.prototype.dropVideo = function(event, ui) {
         if(!isNaN(slot)) {
             this.occupied[slot] = false;
         }
+        */
     }else {
         this.stopVideo();
     }
@@ -380,7 +390,7 @@ PitotiAR.prototype.update = function() {
 
     if(this.currentMarker >= 0 && !this.videoPlaying) {
         if(this.currentMarker >= NUM_VIDEOS) return;
-
+        this.triggerVideo.src = this.videoSources[this.currentMarker];
         this.videoPlaying = true;
     }
 
@@ -422,10 +432,14 @@ $(document).ready(function() {
         //GUI callbacks
         var dragElem = $('#triggerVideo');
         dragElem.draggable( {
-            revert: "invalid"
+            revert: "invalid",
+            cursorAt: { top: 0, left: 0 },
+            helper: function(event) {
+                return $("<img src='images/drag.png'>");
+            }
         });
 
-        var targetElem = $('.filmStrip div');
+        var targetElem = $('.drop img');
         targetElem.droppable( {
             accept: "#triggerVideo",
             drop: function( event, ui) {
@@ -435,7 +449,7 @@ $(document).ready(function() {
 
         var trashElem = $('.trash');
         trashElem.droppable( {
-            accept: "#triggerVideo, .imgDraggable",
+            accept: "#triggerVideo, .drop img",
             drop: function( event, ui) {
                 app.dropVideo(event, ui);
             }
