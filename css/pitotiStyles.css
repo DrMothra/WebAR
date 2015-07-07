@@ -184,22 +184,34 @@ body {
 
 
 
-/* Welcome */
-
+/* Hot spots */
 #rockTitle {
     font-family: "Calibri", sans-serif;
     font-size: 2.3vw;
+    margin-top: 2%;
 }
+#hotSpots {
 
+}
 #hotSpots img {
     position: absolute;
-    width: 50%;
-    top: -5%;
-    left: 25%;
+    width: 5%;
+}
+#spot1 {
+    top: 17.5%;
+    left: 42.5%;
+}
+#spot2 {
+    top: 45%;
+    left: 42.5%;
+}
+#spot3 {
+    top: 40%;
+    left: 55%;
 }
 #seradina {
     margin-left: -10%;
-    margin-top: 30%;
+    margin-top: 100%;
 }
 #seradina img {
     width: 100%;
