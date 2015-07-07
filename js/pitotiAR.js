@@ -297,7 +297,7 @@ PitotiAR.prototype.drop = function(event) {
     $('#' + event.target.id + 'drop').hide();
 
     //Store video name
-    sessionStorage.setItem(event.target.id, this.videoSources[this.currentMarker]);
+    sessionStorage.setItem(event.target.id, "video" + this.currentMarker + ".jpg");
 };
 
 PitotiAR.prototype.dropVideo = function(event, ui) {

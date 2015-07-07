@@ -36,7 +36,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 
 /* Common page styles */
 body {
-    background: url("../images/rock1.jpg") no-repeat center center fixed;
+    background: url("../images/rockBackground.jpg") no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -222,16 +222,23 @@ body {
 #rockFace img {
     width: 80%;
 }
-#WebGL-output {
-    position: fixed;
-    top: 40%;
-    left: 25%;
+
+/* Timeline page */
+#logo img {
+    width: 60%;
 }
 .back {
     margin-top: 1%;
 }
 .back img {
     width: 50%;
+}
+
+#timeline {
+    background-color: #1e3766;
+}
+#playStory {
+    margin-top: 5%;
 }
 .actionButton {
     -moz-box-shadow: 0px 0px 0px 2px #9fb4f2;

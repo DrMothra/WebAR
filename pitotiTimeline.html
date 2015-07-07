@@ -9,13 +9,8 @@
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
 
-    <script type="text/javascript" src="js/detector.js"></script>
-    <script type="text/javascript" src="js/three68.js"></script>
-    <script type="text/javascript" src="js/baseAppAR.js?v=0.3"></script>
     <script type="text/javascript" src="js/skel.min.js"></script>
-
-    <script type="text/javascript" src="js/JSARToolKit.js"></script>
-    <script type="text/javascript" src="js/pitotiAR.js?v=0.3"></script>
+    <script type="text/javascript" src="js/pitotiTimeline.js?v=0.1"></script>
 
     <link href="css/pitotiStyles.css?v=0.4" rel="stylesheet" type="text/css">
 
@@ -28,51 +23,60 @@
 <div class="page">
     <div class="row 0%">
         <div class="3u">
-            <a href="pitotiCreate.html"><img src="images/back.png"></a>
+            <a href="pitotiAR.html"><img src="images/back.png"></a>
             <div class="row 0%">
-                <div class="6u drop">
+                <div class="6u drag">
                     <img id="slot0" src="images/clip1.png">
                     <img id="slot1" src="images/clip2.png">
                     <img id="slot2" src="images/clip3.png">
                     <img id="slot3" src="images/clip4.png">
                 </div>
-                <div class="6u drop">
+                <div class="6u drag">
                     <img id="slot4" src="images/clip5.png">
                     <img id="slot5" src="images/clip6.png">
                     <img id="slot6" src="images/clip7.png">
                     <img id="slot7" src="images/clip8.png">
                 </div>
             </div>
-            <div class="trash">
-                <img src="images/delete.png">
-            </div>
         </div>
         <div class="6u ui-widget-content">
-            <div id="ARoutput" class="6u">
-
+            <div id="timeline" class="drop row 0%">
+                <div class="3u">
+                    <img src="images/story1.png">
+                </div>
+                <div class="3u">
+                    <img src="images/story2.png">
+                </div>
+                <div class="3u">
+                    <img src="images/story3.png">
+                </div>
+                <div class="3u">
+                    <img src="images/story4.png">
+                </div>
             </div>
+            <div id="playStory">
+                <img src="images/play.png">
+            </div>
+
         </div>
         <div class="3u">
-            <a href="pitotiTimeline.html"><img src="images/next.png"></a>
+            <a href="pitotiRecord.html"><img src="images/next.png"></a>
             <div class="bubble">
                 <img src="images/azirSpeech.png">
                 <div class="contents">
                     <p>
-                        Find and collect<br>
-                        Pitoti rock art clips.<br>
-                        Click "Next" when<br>
-                        you are ready!
+                        Now create your own<br>
+                        story! Drag and drop 4<br>
+                        clips into your story<br>
+                        and press play. Click<br>
+                        "Next" when you are<br>
+                        ready!
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Trigger Video -->
-<video id="triggerVideo" class="hide">
-    <source src="videos/HuntSmall.mp4" type="video/mp4">
-</video>
 
 </body>
 </html>
