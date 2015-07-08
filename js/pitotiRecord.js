@@ -2,7 +2,7 @@
  * Created by DrTone on 14/05/2015.
  */
 
-
+var TIMELINE_SLOTS = 4;
 var audio_context, recorder, recording = false;
 var linkNumber = 0;
 var audioClips = [];
@@ -14,6 +14,8 @@ function __log(e, data) {
 var videoPlayer = (function() {
     var player;
     var numVideos = sessionStorage.getItem('numVideos');
+    var vidPlayer;
+    var videoSources = ['videos/HuntSmall.mp4', 'videos/deersSmall.mp4', 'videos/HouseSmall.mp4'];
     var currentVideo = 0;
     var checkInterval = 500;
     var videoTitle;
@@ -21,48 +23,21 @@ var videoPlayer = (function() {
     var videoTimer;
 
     return {
-        init: function(videoId) {
-            player = document.getElementById(videoId);
-            for(currentVideo= 0; currentVideo<numVideos; ++currentVideo) {
-                videoTitle = sessionStorage.getItem('space'+currentVideo);
-                if(videoTitle) break;
-            }
-
-            if(videoTitle) {
-                if(player) {
-                    videoSource = document.createElement("source");
-                    videoSource.setAttribute("src", videoTitle);
-                    player.appendChild(videoSource);
-                }
-            }
-            videoTimer = setInterval(function() {
-                //console.log("Checking");
-                if(player.ended) {
-                    if(++currentVideo >= numVideos) currentVideo = 0;
-                    player.removeChild(videoSource);
-                    //Get next video
-                    videoTitle = sessionStorage.getItem('space'+currentVideo);
-                    if(videoTitle) {
-                        videoSource = document.createElement("source");
-                        videoSource.setAttribute("src", videoTitle);
-                        player.appendChild(videoSource);
-                        player.load();
-                        player.play();
-                    }
-                }
-            }, checkInterval);
-        },
-
-        reset: function() {
-            clearInterval(videoTimer);
-            if(player) {
-                player.pause();
-            }
+        init: function() {
+            vidPlayer = document.getElementById("videoPlayer");
         },
 
         playBack: function() {
-            player = document.getElementById('videoPlayback');
-            player.play();
+            var clip, videoIndex;
+            for(var i=0; i<TIMELINE_SLOTS; ++i) {
+                clip = sessionStorage.getItem("timeline"+i);
+                if(clip) {
+                    videoIndex = parseInt(clip.charAt(clip.length-1));
+                    if(isNaN(videoIndex)) continue;
+                    vidPlayer.src = videoSources[videoIndex];
+                    vidPlayer.play();
+                }
+            }
         }
     }
 })();
@@ -122,9 +97,9 @@ function toggleRecording() {
 }
 
 $(document).ready(function() {
-    //Play videos
-    videoPlayer.init('videoPlayer');
-
+    //Init
+    skel.init();
+    videoPlayer.init();
     //Set up audio recording
     try {
         // webkit shim
@@ -148,25 +123,7 @@ $(document).ready(function() {
         toggleRecording();
     });
 
-    var audioPlayer = null;
-
-    $('#gotoFinal').on('click', function() {
-        $('#pitRecord').hide();
-        $('#pitVideo').show();
-
-        //Play selected video/audio
-        videoPlayer.reset();
-        videoPlayer.init('videoPlayback');
-
-        audioPlayer = document.createElement('audio');
-        audioPlayer.src = sessionStorage.getItem('audioSelection');
-    });
-
-    $('#finalClip').on('click', function() {
-        if(audioPlayer != null) {
-            videoPlayer.playBack();
-            audioPlayer.play();
-        }
-
+    $('#playStory').on("click", function() {
+        videoPlayer.playBack();
     });
 });
