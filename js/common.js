@@ -1,7 +1,7 @@
 /**
- * Created by DrTone on 04/12/2014.
+ * Created by DrTone on 10/07/2015.
  */
-//Visualisation framework
+
 
 $(document).ready(function() {
     //Do any init

@@ -39,7 +39,14 @@ body {
     background: url("../images/rockBackground.jpg") no-repeat center center fixed;
     background-size: cover;
 }
-
+.errorMessage {
+    padding: 3%;
+    border-radius: 15px;
+    background: #444444;
+}
+.hide {
+    display: none;
+}
 .page {
     text-align: center;
 }
@@ -48,14 +55,14 @@ body {
 }
 .contents {
     position: absolute;
-    top: 2%;
+    top: 5%;
     left: 50%;
     width: 100%;
     margin-left: -50%;
 }
 .contents p {
     font-family: "Calibri", sans-serif;
-    font-size: 1.3vw;
+    font-size: 1.3em;
 }
 /* Animations */
 @-webkit-keyframes bounce {
@@ -71,6 +78,33 @@ body {
         -webkit-transform: translate(0px, 0px);
     }
 }
+/* Buttons */
+.actionButton {
+    -moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
+    -webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
+    box-shadow: 0px 0px 0px 2px #9fb4f2;
+    background-color:#7892c2;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+    border:1px solid #4e6096;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:19px;
+    padding:12px 37px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #283966;
+}
+.actionButton:hover {
+    background-color:#476e9e;
+}
+.actionButton:active {
+    position:relative;
+    top:1px;
+}
+
 /* PAGES */
 
 /* Start page */
@@ -106,112 +140,50 @@ body {
     width: 15%
 }
 
-
-
-
 /* Menu page */
-#logoMenu img {
-    width: 70%;
-}
-#aboutOption {
-    margin-top: 70%;
-}
-#createOption {
+#menuOptions {
+    text-align: right;
     margin-top: 10%;
+    margin-right: 5%;
+}
+#menuOptions div {
+    margin-bottom: 5%;
+}
+#azirWelcome {
+    margin-top: -10%;
 }
 
-#storyControls {
-    text-align: left;
-}
 /* About page */
-
-#finalControls {
+#previousPage {
     text-align: left;
+    margin-left: 5%;
 }
 
+/* Overview page */
+
+
+/* Hotspots page */
 #stories {
     background: none;
     background-color: #ffffff;
 }
-#AR{
-    margin: 0;
-    padding: 0;
-    margin-top: 20px;
-    text-align: center;
-}
-
-.errorMessage {
-    padding: 3%;
-    border-radius: 15px;
-    background: #444444;
-}
-.hide {
-    display: none;
-}
-.title {
-    font-size: 2em;
-    margin: 3%;
-}
-.bigTitle {
-    font-size: 4em;
-    margin: 5%;
-}
-.subTitle {
-    font-size: 1.5em;
-    margin: 2%;
-}
-.heavy {
-    font-weight: bold;
-}
-.smallText {
-    font-size: 0.7em;
-}
-.smallMediumText {
-    font-size: 1.8em;
-}
-.normalText {
-    font-size: 1.2em;
-}
-.mediumText {
-    font-size: 2.5em;
-}
-.bigText {
-    font-size: 4.5em;
-    -webkit-text-fill-color: #EE4355;
-    -webkit-text-stroke-width: 4px;
-    -webkit-text-stroke-color: #EE4355;
-}
-.superBigText {
-    font-size: 10em;
-    font-weight: 300;
-}
-.centred {
-    text-align: center;
-}
-
-
-/* Main page */
-
-
-
-
-
-/* Hot spots */
 #rockTitle {
     font-family: "Calibri", sans-serif;
     font-size: 2.3vw;
     margin-top: 2%;
 }
 #hotSpots {
-
+    position: relative;
+    top: 200px;
 }
+
 #hotSpots img {
-    position: absolute;
-    width: 5%;
+    width: 75%;
 }
 #spot1 {
-    top: 17.5%;
-    left: 42.5%;
+    position: absolute;
+    top: 100px;
+    left: 30px;
 }
 #spot2 {
     top: 45%;
@@ -235,6 +207,9 @@ body {
     width: 80%;
 }
 
+
+
+
 /* Timeline page */
 #logo img {
     width: 60%;
@@ -252,31 +227,7 @@ body {
 #playStory {
     margin-top: 5%;
 }
-.actionButton {
-    -moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
-    -webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
-    box-shadow: 0px 0px 0px 2px #9fb4f2;
-    background-color:#7892c2;
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
-    border-radius:10px;
-    border:1px solid #4e6096;
-    display:inline-block;
-    cursor:pointer;
-    color:#ffffff;
-    font-family:Arial;
-    font-size:19px;
-    padding:12px 37px;
-    text-decoration:none;
-    text-shadow:0px 1px 0px #283966;
-}
-.actionButton:hover {
-    background-color:#476e9e;
-}
-.actionButton:active {
-    position:relative;
-    top:1px;
-}
+
 #scan {
     margin-top: 60%;
 }
