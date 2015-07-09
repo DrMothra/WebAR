@@ -39,10 +39,12 @@ var videoPanel = (function() {
             var dragged = $(ui.draggable);
             var image = document.getElementById(id);
             image.src = dragged.attr('src');
+            //Get video index
+            var videoIndex = parseInt(image.src.charAt(image.src.length-5));
             timelineSlots[slot] = true;
             ++numVideos;
             sessionStorage.setItem("numVideos", numVideos);
-            sessionStorage.setItem("timeline"+slot, "video"+slot);
+            sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
         },
 
         playStory: function() {
@@ -93,7 +95,6 @@ var videoPanel = (function() {
             sessionStorage.removeItem("timeline"+slot);
             //Restore original image
             var timelineSlot = document.getElementById("timeline"+slot);
-            ++slot;
             timelineSlot.src = "images/story"+slot+".png";
         }
     }

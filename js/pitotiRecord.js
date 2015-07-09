@@ -16,11 +16,11 @@ var videoPlayer = (function() {
     var numVideos = sessionStorage.getItem('numVideos');
     var vidPlayer;
     var videoSources = ['videos/HuntSmall.mp4', 'videos/deersSmall.mp4', 'videos/HouseSmall.mp4'];
-    var currentVideo = 0;
     var checkInterval = 500;
-    var videoTitle;
-    var videoSource;
-    var videoTimer;
+    var videoChecker;
+    var currentSlot = 0;
+    var gotClip = false;
+    var playingVideo = false;
 
     return {
         init: function() {
@@ -28,15 +28,45 @@ var videoPlayer = (function() {
         },
 
         playBack: function() {
+            if(playingVideo) return;
+            playingVideo = true;
             var clip, videoIndex;
-            for(var i=0; i<TIMELINE_SLOTS; ++i) {
-                clip = sessionStorage.getItem("timeline"+i);
+            while(!gotClip) {
+                clip = sessionStorage.getItem("timeline"+currentSlot);
                 if(clip) {
+                    gotClip = true;
                     videoIndex = parseInt(clip.charAt(clip.length-1));
                     if(isNaN(videoIndex)) continue;
                     vidPlayer.src = videoSources[videoIndex];
                     vidPlayer.play();
+                } else {
+                    if(++currentSlot >= TIMELINE_SLOTS) {
+                        currentSlot = 0;
+                        playingVideo = false;
+                        break;
+                    }
                 }
+            }
+            if(gotClip) {
+                videoChecker = setInterval(function() {
+                    if(vidPlayer.ended) {
+                        //See if any more clips
+                        if(++currentSlot >= TIMELINE_SLOTS) {
+                            currentSlot = 0;
+                            playingVideo = false;
+                            gotClip = false;
+                            clearInterval(videoChecker);
+                        } else {
+                            clip = sessionStorage.getItem("timeline"+currentSlot);
+                            if(clip) {
+                                videoIndex = parseInt(clip.charAt(clip.length-1));
+                                if(isNaN(videoIndex)) return;
+                                vidPlayer.src = videoSources[videoIndex];
+                                vidPlayer.play();
+                            }
+                        }
+                    }
+                }, checkInterval);
             }
         }
     }
