@@ -132,6 +132,14 @@ var ARSystem = (function() {
             return canvas;
         },
 
+        getCanvasWidth: function() {
+            return defaultCanvasWidth;
+        },
+
+        getCanvasHeight: function() {
+            return defaultCanvasHeight;
+        },
+
         getCanvasContext: function() {
             return canvas.getContext('2d');
         },
@@ -203,7 +211,7 @@ PitotiAR.prototype.init = function(container) {
     this.numVideos = 0;
 
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(this.videoWidth, this.videoHeight);
+    this.renderer.setSize(window.innerWidth*0.5*0.85, window.innerHeight*0.5);
     var glCanvas = this.renderer.domElement;
     this.container.appendChild(glCanvas);
 
@@ -364,7 +372,7 @@ PitotiAR.prototype.update = function() {
     this.lastTime = this.video.currentTime;
 
     this.vidCanvas.getContext('2d').drawImage(this.video,0,0);
-    ARSystem.getCanvasContext().drawImage(this.vidCanvas, 0,0,320,240);
+    ARSystem.getCanvasContext().drawImage(this.vidCanvas, 0,0,ARSystem.getCanvasWidth(),ARSystem.getCanvasHeight());
 
     this.ARCanvas.changed = true;
     this.videoTex.needsUpdate = true;

@@ -53,6 +53,9 @@ body {
 .bubble {
     position: relative;
 }
+.bubble img {
+    width: 90%;
+}
 .contents {
     position: absolute;
     top: 5%;
@@ -62,7 +65,7 @@ body {
 }
 .contents p {
     font-family: "Calibri", sans-serif;
-    font-size: 1.3em;
+    font-size: 1.25vw;
 }
 /* Animations */
 @-webkit-keyframes bounce {
@@ -142,15 +145,13 @@ body {
 
 /* Menu page */
 #menuOptions {
-    text-align: right;
-    margin-top: 10%;
-    margin-right: 5%;
+    margin-top: 50%;
 }
 #menuOptions div {
-    margin-bottom: 5%;
+    margin-bottom: 10%;
 }
 #azirWelcome {
-    margin-top: -10%;
+    margin-top: 40%;
 }
 
 /* About page */
@@ -174,23 +175,27 @@ body {
 }
 #hotSpots {
     position: relative;
-    top: 200px;
+    top: 0;
 }
 
 #hotSpots img {
-    width: 75%;
+    width: 40%;
+}
+#spot1,
+#spot2,
+#spot3 {
+    position: absolute;
 }
 #spot1 {
-    position: absolute;
-    top: 100px;
-    left: 30px;
+    top: 175px;
+    left: 42.5%;
 }
 #spot2 {
-    top: 45%;
+    top: 450px;
     left: 42.5%;
 }
 #spot3 {
-    top: 40%;
+    top: 400px;
     left: 55%;
 }
 #seradina {
@@ -207,18 +212,49 @@ body {
     width: 80%;
 }
 
+/* Area3 page */
+#area3 {
+    margin-top: 20%;
+}
 
+/* Create page */
+#azirCreate {
+    margin-top: 5%;
+}
+#azirCreate div {
+    margin-bottom: 5%;
+}
 
+/* AR page */
+.drop img {
+    width: 75%;
+}
+#previousPage img {
+    width: 50%;
+}
+#nextARPage img {
+    width: 50%;
+}
+.trash {
+    margin-top: 5%;
+}
+.trash img {
+    width: 35%;
+}
 
 /* Timeline page */
+.drag img {
+    width: 75%;
+}
+#playStory img {
+    width: 30%;
+}
+
+
+
+
 #logo img {
     width: 60%;
-}
-.back {
-    margin-top: 1%;
-}
-.back img {
-    width: 50%;
 }
 
 #timeline {
@@ -231,35 +267,12 @@ body {
 #scan {
     margin-top: 60%;
 }
-#area3 {
-    margin-top: 20%;
-}
+
 #listen {
     margin-left: -50%;
     margin-top: 150%;
 }
-/* AR stuff */
-.goRight {
-    text-align: right;
-}
-.goLeft {
-    text-align: left;
-}
-.navigate img {
-    width: 75%;
-}
-.filmStrip {
-    background: white;
-}
-.filmStrip div {
-    border: 1px solid black;
-}
-.filmStrip {
-    min-height: 200px;
-}
-.filmStrip img {
-    min-height: 200px;
-}
+
 #space0 {
     margin-left: 11%;
 }
@@ -283,9 +296,7 @@ body {
     top: 0;
     left: 0;
 }
-.trash {
-    margin-top: 5%;
-}
+
 
 
 
