@@ -110,7 +110,9 @@ $(document).ready(function() {
     var dragElem = $('.drag img');
     dragElem.draggable( {
         revert: "invalid",
-        helper: "clone"
+        helper: function(event) {
+            return $('<div class="dragging">Drag to timeline</div>');
+        }
     });
 
     var dragTimeline = $('.drop img');

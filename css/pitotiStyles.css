@@ -249,7 +249,10 @@ body {
 #playStory img {
     width: 30%;
 }
-
+.dragging {
+    font-size: 1.3vw;
+    color: red;
+}
 
 
 
