@@ -155,13 +155,25 @@ body {
 }
 
 /* About page */
-#previousPage {
+#previousPageAbout {
     text-align: left;
     margin-left: 5%;
 }
+#previousPageAbout img {
+    width: 15%;
+}
+#azirAbout img {
+    width: 40%;
+}
 
 /* Overview page */
-
+#previousPageOverview {
+    text-align: left;
+    margin-left: 5%;
+}
+#previousPageOverview img {
+    width: 15%;
+}
 
 /* Hotspots page */
 #stories {
@@ -177,9 +189,8 @@ body {
     position: relative;
     top: 0;
 }
-
 #hotSpots img {
-    width: 40%;
+    width: 30%;
 }
 #spot1,
 #spot2,
@@ -246,6 +257,9 @@ body {
 .drag img {
     width: 75%;
 }
+#playStory {
+    margin-top: 5%;
+}
 #playStory img {
     width: 30%;
 }
@@ -253,20 +267,67 @@ body {
     font-size: 1.3vw;
     color: red;
 }
+#timeline {
+    margin-top: 2%;
+    background-color: #1e3766;
+}
+#timeline div {
+    padding: 2%;
+}
+#azirTimeline img {
+    width: 100%;
+}
 
+/* Record page */
+#nextPageRecord {
+    text-align: right;
+    margin-right: 2%;
+}
+#nextPageRecord img {
+    width: 45%
+}
+#playStoryRecord {
+    margin-top: 5%;
+    text-align: left;
+}
+#playStoryRecord img {
+    width: 30%;
+}
+#recordStory {
+    text-align: left;
+}
+#recordStory img {
+    width: 90%;
+}
+#azirRecord {
+    margin-top: 50%;
+}
 
 
 #logo img {
     width: 60%;
 }
 
-#timeline {
-    background-color: #1e3766;
-}
-#playStory {
-    margin-top: 5%;
-}
 
+/* Final page */
+#playStoryFinal {
+    text-align: left;
+}
+#playStoryFinal img {
+    width: 75%;
+}
+#createFinal {
+    text-align: left;
+}
+#createFinal img {
+    width: 25%;
+}
+#emailFinal {
+    text-align: right;
+}
+#emailFinal img {
+    width: 75%;
+}
 #scan {
     margin-top: 60%;
 }

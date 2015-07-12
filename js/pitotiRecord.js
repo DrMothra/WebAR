@@ -96,6 +96,7 @@ function createLink() {
         audioClips.push(url);
         status.src = "images/redCircle.png";
         status.id = "audioSelect" + linkNumber;
+        status.style.width = "5%";
         status.onclick = function() {
             $('#audioRecordings img').attr('src', 'images/redCircle.png');
             this.setAttribute('src', 'images/greenCircle.png');
@@ -153,7 +154,23 @@ $(document).ready(function() {
         toggleRecording();
     });
 
-    $('#playStory').on("click", function() {
+    $('#playStoryRecord').on("click", function() {
         videoPlayer.playBack();
     });
+
+    var audioPlayer = null;
+    $('#nextPageRecord').on("click", function() {
+        $('#storyControls').hide();
+        $('#nextPageRecord').hide();
+        $('#finalControls').show();
+        audioPlayer = document.createElement('audio');
+        audioPlayer.src = sessionStorage.getItem('audioSelection');
+    });
+
+    $('#playStoryFinal').on("click", function() {
+        if(audioPlayer != null) {
+            videoPlayer.playBack();
+            audioPlayer.play();
+        }
+    })
 });

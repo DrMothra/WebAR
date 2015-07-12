@@ -118,7 +118,9 @@ $(document).ready(function() {
     var dragTimeline = $('.drop img');
     dragTimeline.draggable( {
             revert: "invalid",
-            helper: "clone"
+        helper: function(event) {
+            return $('<div class="dragging">Drag to wastebin</div>');
+        }
     });
 
     var targetElem = $('.drop img');

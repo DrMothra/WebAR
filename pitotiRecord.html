@@ -9,14 +9,16 @@
     <script type="text/javascript" src="js/skel.min.js"></script>
     <script type="text/javascript" src="js/pitotiRecord.js?v=0.2"></script>
 
-    <link href="css/pitotiStyles.css?v=0.4" rel="stylesheet" type="text/css">
+    <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div class="page">
+<div id="recordPage" class="page">
     <div class="row 0%">
         <div class="3u">
-            <a href="pitotiTimeline.html"><img src="images/back.png"></a>
+            <div id="previousPage">
+                <a href="pitotiTimeline.html"><img src="images/back.png"></a>
+            </div>
         </div>
 
         <div class="6u">
@@ -24,7 +26,7 @@
 
             </video>
             <div id="storyControls">
-                <div id="playStory">
+                <div id="playStoryRecord">
                     <img src="images/play.png">
                 </div>
                 <div id="recordStory" class="row 0%">
@@ -42,11 +44,29 @@
 
                 </div>
             </div>
+            <div id="finalControls" class="hide">
+                <div class="row 0%">
+                    <div id="playStoryFinal" class="4u">
+                        <img src="images/playStory.png">
+                    </div>
+                    <div class="4u">
+                        &nbsp;
+                    </div>
+                    <div id="emailFinal" class="4u">
+                        <img src="images/email.png">
+                    </div>
+                </div>
+                <div id="createFinal">
+                    <a href="pitotiAR.html"><img src="images/createStory.png"></a>
+                </div>
+            </div>
         </div>
 
         <div class="3u">
-            <a href="pitotiFinal.html"><img src="images/next.png"></a>
-            <div class="bubble">
+            <div id="nextPageRecord">
+                <img src="images/next.png">
+            </div>
+            <div id="azirRecord" class="bubble">
                 <img src="images/azirSpeech.png">
                 <div class="contents">
                     <p>
