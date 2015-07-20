@@ -36,8 +36,14 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 
 /* Common page styles */
 body {
-    background: url("../images/rockBackground.jpg") no-repeat center center fixed;
+    background: url("../images/rockBackground.jpg") no-repeat center top fixed;
     background-size: cover;
+}
+.italics {
+    font-style: italic;
+}
+.blank {
+    background: none;
 }
 .errorMessage {
     padding: 3%;
@@ -58,14 +64,14 @@ body {
 }
 .contents {
     position: absolute;
-    top: 5%;
+    top: 7.5%;
     left: 50%;
     width: 100%;
     margin-left: -50%;
 }
 .contents p {
     font-family: "Calibri", sans-serif;
-    font-size: 1.25vw;
+    font-size: 1.75vw;
 }
 /* Animations */
 @-webkit-keyframes bounce {
@@ -79,6 +85,19 @@ body {
 
     100% {
         -webkit-transform: translate(0px, 0px);
+    }
+}
+@-webkit-keyframes radiate {
+    0% {
+        -webkit-transform: scale(0, 0);
+    }
+
+    50% {
+        -webkit-transform: scale(0.5, 0.5);
+    }
+
+    100% {
+        -webkit-transform: scale(1, 1);
     }
 }
 /* Buttons */
@@ -124,6 +143,12 @@ body {
     -webkit-animation-duration: 1.5s;
     -webkit-animation-iteration-count: infinite;
 }
+.hotSpotAnimate {
+    -webkit-animation-name: radiate;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-iteration-count: infinite;
+}
 #start {
     margin-top: 5%;
 }
@@ -132,15 +157,19 @@ body {
 #welcomeAzir {
     margin-top: 5%;
 }
-#welcomeAzir img {
-    width: 40%;
-}
 #nextPage {
     text-align: right;
     margin-right: 2%;
+    margin-top: -13%;
 }
 #nextPage img {
     width: 15%
+}
+#azirWelcome {
+
+}
+#azirWelcome img {
+    width: 70%;
 }
 
 /* Menu page */
@@ -150,10 +179,9 @@ body {
 #menuOptions div {
     margin-bottom: 10%;
 }
-#azirWelcome {
+#azirMenu {
     margin-top: 40%;
 }
-
 /* About page */
 #previousPageAbout {
     text-align: left;
@@ -174,63 +202,107 @@ body {
 #previousPageOverview img {
     width: 15%;
 }
-
-/* Hotspots page */
-#stories {
-    background-color: #ffffff;
-    background: url("../images/rockFace.png") no-repeat;
-    background-size: 50% 100%;
-    background-position: center center;
+#videoOverview {
+    margin-top: -7%;
 }
-#rockTitle {
-    font-family: "Calibri", sans-serif;
-    font-size: 2.3vw;
-    margin-top: 2%;
-}
-/* Media queries */
 
+/* Hotspots menu page */
+#previousPageHotMenu {
+    text-align: left;
+    margin-left: 5%;
+}
+#previousPageHotMenu img {
+    width: 15%;
+}
+#rockChoice {
+    margin-top: 10%;
+}
+#rockChoice div {
+    margin-bottom: 10%;
+}
+
+/* Hotspots seradina page */
+#hotSpotsSeradina {
+    margin-top: 5%;
+}
+#hotSpotsSeradina img {
+    width: 100%;
+}
 #hotSpots {
 
 }
 #hotSpots img {
-    width: 10%;
-}
-#spot1,
-#spot2,
-#spot3 {
-
-}
-#spot1 {
-    margin-top: 17%;
-    margin-left: -17.5%;
-}
-#spot2 {
-    margin-top: -5%;
-    margin-left: -17.5%;
-}
-#spot3 {
-    margin-top: 10%;
-    margin-left: 22%;
-}
-#spot3 img {
     width: 15%;
 }
+#spot1 {
+    margin-top: -100%;
+    margin-left: -20%;
+}
+#spot2 {
+    margin-top: 20%;
+    margin-left: -17.5%;
+}
+#rockTitle {
+    font-family: "Calibri", sans-serif;
+    font-size: 2.3vw;
+}
+#rockTitleContents {
+    margin-right: 2%;
+}
 #seradina {
-    margin-left: -10%;
-    margin-top: 100%;
+    margin-top: 70%;
+    margin-left: -50%;
+    text-align: center;
 }
 #seradina img {
     width: 100%;
 }
+#seradinaRockFace {
+    width: 100%;
+}
+
+/* Seradina1 page */
+#seradina1 {
+    margin-top: 5%;
+}
+#seradina1 img {
+    width: 100%;
+}
+#seradina1Stories {
+    margin-top: 15%;
+}
+#seradina1Stories button {
+    margin-bottom: 10%;
+}
+#ploughing {
+    margin: 10% 0 0 1%;
+}
+
+/* Seradina2 page */
+#seradina2 {
+    margin-top: 10%;
+}
+#seradina2 img {
+    width: 110%;
+}
+#archer {
+    margin: 10% 0 0 1%;
+}
+#seradina2Stories {
+    margin-top: 15%;
+}
+#seradina2Stories button {
+    margin-bottom: 10%;
+}
+
+/* Hotspots Foppe page */
+
+
 #rockFace {
     margin-top: 1%;
     width: 80%;
 }
 
-/* Area3 page */
-#area3 {
-    margin-top: 20%;
-}
 
 /* Create page */
 #azirCreate {
@@ -244,8 +316,12 @@ body {
 .drop img {
     width: 75%;
 }
+#previousPage {
+    text-align: left;
+    margin: 2% 0 0 2%;
+}
 #previousPage img {
-    width: 50%;
+    width: 60%;
 }
 #nextARPage img {
     width: 50%;
@@ -334,11 +410,6 @@ body {
 }
 #scan {
     margin-top: 60%;
-}
-
-#listen {
-    margin-left: -50%;
-    margin-top: 150%;
 }
 
 #space0 {

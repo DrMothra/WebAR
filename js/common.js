@@ -6,4 +6,5 @@
 $(document).ready(function() {
     //Do any init
     skel.init();
+
 });
