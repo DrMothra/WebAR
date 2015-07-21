@@ -192,16 +192,16 @@ PitotiAR.prototype.init = function(container) {
     this.resultMat = ARSystem.getResultsMat();
 
     //Triggered video parameters
-    this.videoWidth = window.innerWidth/3;
-    this.videoHeight = window.innerHeight * 0.4;
+    this.videoWidth = window.innerWidth/2;
+    this.videoHeight = window.innerHeight/2;
     this.triggerElem = $("#triggerVideo");
     this.triggerElem.width(this.videoWidth * 0.9);
     this.triggerElem.height(this.videoHeight * 0.9);
     var elem = $('#'+container);
     var pos = elem.position();
     var width = elem.width();
-    var defaultPadding = 40;
-    var triggerLeft = pos.left + defaultPadding + ((width-this.videoWidth)/2) + (this.videoWidth*0.05);
+    var defaultPadding = this.videoWidth*0.05;
+    var triggerLeft = pos.left + defaultPadding;
     this.triggerElem.css("left", triggerLeft + "px");
     this.triggerElem.css("top", "0px");
     this.triggerElem.defaultLeft = triggerLeft;
@@ -210,8 +210,18 @@ PitotiAR.prototype.init = function(container) {
 
     this.numVideos = 0;
 
+    //Dragged elements
+    var elem = document.getElementById("slot0");
+    this.dragImage = document.createElement("img");
+    this.dragImage.src = "images/drag.png";
+    this.dragImage.style.width = elem.clientWidth+"px";
+
+    this.dragTrashImage = document.createElement("img");
+    this.dragTrashImage.src = "images/dragTrash.png";
+    this.dragTrashImage.style.width = elem.clientWidth+"px";
+
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(window.innerWidth*0.5*0.85, window.innerHeight*0.5);
+    this.renderer.setSize(window.innerWidth*0.5, window.innerHeight*0.5);
     var glCanvas = this.renderer.domElement;
     this.container.appendChild(glCanvas);
 
@@ -227,6 +237,10 @@ PitotiAR.prototype.init = function(container) {
     // Create a camera and a marker root object for your Three.js scene.
     this.camera = new THREE.Camera();
     this.scene.add(this.camera);
+};
+
+PitotiAR.prototype.getDragImage = function() {
+    return this.dragImage;
 };
 
 PitotiAR.prototype.createScene = function() {
@@ -284,13 +298,16 @@ PitotiAR.prototype.drop = function(event) {
         return;
     }
 
+    var _this = this;
     event.preventDefault();
     var image = document.getElementById(id);
     image.className = "imgDraggable";
 
     $(image).draggable( {
         revert: "invalid",
-        helper: "clone"
+        helper: function(event) {
+            return _this.dragTrashImage;
+        }
     });
 
     image.src = "images/video" + this.currentMarker + ".jpg";
@@ -443,7 +460,7 @@ $(document).ready(function() {
             revert: "invalid",
             cursorAt: { top: 0, left: 0 },
             helper: function(event) {
-                return $("<img src='images/drag.png'>");
+                return app.getDragImage();
             }
         });
 
