@@ -409,7 +409,8 @@ body {
 
 }
 .drag img {
-    width: 75%;
+    width: 85%;
+    margin-bottom: 7.5%;
 }
 #playStory {
     margin-top: 5%;
@@ -422,15 +423,27 @@ body {
     color: red;
 }
 #timeline {
-    margin-top: 2%;
+    margin-top: 20%;
     background-color: #1e3766;
 }
 #timeline div {
-    padding: 2%;
+    padding-top: 2%;
+}
+#azirTimeline {
+    overflow: hidden;
+    margin-left: -25%;
+    text-align: center;
 }
 #azirTimeline img {
-    width: 100%;
+    width: 110%;
 }
+.notActive {
+    pointer-events: none;
+    cursor: default;
+}
+
+
+
 
 /* Record page */
 #nextPageRecord {
@@ -438,7 +451,7 @@ body {
     margin-right: 2%;
 }
 #nextPageRecord img {
-    width: 45%
+    width: 60%
 }
 #playStoryRecord {
     margin-top: 5%;
@@ -454,13 +467,16 @@ body {
     width: 90%;
 }
 #azirRecord {
-    margin-top: 50%;
+    overflow: hidden;
+    margin-left: -25%;
+    text-align: center;
+}
+#azirRecord img {
+    width: 110%;
 }
 
 
-#logo img {
-    width: 60%;
-}
+
 
 
 /* Final page */

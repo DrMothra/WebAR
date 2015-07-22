@@ -15,6 +15,7 @@ var videoPanel = (function() {
     var numVideos = 0;
     var checkInterval = 1000;
     var videoChecker;
+    var dragImage, dragTrashImage;
 
     return {
         init: function() {
@@ -27,6 +28,23 @@ var videoPanel = (function() {
                     elem.src = "images/" + src;
                 }
             }
+            //Dragged elements
+            var elem = document.getElementById("slot0");
+            dragImage = document.createElement("img");
+            dragImage.src = "images/dragTimeline.png";
+            dragImage.style.width = elem.clientWidth+"px";
+
+            dragTrashImage = document.createElement("img");
+            dragTrashImage.src = "images/dragTrash.png";
+            dragTrashImage.style.width = elem.clientWidth+"px";
+        },
+
+        getDragImage: function() {
+            return dragImage;
+        },
+
+        getDragTrashImage: function() {
+            return dragTrashImage;
         },
 
         drop: function(event, ui) {
@@ -45,6 +63,8 @@ var videoPanel = (function() {
             ++numVideos;
             sessionStorage.setItem("numVideos", numVideos);
             sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
+            //Enable next again
+            $('#nextARPage').removeClass("notActive");
         },
 
         playStory: function() {
@@ -96,6 +116,9 @@ var videoPanel = (function() {
             //Restore original image
             var timelineSlot = document.getElementById("timeline"+slot);
             timelineSlot.src = "images/story"+slot+".png";
+            if(numVideos === 0) {
+                $('#nextARPage').addClass("notActive");
+            }
         }
     }
 })();
@@ -111,7 +134,7 @@ $(document).ready(function() {
     dragElem.draggable( {
         revert: "invalid",
         helper: function(event) {
-            return $('<div class="dragging">Drag to timeline</div>');
+            return videoPanel.getDragImage();
         }
     });
 
@@ -119,7 +142,7 @@ $(document).ready(function() {
     dragTimeline.draggable( {
             revert: "invalid",
         helper: function(event) {
-            return $('<div class="dragging">Drag to wastebin</div>');
+            return videoPanel.getDragTrashImage();
         }
     });
 

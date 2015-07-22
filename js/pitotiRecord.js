@@ -25,6 +25,7 @@ var videoPlayer = (function() {
     return {
         init: function() {
             vidPlayer = document.getElementById("videoPlayer");
+            sessionStorage.setItem("audioSelection",null);
         },
 
         playBack: function() {
@@ -89,10 +90,15 @@ function createLink() {
         var url = URL.createObjectURL(blob);
         var li = document.createElement('li');
         var au = document.createElement('audio');
+        au.setAttribute("type", "audio/wav");
+        //var hf = document.createElement('a');
         var status = document.createElement('img');
 
         au.controls = true;
         au.src = url;
+        //hf.href = url;
+        //hf.download = new Date().toISOString() + '.wav';
+        //hf.innerHTML = hf.download;
         audioClips.push(url);
         status.src = "images/redCircle.png";
         status.id = "audioSelect" + linkNumber;
@@ -105,6 +111,7 @@ function createLink() {
         };
         li.appendChild(status);
         li.appendChild(au);
+        //li.appendChild(hf);
         audioRecordings.appendChild(li);
         ++linkNumber;
     });
@@ -160,6 +167,11 @@ $(document).ready(function() {
 
     var audioPlayer = null;
     $('#nextPageRecord').on("click", function() {
+        var elem = sessionStorage.getItem('audioSelection');
+        if(elem === "null" || audioClips.length === 0) {
+            alert("No audio selected");
+            return;
+        }
         $('#storyControls').hide();
         $('#nextPageRecord').hide();
         $('#finalControls').show();
