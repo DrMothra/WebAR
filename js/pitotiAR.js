@@ -203,7 +203,7 @@ PitotiAR.prototype.init = function(container) {
     var defaultPadding = this.videoWidth*0.05;
     var triggerLeft = pos.left + defaultPadding;
     this.triggerElem.css("left", triggerLeft + "px");
-    this.triggerElem.css("top", "0px");
+    this.triggerElem.css("top", "5%");
     this.triggerElem.defaultLeft = triggerLeft;
 
     this.triggerVideo = document.getElementById("triggerVideo");
@@ -368,7 +368,7 @@ PitotiAR.prototype.allowDrop = function(event) {
 PitotiAR.prototype.restoreVideoPlayer = function() {
     //Put video player back in default position
     this.triggerElem.css("left", this.triggerElem.defaultLeft + "px");
-    this.triggerElem.css("top", 0);
+    this.triggerElem.css("top", "5%");
 };
 
 PitotiAR.prototype.playVideo = function() {

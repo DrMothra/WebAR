@@ -87,7 +87,7 @@ function startUserMedia(stream) {
 function createLink() {
     //Create list of audio links
     recorder.exportWAV(function(blob) {
-        var url = URL.createObjectURL(blob);
+        var url = window.URL.createObjectURL(blob);
         var li = document.createElement('li');
         var au = document.createElement('audio');
         au.setAttribute("type", "audio/wav");
@@ -142,17 +142,18 @@ $(document).ready(function() {
     try {
         // webkit shim
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+        //navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+        navigator.mediaDevices = navigator.mediaDevices || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
         window.URL = window.URL || window.webkitURL;
 
         audio_context = new AudioContext;
         console.log('Audio context set up.');
-        console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+        //console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
     } catch (e) {
         alert('No web audio support in this browser!');
     }
 
-    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+    var p = navigator.mediaDevices.getUserMedia({audio: true}, startUserMedia, function(e) {
         alert('No live audio input: ' + e);
     });
 

@@ -74,6 +74,19 @@ body {
     font-size: 1.75vw;
 }
 /* Animations */
+@-moz-keyframes bounce {
+    0% {
+        -moz-transform: translate(0px, 0px);
+    }
+
+    50% {
+        -moz-transform: translate(0px, 15%);
+    }
+
+    100% {
+        -moz-transform: translate(0px, 0px);
+    }
+}
 @-webkit-keyframes bounce {
     0% {
         -webkit-transform: translate(0px, 0px);
@@ -98,6 +111,19 @@ body {
 
     100% {
         -webkit-transform: scale(1, 1);
+    }
+}
+@-moz-keyframes radiate {
+    0% {
+        -moz-transform: scale(0, 0);
+    }
+
+    50% {
+        -moz-transform: scale(0.5, 0.5);
+    }
+
+    100% {
+        -moz-transform: scale(1, 1);
     }
 }
 /* Buttons */
@@ -142,12 +168,22 @@ body {
     -webkit-animation-timing-function: linear;
     -webkit-animation-duration: 1.5s;
     -webkit-animation-iteration-count: infinite;
+
+    -moz-animation-name: bounce;
+    -moz-animation-timing-function: linear;
+    -moz-animation-duration: 1.5s;
+    -moz-animation-iteration-count: infinite;
 }
 .hotSpotAnimate {
     -webkit-animation-name: radiate;
     -webkit-animation-timing-function: linear;
     -webkit-animation-duration: 1.5s;
     -webkit-animation-iteration-count: infinite;
+
+    -moz-animation-name: radiate;
+    -moz-animation-timing-function: linear;
+    -moz-animation-duration: 1.5s;
+    -moz-animation-iteration-count: infinite;
 }
 #start {
     margin-top: 5%;
