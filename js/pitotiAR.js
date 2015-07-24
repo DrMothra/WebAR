@@ -432,7 +432,7 @@ PitotiAR.prototype.update = function() {
             if(this.triggerVideo.ended) {
                 this.stopVideo();
                 //DEBUG
-                console.log("Stopped");
+                //console.log("Stopped");
             }
         }
     }
@@ -445,7 +445,9 @@ PitotiAR.prototype.update = function() {
 
 $(document).ready(function() {
     //Initialise app
+
     if(!Detector.webgl) {
+        alert("WebGL not supported");
         $('#notSupported').show();
     } else {
         skel.init();

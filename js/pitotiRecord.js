@@ -3,8 +3,11 @@
  */
 
 var TIMELINE_SLOTS = 4;
+var MAX_CLIPS = 5;
 var audio_context, recorder, recording = false;
 var linkNumber = 0;
+var newSource = new Array(5);
+var newBuffer = new Array(5);
 var audioClips = [];
 
 function __log(e, data) {
@@ -94,10 +97,21 @@ function createLink() {
         //var hf = document.createElement('a');
         var status = document.createElement('img');
 
+        //DEBUG
+        /*
+        var link = window.document.createElement('a');
+        link.href = url;
+        link.download = 'output.wav';
+        var click = document.createEvent("Event");
+        click.initEvent("click", true, true);
+        link.dispatchEvent(click);
+        */
+
+
         au.controls = true;
-        au.src = url;
-        //hf.href = url;
-        //hf.download = new Date().toISOString() + '.wav';
+        au.src = "sounds/creak_x.wav";
+       // hf.href = url;
+       // hf.download = "audioRecording"+;
         //hf.innerHTML = hf.download;
         audioClips.push(url);
         status.src = "images/redCircle.png";
@@ -117,6 +131,27 @@ function createLink() {
     });
 }
 
+function saveBuffer( buffers) {
+    //newSource[linkNumber] = audio_context.createBufferSource();
+    newBuffer[linkNumber] = audio_context.createBuffer( 2, buffers[0].length, audio_context.sampleRate );
+    newBuffer[linkNumber].getChannelData(0).set(buffers[0]);
+    newBuffer[linkNumber].getChannelData(1).set(buffers[1]);
+    //newSource[linkNumber].buffer = newBuffer[linkNumber];
+    //newSource[linkNumber].connect( audio_context.destination );
+
+    $('#record'+linkNumber).show();
+
+    ++linkNumber;
+}
+
+function playBuffer(bufferNumber) {
+    bufferNumber = bufferNumber.charAt(bufferNumber.length-1);
+    var source = audio_context.createBufferSource();
+    source.buffer = newBuffer[bufferNumber];
+    source.connect(audio_context.destination);
+    source.start(0);
+}
+
 function toggleRecording() {
     //Start/stop recording
     if(!recorder) return;
@@ -129,7 +164,8 @@ function toggleRecording() {
     } else {
         recorder.stop();
         recImage.attr('src', 'images/recordOff.png');
-        createLink();
+        //createLink();
+        recorder.getBuffer(saveBuffer);
         recorder.clear();
     }
 }
@@ -142,8 +178,8 @@ $(document).ready(function() {
     try {
         // webkit shim
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        //navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-        navigator.mediaDevices = navigator.mediaDevices || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+        //navigator.mediaDevices = navigator.mediaDevices || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
         window.URL = window.URL || window.webkitURL;
 
         audio_context = new AudioContext;
@@ -153,12 +189,16 @@ $(document).ready(function() {
         alert('No web audio support in this browser!');
     }
 
-    var p = navigator.mediaDevices.getUserMedia({audio: true}, startUserMedia, function(e) {
+    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
         alert('No live audio input: ' + e);
     });
 
     //Callbacks
     $('#audioRecord').on('click', function() {
+        if(linkNumber === MAX_CLIPS) {
+            alert("Max recordings made");
+            return;
+        }
         toggleRecording();
     });
 
@@ -169,21 +209,38 @@ $(document).ready(function() {
     var audioPlayer = null;
     $('#nextPageRecord').on("click", function() {
         var elem = sessionStorage.getItem('audioSelection');
-        if(elem === "null" || audioClips.length === 0) {
+        if(elem === "null") {
             alert("No audio selected");
             return;
         }
         $('#storyControls').hide();
         $('#nextPageRecord').hide();
         $('#finalControls').show();
-        audioPlayer = document.createElement('audio');
-        audioPlayer.src = sessionStorage.getItem('audioSelection');
+        //audioPlayer = document.createElement('audio');
+        //audioPlayer.src = sessionStorage.getItem('audioSelection');
     });
 
     $('#playStoryFinal').on("click", function() {
-        if(audioPlayer != null) {
+        var index = sessionStorage.getItem('audioSelection');
+        if(index != "null") {
             videoPlayer.playBack();
-            audioPlayer.play();
+            playBuffer(index);
         }
-    })
+    });
+
+    var status = $('#audioRecordings img');
+    $(status).on("click", function() {
+        status.attr('src', 'images/redCircle.png');
+        this.setAttribute('src', 'images/greenCircle.png');
+        var index = this.id.charAt(this.id.length-1);
+        sessionStorage.setItem('audioSelection', index);
+    });
+
+    var play = $('#audioRecordings button');
+    $(play).on("click", function() {
+        playBuffer(this.id);
+    });
+
+
+
 });

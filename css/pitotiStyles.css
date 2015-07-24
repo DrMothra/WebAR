@@ -510,7 +510,10 @@ body {
 #azirRecord img {
     width: 110%;
 }
-
+#audioRecordings img {
+    width: 7%;
+    vertical-align: middle;
+}
 
 
 
