@@ -353,6 +353,8 @@ PitotiAR.prototype.dropVideo = function(event, ui) {
 
 PitotiAR.prototype.stopVideo = function() {
     //Stop video playing
+    //DEBUG
+    console.log("Video stopped");
     this.triggerVideo.playing = false;
     this.videoPlaying = false;
     this.currentMarker = -1;
@@ -380,12 +382,19 @@ PitotiAR.prototype.update = function() {
     //this.delta = this.clock.getDelta();
 
     if (this.video.ended) this.video.play();
-    if (this.video.paused) return;
-    if (window.paused) return;
+    if(!this.videoPlaying && this.video.paused) {
+        //Wait slight amount of time before resuming
+        var _this = this;
+        setTimeout(function(){
+            _this.video.play();
+        }, 3000);
+    }
+    //if (this.video.paused) return;
+    //if (window.paused) return;
     if (this.video.currentTime == this.video.duration) {
         this.video.currentTime = 0;
     }
-    if (this.video.currentTime == this.lastTime) return;
+    //if (this.video.currentTime == this.lastTime) return;
     this.lastTime = this.video.currentTime;
 
     this.vidCanvas.getContext('2d').drawImage(this.video,0,0);
@@ -417,6 +426,7 @@ PitotiAR.prototype.update = function() {
         if(this.currentMarker >= NUM_VIDEOS) return;
         this.triggerVideo.src = this.videoSources[this.currentMarker];
         this.videoPlaying = true;
+        this.video.pause();
     }
 
     //See if any videos triggered
@@ -426,13 +436,9 @@ PitotiAR.prototype.update = function() {
             this.triggerElem.show();
             this.triggerVideo.play();
             this.triggerVideo.playing = true;
-            //DEBUG
-            //console.log("Playing");
         } else {
             if(this.triggerVideo.ended) {
                 this.stopVideo();
-                //DEBUG
-                //console.log("Stopped");
             }
         }
     }
