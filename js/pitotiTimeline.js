@@ -10,7 +10,9 @@ var videoPanel = (function() {
     for(var i=0; i<TIMELINE_SLOTS; ++i) {
         timelineSlots[i] = false;
     }
-    var videoSources = ['videos/HuntSmall.mp4', 'videos/deersSmall.mp4', 'videos/HouseSmall.mp4'];
+    var videoSources = ['videos/axeMan.mp4', 'videos/deers.mp4', 'videos/horseWarrior.mp4', 'videos/house.mp4', 'videos/hunt.mp4', 'videos/manBeasts.mp4',
+        'videos/manHunt.mp4', 'videos/manHorse.mp4', 'videos/marching.mp4', 'videos/morph.mp4', 'videos/headDress.mp4', 'videos/spearHunt.mp4', 'videos/tallMorph.mp4',
+        'videos/manuel.mp4', 'videos/warrior.mp4'];
     var videosToPlay = [];
     var numVideos = 0;
     var checkInterval = 1000;

@@ -1,7 +1,6 @@
 /**
  * Created by DrTone on 30/03/2015.
  */
-var NUM_VIDEOS = 3;
 var NUM_CONTAINERS = 8;
 
 //Augmented reality app for 3D Pitoti
@@ -172,8 +171,13 @@ PitotiAR.prototype.init = function(container) {
     this.container = document.getElementById(container);
 
     //Clear videos from film clips
+    //Load video sources
+    this.videoSources = ['videos/axeMan.mp4', 'videos/deers.mp4', 'videos/horseWarrior.mp4', 'videos/house.mp4', 'videos/hunt.mp4', 'videos/manBeasts.mp4',
+        'videos/manHunt.mp4', 'videos/manHorse.mp4', 'videos/marching.mp4', 'videos/morph.mp4', 'videos/headDress.mp4', 'videos/spearHunt.mp4', 'videos/tallMorph.mp4',
+        'videos/manuel.mp4', 'videos/warrior.mp4'];
+    this.numVideos = this.videoSources.length;
     sessionStorage.clear();
-    sessionStorage.setItem('numVideos', NUM_VIDEOS);
+    sessionStorage.setItem('numVideos', this.numVideos);
     this.occupied = new Array(NUM_CONTAINERS);
     for(var i=0; i<NUM_CONTAINERS; ++i) {
         this.occupied[i] = false;
@@ -208,8 +212,6 @@ PitotiAR.prototype.init = function(container) {
 
     this.triggerVideo = document.getElementById("triggerVideo");
 
-    this.numVideos = 0;
-
     //Dragged elements
     var elem = document.getElementById("slot0");
     this.dragImage = document.createElement("img");
@@ -224,6 +226,12 @@ PitotiAR.prototype.init = function(container) {
     this.renderer.setSize(window.innerWidth*0.5, window.innerHeight*0.5);
     var glCanvas = this.renderer.domElement;
     this.container.appendChild(glCanvas);
+
+    //Paused video contents
+    this.detectMarkers = false;
+    this.pausedImage = document.createElement("img");
+    this.pausedImage.src = "images/blackout.jpg";
+    this.pausedImage.style.width = this.triggerElem.width + "px";
 
     //Don't strictly need these anymore
     this.scene = new THREE.Scene();
@@ -275,9 +283,6 @@ PitotiAR.prototype.createScene = function() {
     this.raster = ARSystem.getRaster();
 
     this.renderer.autoClear = false;
-
-    //Load video sources
-    this.videoSources = ['videos/HuntSmall.mp4', 'videos/deersSmall.mp4', 'videos/HouseSmall.mp4'];
 };
 
 PitotiAR.prototype.drag = function(event) {
@@ -353,8 +358,6 @@ PitotiAR.prototype.dropVideo = function(event, ui) {
 
 PitotiAR.prototype.stopVideo = function() {
     //Stop video playing
-    //DEBUG
-    console.log("Video stopped");
     this.triggerVideo.playing = false;
     this.videoPlaying = false;
     this.currentMarker = -1;
@@ -379,32 +382,35 @@ PitotiAR.prototype.playVideo = function() {
 
 PitotiAR.prototype.update = function() {
     //Perform any updates
-    //this.delta = this.clock.getDelta();
-
     if (this.video.ended) this.video.play();
-    if(!this.videoPlaying && this.video.paused) {
-        //Wait slight amount of time before resuming
-        var _this = this;
-        setTimeout(function(){
-            _this.video.play();
-        }, 3000);
-    }
-    //if (this.video.paused) return;
-    //if (window.paused) return;
+
     if (this.video.currentTime == this.video.duration) {
         this.video.currentTime = 0;
     }
-    //if (this.video.currentTime == this.lastTime) return;
+
     this.lastTime = this.video.currentTime;
 
-    this.vidCanvas.getContext('2d').drawImage(this.video,0,0);
+    if(this.video.paused && !this.videoPlaying) {
+        var _this = this;
+        this.detectMarkers = false;
+        this.video.play();
+        setTimeout(function(){
+            _this.detectMarkers = true;
+        }, 1000);
+    }
+
+    if(this.video.paused) {
+        this.vidCanvas.getContext('2d').drawImage(this.pausedImage, 0, 0);
+    } else {
+        this.vidCanvas.getContext('2d').drawImage(this.video,0,0);
+    }
     ARSystem.getCanvasContext().drawImage(this.vidCanvas, 0,0,ARSystem.getCanvasWidth(),ARSystem.getCanvasHeight());
 
     this.ARCanvas.changed = true;
     this.videoTex.needsUpdate = true;
 
     //Don't do detection if videos playing
-    if(!this.videoPlaying) {
+    if(!this.videoPlaying && this.detectMarkers) {
         this.currentMarker = -1;
         var detected = this.detector.detectMarkerLite(this.raster, ARSystem.getThreshold());
         if(detected) {
@@ -423,7 +429,9 @@ PitotiAR.prototype.update = function() {
     }
 
     if(this.currentMarker >= 0 && !this.videoPlaying) {
-        if(this.currentMarker >= NUM_VIDEOS) return;
+        //DEBUG
+        //console.log("Marker =", this.currentMarker);
+        if(this.currentMarker >= this.numVideos) return;
         this.triggerVideo.src = this.videoSources[this.currentMarker];
         this.videoPlaying = true;
         this.video.pause();
