@@ -9,7 +9,6 @@ $(document).ready(function() {
 
     //Play audio
     $('#story1').on("click", function() {
-        var audioPlayer = document.getElementById("audioPlough");
-        audioPlayer.play();
+        audioManager.playAudio(this.id);
     });
 });

@@ -171,11 +171,7 @@ PitotiAR.prototype.init = function(container) {
     this.container = document.getElementById(container);
 
     //Clear videos from film clips
-    //Load video sources
-    this.videoSources = ['videos/axeMan.mp4', 'videos/deers.mp4', 'videos/horseWarrior.mp4', 'videos/house.mp4', 'videos/hunt.mp4', 'videos/manBeasts.mp4',
-        'videos/manHunt.mp4', 'videos/manHorse.mp4', 'videos/marching.mp4', 'videos/morph.mp4', 'videos/headDress.mp4', 'videos/spearHunt.mp4', 'videos/tallMorph.mp4',
-        'videos/manuel.mp4', 'videos/warrior.mp4'];
-    this.numVideos = this.videoSources.length;
+    this.numVideos = videoManager.getNumVideos();
     sessionStorage.clear();
     sessionStorage.setItem('numVideos', this.numVideos);
     this.occupied = new Array(NUM_CONTAINERS);
@@ -204,7 +200,7 @@ PitotiAR.prototype.init = function(container) {
     var elem = $('#'+container);
     var pos = elem.position();
     var width = elem.width();
-    var defaultPadding = this.videoWidth*0.05;
+    var defaultPadding = window.innerWidth < 1024 ? this.videoWidth * 0.1 : this.videoWidth * 0.05;
     var triggerLeft = pos.left + defaultPadding;
     this.triggerElem.css("left", triggerLeft + "px");
     this.triggerElem.css("top", "5%");
@@ -295,6 +291,7 @@ PitotiAR.prototype.drag = function(event) {
 
 PitotiAR.prototype.drop = function(event) {
     //Dragged video clip
+    this.triggerVideo.play();
     var id = event.target.id;
     var slot = parseInt(id.charAt(id.length-1));
     if(isNaN(slot)) return;
@@ -322,7 +319,7 @@ PitotiAR.prototype.drop = function(event) {
 
     this.occupied[slot] = true;
 
-    this.restoreVideoPlayer();
+    //this.restoreVideoPlayer();
 
     $('#' + event.target.id + 'drop').hide();
 
@@ -432,7 +429,7 @@ PitotiAR.prototype.update = function() {
         //DEBUG
         //console.log("Marker =", this.currentMarker);
         if(this.currentMarker >= this.numVideos) return;
-        this.triggerVideo.src = this.videoSources[this.currentMarker];
+        this.triggerVideo.src = videoManager.getVideoSource(this.currentMarker);
         this.videoPlaying = true;
         this.video.pause();
     }
@@ -476,6 +473,7 @@ $(document).ready(function() {
             revert: "invalid",
             cursorAt: { top: 0, left: 0 },
             helper: function(event) {
+                this.pause();
                 return app.getDragImage();
             }
         });

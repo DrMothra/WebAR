@@ -6,6 +6,7 @@
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/skel.min.js"></script>
+    <script type="text/javascript" src="js/audioManager.js?v=0.1"></script>
     <script type="text/javascript" src="js/hotSpotFoppe1.js?v=0.1"></script>
 
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
@@ -37,16 +38,18 @@
             <div>
                 <button id="story1" class="actionButton">Story 1</button>
                 <audio id="audiostory1">
+                    <source src="audio/RosaCamuna.ogg" type="audio/ogg">
                     <source src="audio/RosaCamuna.mp3" type="audio/mpeg">
                 </audio>
             </div>
             <div>
                 <button id="story2" class="actionButton">Story 2</button>
                 <audio id="audiostory2">
+                    <source src="audio/Warriors.ogg" type="audio/ogg">
                     <source src="audio/Warriors.mp3" type="audio/mpeg">
                 </audio>
             </div>
-            <div>
+            <div class="hide">
                 <button class="actionButton">Story 3</button>
             </div>
         </div>

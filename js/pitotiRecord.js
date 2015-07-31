@@ -9,6 +9,7 @@ var linkNumber = 0;
 var newSource = new Array(5);
 var newBuffer = new Array(5);
 var audioClips = [];
+var RECORDING = 0, PLAYING = 1;
 
 function __log(e, data) {
     log.innerHTML += "\n" + e + " " + (data || '');
@@ -18,7 +19,6 @@ var videoPlayer = (function() {
     var player;
     var numVideos = sessionStorage.getItem('numVideos');
     var vidPlayer;
-    var videoSources = ['videos/HuntSmall.mp4', 'videos/deersSmall.mp4', 'videos/HouseSmall.mp4'];
     var checkInterval = 500;
     var videoChecker;
     var currentSlot = 0;
@@ -41,7 +41,7 @@ var videoPlayer = (function() {
                     gotClip = true;
                     videoIndex = parseInt(clip.charAt(clip.length-1));
                     if(isNaN(videoIndex)) continue;
-                    vidPlayer.src = videoSources[videoIndex];
+                    vidPlayer.src = videoManager.getVideoSource(videoIndex);
                     vidPlayer.play();
                 } else {
                     if(++currentSlot >= TIMELINE_SLOTS) {
@@ -65,7 +65,7 @@ var videoPlayer = (function() {
                             if(clip) {
                                 videoIndex = parseInt(clip.charAt(clip.length-1));
                                 if(isNaN(videoIndex)) return;
-                                vidPlayer.src = videoSources[videoIndex];
+                                vidPlayer.src = videoManager.getVideoSource(videoIndex);
                                 vidPlayer.play();
                             }
                         }
@@ -133,9 +133,11 @@ function createLink() {
 
 function saveBuffer( buffers) {
     //newSource[linkNumber] = audio_context.createBufferSource();
-    newBuffer[linkNumber] = audio_context.createBuffer( 2, buffers[0].length, audio_context.sampleRate );
+    //DEBUG
+    console.log("Creating buffer", linkNumber);
+    newBuffer[linkNumber] = audio_context.createBuffer( 1, buffers[0].length, audio_context.sampleRate );
     newBuffer[linkNumber].getChannelData(0).set(buffers[0]);
-    newBuffer[linkNumber].getChannelData(1).set(buffers[1]);
+    //newBuffer[linkNumber].getChannelData(1).set(buffers[1]);
     //newSource[linkNumber].buffer = newBuffer[linkNumber];
     //newSource[linkNumber].connect( audio_context.destination );
 
@@ -146,6 +148,8 @@ function saveBuffer( buffers) {
 
 function playBuffer(bufferNumber) {
     bufferNumber = bufferNumber.charAt(bufferNumber.length-1);
+    //DEBUG
+    console.log("Playing buffer", bufferNumber);
     var source = audio_context.createBufferSource();
     source.buffer = newBuffer[bufferNumber];
     source.connect(audio_context.destination);
@@ -174,10 +178,11 @@ $(document).ready(function() {
     //Init
     skel.init();
     videoPlayer.init();
+    var pageStatus = RECORDING;
     //Set up audio recording
     try {
         // webkit shim
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         //navigator.mediaDevices = navigator.mediaDevices || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
         window.URL = window.URL || window.webkitURL;
@@ -208,6 +213,7 @@ $(document).ready(function() {
 
     var audioPlayer = null;
     $('#nextPageRecord').on("click", function() {
+        pageStatus = PLAYING;
         var elem = sessionStorage.getItem('audioSelection');
         if(elem === "null") {
             alert("No audio selected");
@@ -218,6 +224,17 @@ $(document).ready(function() {
         $('#finalControls').show();
         //audioPlayer = document.createElement('audio');
         //audioPlayer.src = sessionStorage.getItem('audioSelection');
+    });
+
+    $('#previousPage').on("click", function() {
+        if(pageStatus === RECORDING) {
+            window.location.href = "pitotiTimeline.html";
+        } else {
+            pageStatus = RECORDING;
+            $('#storyControls').show();
+            $('#nextPageRecord').show();
+            $('#finalControls').hide();
+        }
     });
 
     $('#playStoryFinal').on("click", function() {
