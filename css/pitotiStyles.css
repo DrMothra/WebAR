@@ -56,6 +56,20 @@ body {
 .page {
     text-align: center;
 }
+.previousPageColumn {
+    text-align: left;
+    margin: 2% 0 0 2%;
+}
+.previousPageColumn img {
+    width: 60%;
+}
+.previousPage {
+    text-align: left;
+    margin-left: 5%;
+}
+.previousPage img {
+    width: 15%;
+}
 .bubble {
     position: relative;
 }
@@ -194,7 +208,6 @@ body {
 
 /* Configure page */
 #configure p {
-    text-align: center;
     color: white;
 }
 
@@ -230,13 +243,7 @@ body {
     margin-top: 40%;
 }
 /* About page */
-#previousPageAbout {
-    text-align: left;
-    margin-left: 5%;
-}
-#previousPageAbout img {
-    width: 15%;
-}
+
 #azirAbout img {
     width: 40%;
 }
@@ -422,13 +429,7 @@ body {
     width: 85%;
     margin-bottom: 7.5%;
 }
-#previousPage {
-    text-align: left;
-    margin: 2% 0 0 2%;
-}
-#previousPage img {
-    width: 60%;
-}
+
 #nextARPage img {
     width: 60%;
 }
