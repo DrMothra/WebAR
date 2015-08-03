@@ -163,6 +163,9 @@ body {
 #startPage img {
     width: 25%;
 }
+#startPage div {
+    margin-bottom: 2.5%;
+}
 .intro {
     -webkit-animation-name: bounce;
     -webkit-animation-timing-function: linear;
@@ -188,6 +191,14 @@ body {
 #start {
     margin-top: 5%;
 }
+
+/* Configure page */
+#configure p {
+    text-align: center;
+    color: white;
+}
+
+
 
 /* Welcome page */
 #welcomeAzir {
@@ -514,7 +525,9 @@ body {
     width: 7%;
     vertical-align: middle;
 }
-
+#audioButton {
+    margin-top: 5%;
+}
 
 
 

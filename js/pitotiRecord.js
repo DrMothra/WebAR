@@ -6,8 +6,9 @@ var TIMELINE_SLOTS = 4;
 var MAX_CLIPS = 5;
 var audio_context, recorder, recording = false;
 var linkNumber = 0;
-var newSource = new Array(5);
-var newBuffer = new Array(5);
+var newSource = null;
+var newBuffer = null;
+var recorded = false;
 var audioClips = [];
 var RECORDING = 0, PLAYING = 1;
 
@@ -77,13 +78,13 @@ var videoPlayer = (function() {
 })();
 
 function startUserMedia(stream) {
-    var input = audio_context.createMediaStreamSource(stream);
+    window.input = audio_context.createMediaStreamSource(stream);
     console.log('Media stream created.');
     // Uncomment if you want the audio to feedback directly
     //input.connect(audio_context.destination);
     //__log('Input connected to audio context destination.');
 
-    recorder = new Recorder(input);
+    recorder = new Recorder(window.input);
     console.log('Recorder initialised.');
 }
 
@@ -132,28 +133,18 @@ function createLink() {
 }
 
 function saveBuffer( buffers) {
-    //newSource[linkNumber] = audio_context.createBufferSource();
     //DEBUG
     console.log("Creating buffer", linkNumber);
-    newBuffer[linkNumber] = audio_context.createBuffer( 1, buffers[0].length, audio_context.sampleRate );
-    newBuffer[linkNumber].getChannelData(0).set(buffers[0]);
-    //newBuffer[linkNumber].getChannelData(1).set(buffers[1]);
-    //newSource[linkNumber].buffer = newBuffer[linkNumber];
-    //newSource[linkNumber].connect( audio_context.destination );
-
-    $('#record'+linkNumber).show();
-
-    ++linkNumber;
+    newBuffer = audio_context.createBuffer( 2, buffers[0].length, audio_context.sampleRate );
+    newBuffer.getChannelData(0).set(buffers[0]);
+    newBuffer.getChannelData(1).set(buffers[1]);
 }
 
-function playBuffer(bufferNumber) {
-    bufferNumber = bufferNumber.charAt(bufferNumber.length-1);
-    //DEBUG
-    console.log("Playing buffer", bufferNumber);
-    var source = audio_context.createBufferSource();
-    source.buffer = newBuffer[bufferNumber];
-    source.connect(audio_context.destination);
-    source.start(0);
+function playBuffer() {
+    window.source = audio_context.createBufferSource();
+    window.source.buffer = newBuffer;
+    window.source.connect(audio_context.destination);
+    window.source.start(0);
 }
 
 function toggleRecording() {
@@ -167,6 +158,7 @@ function toggleRecording() {
         recorder.record();
     } else {
         recorder.stop();
+        recorded = true;
         recImage.attr('src', 'images/recordOff.png');
         //createLink();
         recorder.getBuffer(saveBuffer);
@@ -186,7 +178,6 @@ $(document).ready(function() {
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         //navigator.mediaDevices = navigator.mediaDevices || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
         window.URL = window.URL || window.webkitURL;
-
         audio_context = new AudioContext;
         console.log('Audio context set up.');
         //console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
@@ -200,11 +191,10 @@ $(document).ready(function() {
 
     //Callbacks
     $('#audioRecord').on('click', function() {
-        if(linkNumber === MAX_CLIPS) {
-            alert("Max recordings made");
-            return;
-        }
         toggleRecording();
+        if(recorded) {
+            $('#audioButtonContainer').show();
+        }
     });
 
     $('#playStoryRecord').on("click", function() {
@@ -213,12 +203,11 @@ $(document).ready(function() {
 
     var audioPlayer = null;
     $('#nextPageRecord').on("click", function() {
-        pageStatus = PLAYING;
-        var elem = sessionStorage.getItem('audioSelection');
-        if(elem === "null") {
-            alert("No audio selected");
+        if(!recorded) {
+            alert("No audio recorded");
             return;
         }
+        pageStatus = PLAYING;
         $('#storyControls').hide();
         $('#nextPageRecord').hide();
         $('#finalControls').show();
@@ -238,26 +227,11 @@ $(document).ready(function() {
     });
 
     $('#playStoryFinal').on("click", function() {
-        var index = sessionStorage.getItem('audioSelection');
-        if(index != "null") {
-            videoPlayer.playBack();
-            playBuffer(index);
-        }
+        videoPlayer.playBack();
+        playBuffer();
     });
 
-    var status = $('#audioRecordings img');
-    $(status).on("click", function() {
-        status.attr('src', 'images/redCircle.png');
-        this.setAttribute('src', 'images/greenCircle.png');
-        var index = this.id.charAt(this.id.length-1);
-        sessionStorage.setItem('audioSelection', index);
+    $('#audioButton').on("click", function() {
+        playBuffer();
     });
-
-    var play = $('#audioRecordings button');
-    $(play).on("click", function() {
-        playBuffer(this.id);
-    });
-
-
-
 });
