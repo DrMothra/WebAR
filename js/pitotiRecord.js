@@ -88,6 +88,29 @@ function startUserMedia(stream) {
     console.log('Recorder initialised.');
 }
 
+function sendFilesToServer() {
+    //DEBUG
+    console.log("Sending files to server");
+
+    recorder.exportWAV(function(blob) {
+        var formData = new FormData();
+        formData.append("audioFile", blob, "story.wav");
+
+        //Send data
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "uploadHandler.php", true);
+        xhr.onload = function() {
+            if(xhr.status === 200) {
+                console.log("Uploaded");
+            } else {
+                alert("Upload error");
+            }
+        };
+
+        xhr.send(formData);
+    })
+}
+
 function createLink() {
     //Create list of audio links
     recorder.exportWAV(function(blob) {
@@ -154,6 +177,7 @@ function toggleRecording() {
     var recImage = $('#audioRecord');
     recording = !recording;
     if(recording) {
+        recorder.clear();
         recImage.attr('src', 'images/recordOn.png');
         recorder.record();
     } else {
@@ -162,7 +186,6 @@ function toggleRecording() {
         recImage.attr('src', 'images/recordOff.png');
         //createLink();
         recorder.getBuffer(saveBuffer);
-        recorder.clear();
     }
 }
 
@@ -215,7 +238,7 @@ $(document).ready(function() {
         //audioPlayer.src = sessionStorage.getItem('audioSelection');
     });
 
-    $('#previousPage').on("click", function() {
+    $('.previousPageColumn').on("click", function() {
         if(pageStatus === RECORDING) {
             window.location.href = "pitotiTimeline.html";
         } else {
@@ -234,4 +257,27 @@ $(document).ready(function() {
     $('#audioButton').on("click", function() {
         playBuffer();
     });
+
+    var form = document.getElementById("uploadForm");
+    form.onsubmit = function(event) {
+        event.preventDefault();
+
+        recorder.exportWAV(function(blob) {
+            var formData = new FormData();
+            formData.append("audioFile", blob, "story.wav");
+
+            //Send data
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "uploadHandler.php", true);
+            xhr.onload = function() {
+                if(xhr.status === 200) {
+                    console.log("Uploaded");
+                } else {
+                    alert("Upload error");
+                }
+            };
+
+            xhr.send(formData);
+        })
+    }
 });

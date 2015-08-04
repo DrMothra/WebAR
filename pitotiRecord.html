@@ -50,8 +50,11 @@
                     <div class="4u">
                         &nbsp;
                     </div>
-                    <div id="emailFinal" class="4u">
-                        <img src="images/email.png">
+                    <div class="4u">
+                        <form id="uploadForm" action="uploadHandler.php" method="POST">
+                            <input type="file" name="audioFile" class="hide">
+                            <button type="submit" class="actionButton">Upload Story</button>
+                        </form>
                     </div>
                 </div>
                 <div id="createFinal">
