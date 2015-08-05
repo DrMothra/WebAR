@@ -263,20 +263,24 @@ $(document).ready(function() {
         event.preventDefault();
 
         recorder.exportWAV(function(blob) {
+            var myFiles = document.getElementById("fileInput");
             var formData = new FormData();
+            //DEBUG
+            console.log("File =", myFiles.files[0]);
+
             formData.append("audioFile", blob, "story.wav");
 
             //Send data
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "uploadHandler.php", true);
-            xhr.onload = function() {
-                if(xhr.status === 200) {
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState === 4 && xhr.status === 200) {
                     console.log("Uploaded");
-                } else {
-                    alert("Upload error");
+                    console.log("Response =", xhr.responseText);
                 }
             };
 
+            //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
             xhr.send(formData);
         })
     }
