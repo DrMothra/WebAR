@@ -5,10 +5,10 @@
     <title>Record Audio Track</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="js/recorder.js"></script>
+    <script type="text/javascript" src="js/recordmp3.js"></script>
     <script type="text/javascript" src="js/skel.min.js"></script>
     <script type="text/javascript" src="js/videoManager.js"></script>
-    <script type="text/javascript" src="js/pitotiRecord.js?v=0.2"></script>
+    <script type="text/javascript" src="js/pitotiRecord.js?v=0.5"></script>
 
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
@@ -55,6 +55,13 @@
                             <input type="file" name="audioFile" id="fileInput" class="hide">
                             <button type="submit" name="submit" class="actionButton">Upload Story</button>
                         </form>
+                        <div id="success" class="hide">
+                            <button  class="actionButton">Success</button>
+                        </div>
+                        <div id="failure" class="hide">
+                            <button class="actionButton">Failure</button>
+                        </div>
+
                     </div>
                 </div>
                 <div id="createFinal">

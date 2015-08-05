@@ -157,10 +157,10 @@ function createLink() {
 
 function saveBuffer( buffers) {
     //DEBUG
-    console.log("Creating buffer", linkNumber);
-    newBuffer = audio_context.createBuffer( 2, buffers[0].length, audio_context.sampleRate );
+    console.log("Creating buffer", buffers);
+    newBuffer = audio_context.createBuffer( 1, buffers[0].length, audio_context.sampleRate );
     newBuffer.getChannelData(0).set(buffers[0]);
-    newBuffer.getChannelData(1).set(buffers[1]);
+    //newBuffer.getChannelData(1).set(buffers[1]);
 }
 
 function playBuffer() {
@@ -263,20 +263,22 @@ $(document).ready(function() {
         event.preventDefault();
 
         recorder.exportWAV(function(blob) {
-            var myFiles = document.getElementById("fileInput");
             var formData = new FormData();
-            //DEBUG
-            console.log("File =", myFiles.files[0]);
-
-            formData.append("audioFile", blob, "story.wav");
+            formData.append("audioFile", blob, "story.mp3");
 
             //Send data
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "uploadHandler.php", true);
             xhr.onreadystatechange = function() {
-                if(xhr.readyState === 4 && xhr.status === 200) {
-                    console.log("Uploaded");
-                    console.log("Response =", xhr.responseText);
+                if(xhr.readyState === 4) {
+                    if(xhr.status === 200) {
+                        $("#success").show();
+                        console.log("Uploaded");
+                        console.log("Response =", xhr.responseText);
+                    } else {
+                        console.log("Error uploading");
+                        $('#failure').show();
+                    }
                 }
             };
 
