@@ -172,7 +172,7 @@ PitotiAR.prototype.init = function(container) {
 
     //Clear videos from film clips
     this.numVideos = videoManager.getNumVideos();
-    sessionStorage.clear();
+    //sessionStorage.clear();
     sessionStorage.setItem('numVideos', this.numVideos);
     this.occupied = new Array(NUM_CONTAINERS);
     for(var i=0; i<NUM_CONTAINERS; ++i) {
@@ -462,6 +462,9 @@ $(document).ready(function() {
         $('#notSupported').show();
     } else {
         skel.init();
+
+        //DEBUG
+        console.log("Username =", sessionStorage.getItem("userName"));
 
         var app = new PitotiAR();
         app.init('ARoutput');

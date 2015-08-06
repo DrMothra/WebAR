@@ -5,24 +5,39 @@
     <title>Configure</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/skel.min.js"></script>
+    <script type="text/javascript" src="js/pitotiConfigure.js?v=0.1"></script>
 
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div id="configure" class="page">
-    <div class="previousPage">
-        <a href="pitoti.html"><img src="images/back.png"></a>
+<div class="page">
+    <div class="row 0%">
+        <div class="3u">
+            <div class="previousPageColumn">
+                <a href="pitoti.html"><img src="images/back.png"></a>
+            </div>
+        </div>
+
+        <div class="6u">
+            <div id="configureEntry">
+                <p>
+                    Please enter your name and e-mail address below so that we can send you
+                    your Pitoti story. Thanks!
+                </p>
+                <form id="enterDetails">
+                    Name: <input id="name" type="text" name="name"><br>
+                    E-mail: <input id="mail" type="email" name="email"><br>
+                    <button class="actionButton" type="submit" id="storeDetails">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="3u">
+            &nbsp;
+        </div>
     </div>
-    <p>
-        Please enter your name and e-mail address below so that we can send you
-        your Pitoti story. Thanks!
-    </p>
-    <form>
-        Name: <input type="text" name="name"><br>
-        E-mail: <input type="email" name="email"><br>
-        <input type="submit">
-    </form>
 </div>
 
 </body>

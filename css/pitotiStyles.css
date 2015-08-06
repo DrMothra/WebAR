@@ -207,11 +207,24 @@ body {
 }
 
 /* Configure page */
-#configure p {
-    color: white;
+#configureEntry {
+    margin-top: 25%;
     background-color: #0078e7;
+    border-radius: 15px;
 }
-
+#configureEntry p {
+    color: white;
+    padding: 5% 0;
+}
+#enterDetails {
+    padding: 3% 0;
+    color: #ffffff;
+}
+#enterDetails input {
+    margin-bottom: 2.5%;
+    color: #000000;
+    border-radius: 5px;
+}
 
 
 /* Welcome page */

@@ -193,6 +193,10 @@ $(document).ready(function() {
     //Init
     skel.init();
     videoPlayer.init();
+
+    //DEBUG
+    console.log("Name =", sessionStorage.getItem("userName"));
+
     var pageStatus = RECORDING;
     //Set up audio recording
     try {
@@ -260,11 +264,33 @@ $(document).ready(function() {
 
     var form = document.getElementById("uploadForm");
     form.onsubmit = function(event) {
+        //DEBUG
+        console.log("Name =", sessionStorage.getItem("userName"));
+
         event.preventDefault();
 
         recorder.exportWAV(function(blob) {
             var formData = new FormData();
-            formData.append("audioFile", blob, "story.mp3");
+
+            var userName = sessionStorage.getItem("userName");
+            if(userName) {
+                formData.append("userName", userName);
+            } else {
+                alert("No user name");
+            }
+            var email = sessionStorage.getItem("userMail");
+            if(email) {
+                formData.append("email", email);
+            } else {
+                alert("No e-mail");
+            }
+
+            var audioFilename = "story_" + userName + "_" + new Date().toUTCString() + ".mp3";
+
+            //DEBUG
+            console.log("audioFile = ", audioFilename);
+
+            formData.append("audioFile", blob, audioFilename);
 
             //Send data
             var xhr = new XMLHttpRequest();
