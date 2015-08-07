@@ -129,9 +129,6 @@ $(document).ready(function() {
 
     videoPanel.init();
 
-    //DEBUG
-    console.log("Name =", sessionStorage.getItem("userName"));
-
     var dragElem = $('.drag img');
     dragElem.draggable( {
         revert: "invalid",

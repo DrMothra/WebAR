@@ -296,7 +296,6 @@ PitotiAR.prototype.drop = function(event) {
     var slot = parseInt(id.charAt(id.length-1));
     if(isNaN(slot)) return;
     if(this.currentMarker < 0 || this.occupied[slot]) {
-        this.restoreVideoPlayer();
         return;
     }
 
@@ -319,9 +318,10 @@ PitotiAR.prototype.drop = function(event) {
 
     this.occupied[slot] = true;
 
-    //this.restoreVideoPlayer();
-
     $('#' + event.target.id + 'drop').hide();
+
+    //Hide video
+    this.stopVideo();
 
     //Store video name
     sessionStorage.setItem(event.target.id, "video" + this.currentMarker + ".jpg");
@@ -360,7 +360,7 @@ PitotiAR.prototype.stopVideo = function() {
     this.currentMarker = -1;
     this.triggerElem.hide();
 
-    this.restoreVideoPlayer();
+    //this.restoreVideoPlayer();
 };
 
 PitotiAR.prototype.allowDrop = function(event) {

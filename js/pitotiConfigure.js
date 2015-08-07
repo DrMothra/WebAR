@@ -26,7 +26,6 @@ $(document).ready(function() {
         sessionStorage.setItem("userName", name);
         sessionStorage.setItem("userMail", mail);
 
-        //DEBUG
-        console.log("Written", name, "and", mail, " to session storage");
+        $('#entered').show();
     }
 });

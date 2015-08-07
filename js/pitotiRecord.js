@@ -292,6 +292,18 @@ $(document).ready(function() {
 
             formData.append("audioFile", blob, audioFilename);
 
+            //Get videos
+            var video, index;
+            for(var slot=0; slot<TIMELINE_SLOTS; ++slot) {
+                video = sessionStorage.getItem("timeline"+slot);
+                if(video) {
+                    index = parseInt(video.charAt(video.length-1));
+                    //DEBUG
+                    console.log("Video =", videoManager.getVideoSource(index));
+
+                    formData.append("video"+slot, videoManager.getVideoSource(index));
+                }
+            }
             //Send data
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "uploadHandler.php", true);
