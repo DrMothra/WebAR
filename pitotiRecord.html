@@ -48,7 +48,7 @@
                         <img src="images/playStory.png">
                     </div>
                     <div class="4u">
-                        &nbsp;
+                        <button class="actionButton">Discard Story</button>
                     </div>
                     <div class="4u">
                         <form id="uploadForm" method="POST">
@@ -61,18 +61,22 @@
                             <input type="text" name="video3" id="video3" class="hide">
                             <button type="submit" name="submit" class="actionButton">Upload Story</button>
                         </form>
-                        <div id="success" class="hide">
-                            <button  class="actionButton">Success</button>
-                        </div>
-                        <div id="failure" class="hide">
-                            <button class="actionButton">Failure</button>
-                        </div>
-
                     </div>
                 </div>
-                <div id="createFinal">
-                    <a href="pitotiAR.html"><img src="images/createStory.png"></a>
+                <div id="createFinal" class="row 0%">
+                    <div class="4u">
+                        <a href="pitotiAR.html"><img src="images/createStory.png"></a>
+                    </div>
+                    <div class="4u">
+                        &nbsp;
+                    </div>
+                    <div class="4u">
+                        <p id="uploadStatus" class="hide">
+                            Uploading...
+                        </p>
+                    </div>
                 </div>
+
             </div>
         </div>
 

@@ -264,8 +264,8 @@ $(document).ready(function() {
 
     var form = document.getElementById("uploadForm");
     form.onsubmit = function(event) {
-        //DEBUG
-        console.log("Name =", sessionStorage.getItem("userName"));
+        var status = $('#uploadStatus');
+        status.show();
 
         event.preventDefault();
 
@@ -287,8 +287,6 @@ $(document).ready(function() {
 
             var audioFilename = "story_" + userName + "_" + new Date().toUTCString() + ".mp3";
 
-            //DEBUG
-            console.log("audioFile = ", audioFilename);
 
             formData.append("audioFile", blob, audioFilename);
 
@@ -310,12 +308,12 @@ $(document).ready(function() {
             xhr.onreadystatechange = function() {
                 if(xhr.readyState === 4) {
                     if(xhr.status === 200) {
-                        $("#success").show();
+                        status.html("Story uploaded!");
                         console.log("Uploaded");
                         console.log("Response =", xhr.responseText);
                     } else {
                         console.log("Error uploading");
-                        $('#failure').show();
+                        status.html("Upload failed - try again");
                     }
                 }
             };

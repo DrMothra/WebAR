@@ -184,6 +184,7 @@ PitotiAR.prototype.init = function(container) {
     this.videoClips = [];
     this.videoPlaying = false;
     this.currentMarker = -1;
+    this.currentSlot = 0;
 
     //Matrix store
     this.tmp = new Float32Array(16);
@@ -289,18 +290,18 @@ PitotiAR.prototype.drag = function(event) {
     event.originalEvent.originalEvent.dataTransfer.setData("text", icon);
 };
 
-PitotiAR.prototype.drop = function(event) {
-    //Dragged video clip
-    this.triggerVideo.play();
-    var id = event.target.id;
-    var slot = parseInt(id.charAt(id.length-1));
-    if(isNaN(slot)) return;
-    if(this.currentMarker < 0 || this.occupied[slot]) {
+PitotiAR.prototype.drop = function() {
+    //Selected video clip
+    if(this.currentMarker < 0) {
         return;
     }
+    if(this.currentSlot === NUM_CONTAINERS) {
+        alert("All clips are full");
+        return;
+    }
+    var id = "slot" + this.currentSlot;
 
     var _this = this;
-    event.preventDefault();
     var image = document.getElementById(id);
     image.className = "imgDraggable";
 
@@ -313,18 +314,20 @@ PitotiAR.prototype.drop = function(event) {
 
     image.src = "images/video" + this.currentMarker + ".jpg";
 
-    image.style.width = event.target.clientWidth + 'px';
-    image.style.height = event.target.clientHeight + 'px';
+    image.style.width = id.clientWidth + 'px';
+    image.style.height = id.clientHeight + 'px';
 
-    this.occupied[slot] = true;
+    this.occupied[this.currentSlot] = true;
 
-    $('#' + event.target.id + 'drop').hide();
+    //$('#' + event.target.id + 'drop').hide();
+
+    //Store video name
+    sessionStorage.setItem(id, "video" + this.currentMarker + ".jpg");
+
+    ++this.currentSlot;
 
     //Hide video
     this.stopVideo();
-
-    //Store video name
-    sessionStorage.setItem(event.target.id, "video" + this.currentMarker + ".jpg");
 };
 
 PitotiAR.prototype.dropVideo = function(event, ui) {
@@ -336,7 +339,7 @@ PitotiAR.prototype.dropVideo = function(event, ui) {
         if(!isNaN(slot)) {
             this.occupied[slot] = false;
         }
-        ++slot;
+        --this.currentSlot;
         dragged.attr('src', 'images/clip'+slot+'.png');
         /*
         var id = dragged.parent().attr('id');
@@ -454,6 +457,12 @@ PitotiAR.prototype.update = function() {
     BaseApp.prototype.update.call(this);
 };
 
+function clearSlots() {
+    for(var i=0; i<NUM_CONTAINERS; ++i) {
+        sessionStorage.removeItem("slot"+i);
+    }
+}
+
 $(document).ready(function() {
     //Initialise app
 
@@ -463,8 +472,7 @@ $(document).ready(function() {
     } else {
         skel.init();
 
-        //DEBUG
-        console.log("Username =", sessionStorage.getItem("userName"));
+        clearSlots();
 
         var app = new PitotiAR();
         app.init('ARoutput');
@@ -495,6 +503,14 @@ $(document).ready(function() {
             drop: function( event, ui) {
                 app.dropVideo(event, ui);
             }
+        });
+
+        $('#keepClip').on("click", function() {
+            app.drop();
+        });
+
+        $('#stopClip').on("click", function() {
+            app.stopVideo();
         });
 
         app.run();

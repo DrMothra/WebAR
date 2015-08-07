@@ -461,7 +461,9 @@ body {
 #azirAR img {
     width: 110%;
 }
-
+#ARbuttons {
+    margin-top: 5%;
+}
 
 /* Timeline page */
 .dragVideo {
@@ -557,7 +559,7 @@ body {
     text-align: left;
 }
 #createFinal img {
-    width: 25%;
+    width: 75%;
 }
 #emailFinal {
     text-align: right;
@@ -591,6 +593,15 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+}
+#uploadStatus {
+    padding: 5% 0;
+    background-color: #7892c2;
+    text-align: center;
+    border-radius: 10px;
+    color: white;
+    font-family:Arial;
+    font-size:19px;
 }
 
 
