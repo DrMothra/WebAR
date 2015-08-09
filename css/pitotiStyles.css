@@ -505,8 +505,12 @@ body {
     pointer-events: none;
     cursor: default;
 }
-
-
+#progressContainer {
+    margin-top: 2.5%;
+}
+#progressContainer progress {
+    width: 100%;
+}
 
 
 /* Record page */

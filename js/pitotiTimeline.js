@@ -7,6 +7,7 @@ var TIMELINE_SLOTS = 4;
 var videoPanel = (function() {
     //Timeline
     var timelineSlots = new Array(TIMELINE_SLOTS);
+    var videoPlayers = new Array(TIMELINE_SLOTS);
     for(var i=0; i<TIMELINE_SLOTS; ++i) {
         timelineSlots[i] = false;
     }
@@ -15,6 +16,8 @@ var videoPanel = (function() {
     var checkInterval = 1000;
     var videoChecker;
     var dragImage, dragTrashImage;
+    var progressBar;
+    var currentElapsed = -1;
 
     return {
         init: function() {
@@ -39,10 +42,14 @@ var videoPanel = (function() {
 
             //Video containers
             var vidElem;
+
             for(var i=0; i<TIMELINE_SLOTS; ++i) {
                 vidElem = document.getElementById("timelineVideo" + i);
                 vidElem.style.width = elem.clientWidth+"px";
+                videoPlayers[i] = document.getElementById("timelineVideo"+i);
             }
+
+            progressBar = document.getElementById("elapsed");
         },
 
         getDragImage: function() {
@@ -74,37 +81,57 @@ var videoPanel = (function() {
         },
 
         playStory: function() {
-            var slotId, containsVideo=false, videoIndex;
+            currentElapsed = -1;
+            var slotId, containsVideo=false, videoIndex, videoId;
             for(var i=0; i<TIMELINE_SLOTS; ++i) {
                 slotId = document.getElementById("timeline"+i);
                 if(slotId.src.indexOf("video") >= 0) {
                     containsVideo = true;
+                    videoPlayers[i].empty = false;
                     videoIndex = parseInt(slotId.src.charAt(slotId.src.length-5));
                     if(isNaN(videoIndex)) continue;
-                    videosToPlay.push(videoManager.getVideoSource(videoIndex));
+                    videoPlayers[i].src = videoManager.getVideoSource(videoIndex);
+                    $('#timeline'+i).hide();
+                    $('#timelineVideo'+i).show();
+                } else {
+                    videoPlayers[i].empty = true;
                 }
             }
             if(!containsVideo) {
                 alert("No videos in timeline");
             } else {
-                var player = document.getElementById("videoPlayer");
-                $('#timeline').hide();
-                $('#videoPlayer').show();
-                player.src = videosToPlay[0];
-                player.play();
+                var currentPlayer;
+                for(var i=0; i<TIMELINE_SLOTS; ++i) {
+                    if(!videoPlayers[i].empty) {
+                        currentPlayer = i;
+                        videoPlayers[i].play();
+                        break;
+                    }
+                }
                 videoChecker = setInterval(function() {
-                    if(player.ended) {
-                        //See if any more clips
-                        videosToPlay.shift();
-                        if(videosToPlay.length != 0) {
-                            player.src = videosToPlay[0];
-                            player.play();
-                        } else {
+                    if(videoPlayers[currentPlayer].ended) {
+                        ++currentPlayer;
+                        var playing = false;
+                        for(var i=currentPlayer; i<TIMELINE_SLOTS; ++i) {
+                            if(!videoPlayers[i].empty) {
+                                playing = true;
+                                currentPlayer = i;
+                                videoPlayers[i].play();
+                                break;
+                            } else {
+                                currentElapsed += 15;
+                            }
+                        }
+                        if(!playing) {
+                            for(var i=0; i<TIMELINE_SLOTS; ++i) {
+                                $('#timeline'+i).show();
+                                $('#timelineVideo'+i).hide();
+                            }
                             clearInterval(videoChecker);
-                            $('#timeline').show();
-                            $('#videoPlayer').hide();
                         }
                     }
+                    progressBar.value = ++currentElapsed;
+
                 }, checkInterval);
             }
         },
