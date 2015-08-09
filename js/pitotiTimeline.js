@@ -36,6 +36,13 @@ var videoPanel = (function() {
             dragTrashImage = document.createElement("img");
             dragTrashImage.src = "images/dragTrash.png";
             dragTrashImage.style.width = elem.clientWidth+"px";
+
+            //Video containers
+            var vidElem;
+            for(var i=0; i<TIMELINE_SLOTS; ++i) {
+                vidElem = document.getElementById("timelineVideo" + i);
+                vidElem.style.width = elem.clientWidth+"px";
+            }
         },
 
         getDragImage: function() {

@@ -185,6 +185,7 @@ PitotiAR.prototype.init = function(container) {
     this.videoPlaying = false;
     this.currentMarker = -1;
     this.currentSlot = 0;
+    this.slotsFull = false;
 
     //Matrix store
     this.tmp = new Float32Array(16);
@@ -295,8 +296,18 @@ PitotiAR.prototype.drop = function() {
     if(this.currentMarker < 0) {
         return;
     }
-    if(this.currentSlot === NUM_CONTAINERS) {
-        alert("All clips are full");
+
+    //Get next available slot
+    this.currentSlot = -1;
+    for(var i=0; i<NUM_CONTAINERS; ++i) {
+        if(!this.occupied[i]) {
+            this.currentSlot = i;
+            break;
+        }
+    }
+    if(this.currentSlot < 0) {
+        alert("All slots full");
+        this.stopVideo();
         return;
     }
     var id = "slot" + this.currentSlot;
@@ -339,7 +350,7 @@ PitotiAR.prototype.dropVideo = function(event, ui) {
         if(!isNaN(slot)) {
             this.occupied[slot] = false;
         }
-        --this.currentSlot;
+        ++slot;
         dragged.attr('src', 'images/clip'+slot+'.png');
         /*
         var id = dragged.parent().attr('id');
@@ -478,28 +489,9 @@ $(document).ready(function() {
         app.init('ARoutput');
         app.createScene();
 
-        //GUI callbacks
-        var dragElem = $('#triggerVideo');
-        dragElem.draggable( {
-            revert: "invalid",
-            cursorAt: { top: 0, left: 0 },
-            helper: function(event) {
-                this.pause();
-                return app.getDragImage();
-            }
-        });
-
-        var targetElem = $('.drop img');
-        targetElem.droppable( {
-            accept: "#triggerVideo",
-            drop: function( event, ui) {
-                app.drop(event);
-            }
-        });
-
         var trashElem = $('.trash');
         trashElem.droppable( {
-            accept: "#triggerVideo, .drop img",
+            accept: ".drop img",
             drop: function( event, ui) {
                 app.dropVideo(event, ui);
             }
