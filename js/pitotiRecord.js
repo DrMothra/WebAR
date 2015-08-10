@@ -373,6 +373,7 @@ $(document).ready(function() {
         var bufferIndex;
         for(var i=0; i<MAX_BUFFERS; ++i) {
             if(audioSelected[i]) {
+                recorder.clear();
                 recorder.setBuffer(newBuffer[i]);
                 bufferIndex = i;
                 break;
