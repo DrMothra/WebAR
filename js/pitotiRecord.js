@@ -82,6 +82,12 @@ var videoPlayer = (function() {
                     }
                 }, checkInterval);
             }
+        },
+
+        rewind: function() {
+            vidPlayer.pause();
+            playingVideo = false;
+            gotClip = false;
         }
     }
 })();
@@ -304,6 +310,8 @@ $(document).ready(function() {
             return;
         }
         pageStatus = PLAYING;
+        //Video back to start
+        videoPlayer.rewind();
         $('#storyControls').hide();
         $('#nextPageRecord').hide();
         $('#finalControls').show();
@@ -315,6 +323,7 @@ $(document).ready(function() {
         if(pageStatus === RECORDING) {
             window.location.href = "pitotiTimeline.html";
         } else {
+            videoPlayer.rewind();
             pageStatus = RECORDING;
             $('#storyControls').show();
             $('#nextPageRecord').show();
@@ -324,7 +333,13 @@ $(document).ready(function() {
 
     $('#playStoryFinal').on("click", function() {
         videoPlayer.playBack();
-        playBuffer();
+        for(var i=0; i<MAX_BUFFERS; ++i) {
+            if(audioSelected[index]) {
+                playBuffer(index);
+                break;
+            }
+        }
+
     });
 
     var index;
@@ -354,6 +369,17 @@ $(document).ready(function() {
 
         event.preventDefault();
 
+
+        var bufferIndex;
+        for(var i=0; i<MAX_BUFFERS; ++i) {
+            if(audioSelected[i]) {
+                recorder.setBuffer(newBuffer[i]);
+                bufferIndex = i;
+                break;
+            }
+        }
+
+        //recorder.setBuffer(audioBuffer);
         recorder.exportWAV(function(blob) {
             var formData = new FormData();
 

@@ -1,8 +1,27 @@
+
+var bufferManager = (function() {
+  var audioBuffer;
+
+  return {
+    getAudioBuffer: function() {
+      return audioBuffer;
+    },
+
+    setAudioBuffer: function(buffer) {
+      audioBuffer = buffer;
+      console.log("Buffer =", audioBuffer);
+    }
+  }
+})();
+
+
 var recLength = 0,
   recBuffersL = [],
   recBuffersR = [],
   bits        = 16,
   sampleRate;
+
+var AUDIOBUFFER = null;
 
 this.onmessage = function(e){
   switch(e.data.command){
@@ -17,6 +36,9 @@ this.onmessage = function(e){
       break;
     case 'getBuffer':
       getBuffer();
+      break;
+    case 'setBuffer':
+      setBuffer(e.data.audioBuffer);
       break;
     case 'clear':
       clear();
@@ -50,6 +72,13 @@ function getBuffer() {
   buffers.push( mergeBuffers(recBuffersL, recLength) );
   //buffers.push( mergeBuffers(recBuffersR, recLength) );
   this.postMessage(buffers);
+}
+
+function setBuffer(audioBuffer) {
+  //DEBUG
+  console.log("Buffer length =", audioBuffer[0].length);
+  recBuffersL.push(audioBuffer[0]);
+  recLength += audioBuffer[0].length;
 }
 
 function clear(){
@@ -159,3 +188,4 @@ function encodeWAV(samples){
 
   return view;
 }
+

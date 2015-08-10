@@ -3,6 +3,7 @@
  */
 var NUM_CONTAINERS = 8;
 var TIMELINE_SLOTS = 4;
+var MAX_VIDEO_TIME = 60;
 
 var videoPanel = (function() {
     //Timeline
@@ -17,7 +18,7 @@ var videoPanel = (function() {
     var videoChecker;
     var dragImage, dragTrashImage;
     var progressBar;
-    var currentElapsed = -1;
+    var currentElapsed = 0;
 
     return {
         init: function() {
@@ -30,6 +31,11 @@ var videoPanel = (function() {
                     elem.src = "images/" + src;
                 }
             }
+            //Clear timeline
+            for(var i=0; i<NUM_CONTAINERS; ++i) {
+                sessionStorage.removeItem("timeline"+i);
+            }
+
             //Dragged elements
             var elem = document.getElementById("slot0");
             dragImage = document.createElement("img");
@@ -43,10 +49,11 @@ var videoPanel = (function() {
             //Video containers
             var vidElem;
 
+            var elem = document.getElementById("timeline0");
             for(var i=0; i<TIMELINE_SLOTS; ++i) {
                 vidElem = document.getElementById("timelineVideo" + i);
                 vidElem.style.width = elem.clientWidth+"px";
-                videoPlayers[i] = document.getElementById("timelineVideo"+i);
+                videoPlayers[i] = vidElem;
             }
 
             progressBar = document.getElementById("elapsed");
@@ -81,7 +88,7 @@ var videoPanel = (function() {
         },
 
         playStory: function() {
-            currentElapsed = -1;
+            currentElapsed = 0;
             var slotId, containsVideo=false, videoIndex, videoId;
             for(var i=0; i<TIMELINE_SLOTS; ++i) {
                 slotId = document.getElementById("timeline"+i);
@@ -111,6 +118,7 @@ var videoPanel = (function() {
                 videoChecker = setInterval(function() {
                     if(videoPlayers[currentPlayer].ended) {
                         ++currentPlayer;
+                        currentElapsed = currentPlayer * 15;
                         var playing = false;
                         for(var i=currentPlayer; i<TIMELINE_SLOTS; ++i) {
                             if(!videoPlayers[i].empty) {
@@ -127,10 +135,12 @@ var videoPanel = (function() {
                                 $('#timeline'+i).show();
                                 $('#timelineVideo'+i).hide();
                             }
+                            progressBar.value = MAX_VIDEO_TIME;
                             clearInterval(videoChecker);
                         }
+                    } else {
+                        progressBar.value = ++currentElapsed;
                     }
-                    progressBar.value = ++currentElapsed;
 
                 }, checkInterval);
             }
