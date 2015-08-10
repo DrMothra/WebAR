@@ -23,25 +23,42 @@
         </div>
 
         <div class="6u">
-            <video id="videoPlayer" width="100%" controls>
+            <video id="videoPlayer" width="100%">
 
             </video>
-            <div id="storyControls">
-                <div id="playStoryRecord">
-                    <img src="images/play.png">
-                </div>
-                <div id="recordStory" class="row 0%">
-                    <div class="4u">
+            <div id="storyControls" class="row 0%">
+                <div class="4u">
+                    <div id="playStoryRecord">
+                        <img src="images/play.png">
+                    </div>
+                    <div id="audioRecordLabel">
                         <img src="images/record.png">
                     </div>
-                    <div class="2u">
-                        <img id="audioRecord" src="images/recordOff.png">
+                </div>
+                <div id="micContainer" class="2u">
+                    <img id="audioRecord" src="images/recordOff.png">
+                </div>
+                <div id="buttonContainer" class="6u">
+                    <div id="buttons0" class="hide">
+                        <img id="selectButton0" src="images/redCircle.png">
+                        <button id="audioButton0" class="actionButton">Play</button>
+                        <button id="deleteButton0" class="actionButton">Del</button>
                     </div>
-                    <div id="audioButtonContainer" class="6u hide">
-                        <button id="audioButton" class="actionButton">Play audio</button>
+                    <div id="buttons1" class="hide">
+                        <img id="selectButton1" src="images/redCircle.png">
+                        <button id="audioButton1" class="actionButton">Play</button>
+                        <button id="deleteButton1" class="actionButton">Del</button>
+                    </div>
+                    <div id="buttons2" class="hide">
+                        <img id="selectButton2" src="images/redCircle.png">
+                        <button id="audioButton2" class="actionButton">Play</button>
+                        <button id="deleteButton2" class="actionButton">Del</button>
                     </div>
                 </div>
             </div>
+            <progress id="audioProgress" max="60" value="0">
+
+            </progress>
             <div id="finalControls" class="hide">
                 <div class="row 0%">
                     <div id="playStoryFinal" class="4u">

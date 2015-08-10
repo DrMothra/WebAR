@@ -514,6 +514,12 @@ body {
 
 
 /* Record page */
+#storyControls {
+    text-align: left;
+}
+#audioRecord {
+    text-align: left;
+}
 #nextPageRecord {
     text-align: right;
     margin-right: 2%;
@@ -522,11 +528,13 @@ body {
     width: 60%
 }
 #playStoryRecord {
-    margin-top: 5%;
     text-align: left;
 }
 #playStoryRecord img {
-    width: 30%;
+    width: 90%;
+}
+#audioRecordLabel {
+    text-align: left;
 }
 #recordStory {
     text-align: left;
@@ -546,11 +554,22 @@ body {
     width: 7%;
     vertical-align: middle;
 }
+#buttonContainer {
+    margin-top: 2.5%;
+}
+#buttonContainer img {
+    width: 15%;
+    vertical-align: middle;
+}
 #audioButton {
     margin-top: 5%;
 }
-
-
+#audioProgress {
+    width: 100%;
+}
+#micContainer {
+    margin-top: 7.5%;
+}
 
 /* Final page */
 #playStoryFinal {

@@ -6,11 +6,19 @@ var TIMELINE_SLOTS = 4;
 var MAX_CLIPS = 5;
 var audio_context, recorder, recording = false;
 var linkNumber = 0;
+var bufferNumber = 0;
 var newSource = null;
-var newBuffer = null;
+var MAX_BUFFERS = 3;
+var newBuffer = new Array(MAX_BUFFERS);
 var recorded = false;
 var audioClips = [];
 var RECORDING = 0, PLAYING = 1;
+var started = false, stopped = false;
+var audioPlayersEmpty = new Array(3);
+var audioSelected = new Array(3);
+var audioProgress;
+var elapsedTime = 0;
+var checkInterval = 1000;
 
 function __log(e, data) {
     log.innerHTML += "\n" + e + " " + (data || '');
@@ -48,6 +56,7 @@ var videoPlayer = (function() {
                     if(++currentSlot >= TIMELINE_SLOTS) {
                         currentSlot = 0;
                         playingVideo = false;
+                        clearInterval(videoChecker);
                         break;
                     }
                 }
@@ -158,14 +167,14 @@ function createLink() {
 function saveBuffer( buffers) {
     //DEBUG
     console.log("Creating buffer", buffers);
-    newBuffer = audio_context.createBuffer( 1, buffers[0].length, audio_context.sampleRate );
-    newBuffer.getChannelData(0).set(buffers[0]);
+    newBuffer[bufferNumber] = audio_context.createBuffer( 1, buffers[0].length, audio_context.sampleRate );
+    newBuffer[bufferNumber].getChannelData(0).set(buffers[0]);
     //newBuffer.getChannelData(1).set(buffers[1]);
 }
 
-function playBuffer() {
+function playBuffer(buffer) {
     window.source = audio_context.createBufferSource();
-    window.source.buffer = newBuffer;
+    window.source.buffer = newBuffer[buffer];
     window.source.connect(audio_context.destination);
     window.source.start(0);
 }
@@ -174,15 +183,55 @@ function toggleRecording() {
     //Start/stop recording
     if(!recorder) return;
 
+    var empty = false;
+    for(var i=0; i<MAX_BUFFERS; ++i) {
+        if(audioPlayersEmpty[i]) {
+            empty = true;
+            bufferNumber = i;
+            break;
+        }
+    }
+    if(!empty) {
+        alert("Max recordings reached");
+        return;
+    }
+
     var recImage = $('#audioRecord');
     recording = !recording;
     if(recording) {
         recorder.clear();
         recImage.attr('src', 'images/recordOn.png');
         recorder.record();
+        audioProgress = setInterval(function() {
+            $('#audioProgress').attr("value", ++elapsedTime);
+            if(elapsedTime >= 60) {
+                elapsedTime = 0;
+                $('#audioProgress').attr("value", 0);
+                recorder.stop();
+                clearInterval(audioProgress);
+                recorded = true;
+                stopped = false;
+                recImage.attr('src', 'images/recordOff.png');
+                recorder.getBuffer(saveBuffer);
+                for(var i=0; i<MAX_BUFFERS; ++i) {
+                    if(audioPlayersEmpty[i]) {
+                        $('#buttons'+i).show();
+                        $('#selectButton'+i).attr("src", "images/redCircle.png");
+                        audioPlayersEmpty[i] = false;
+                        break;
+                    }
+                }
+            }
+        }, checkInterval);
+        started = true;
+
     } else {
         recorder.stop();
+        elapsedTime = 0;
+        clearInterval(audioProgress);
+        $('#audioProgress').attr("value", 0);
         recorded = true;
+        stopped = true;
         recImage.attr('src', 'images/recordOff.png');
         //createLink();
         recorder.getBuffer(saveBuffer);
@@ -193,6 +242,9 @@ $(document).ready(function() {
     //Init
     skel.init();
     videoPlayer.init();
+    for(var i=0; i<MAX_BUFFERS; ++i) {
+        audioPlayersEmpty[i] = true;
+    }
 
     //DEBUG
     console.log("Name =", sessionStorage.getItem("userName"));
@@ -219,8 +271,18 @@ $(document).ready(function() {
     //Callbacks
     $('#audioRecord').on('click', function() {
         toggleRecording();
-        if(recorded) {
-            $('#audioButtonContainer').show();
+        if(stopped) {
+            stopped = false;
+            started = false;
+            for(var i=0; i<MAX_BUFFERS; ++i) {
+                if(audioPlayersEmpty[i]) {
+                    $('#buttons'+i).show();
+                    $('#selectButton'+i).attr("src", "images/redCircle.png");
+                    audioPlayersEmpty[i] = false;
+                    break;
+                }
+            }
+
         }
     });
 
@@ -230,8 +292,15 @@ $(document).ready(function() {
 
     var audioPlayer = null;
     $('#nextPageRecord').on("click", function() {
-        if(!recorded) {
-            alert("No audio recorded");
+        var audio = false;
+        for(var i=0; i<MAX_BUFFERS; ++i) {
+            if(audioSelected[i]) {
+                audio = true;
+                break;
+            }
+        }
+        if(!audio) {
+            alert("No audio selected");
             return;
         }
         pageStatus = PLAYING;
@@ -258,8 +327,24 @@ $(document).ready(function() {
         playBuffer();
     });
 
-    $('#audioButton').on("click", function() {
-        playBuffer();
+    var index;
+    $('[id^=audioButton]').on("click", function() {
+        index = parseInt(this.id.charAt(this.id.length-1));
+        playBuffer(index);
+    });
+
+    $('[id^=deleteButton]').on("click", function() {
+        index = parseInt(this.id.charAt(this.id.length-1));
+        audioPlayersEmpty[index] = true;
+        $('#buttons'+index).hide();
+        audioSelected[index] = false;
+    });
+
+    $('[id^=selectButton]').on("click", function() {
+        index = parseInt(this.id.charAt(this.id.length-1));
+        $('[id^=selectButton]').attr("src", "images/redCircle.png");
+        $('#selectButton'+index).attr("src", "images/greenCircle.png");
+        audioSelected[index] = true;
     });
 
     var form = document.getElementById("uploadForm");
