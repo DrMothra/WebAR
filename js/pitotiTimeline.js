@@ -19,6 +19,7 @@ var videoPanel = (function() {
     var dragImage, dragTrashImage;
     var progressBar;
     var currentElapsed = 0;
+    var timelineOccupied = false;
 
     return {
         init: function() {
@@ -84,7 +85,7 @@ var videoPanel = (function() {
             sessionStorage.setItem("numVideos", numVideos);
             sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
             //Enable next again
-            $('#nextARPage').removeClass("notActive");
+            videoPanel.setTimelineOccupied(true);
         },
 
         playStory: function() {
@@ -95,8 +96,23 @@ var videoPanel = (function() {
                 if(slotId.src.indexOf("video") >= 0) {
                     containsVideo = true;
                     videoPlayers[i].empty = false;
-                    videoIndex = parseInt(slotId.src.charAt(slotId.src.length-5));
-                    if(isNaN(videoIndex)) continue;
+                    //Get index
+                    var videoName = slotId.src.substring(0, slotId.src.length-4);
+                    var number = true;
+                    var index = videoName.length - 1;
+                    var value;
+                    while(number) {
+                        value = parseInt(videoName.charAt(index));
+                        if(isNaN(value)) {
+                            number = false;
+                        }
+                        --index;
+                    }
+                    videoIndex = parseInt(videoName.substring(index+2, videoName.length));
+
+                    //DEBUG
+                    console.log("Index = ", videoIndex);
+
                     videoPlayers[i].src = videoManager.getVideoSource(videoIndex);
                     $('#timeline'+i).hide();
                     $('#timelineVideo'+i).show();
@@ -160,8 +176,16 @@ var videoPanel = (function() {
             var timelineSlot = document.getElementById("timeline"+slot);
             timelineSlot.src = "images/story"+slot+".png";
             if(numVideos === 0) {
-                $('#nextARPage').addClass("notActive");
+                videoPanel.setTimelineOccupied(false);
             }
+        },
+
+        setTimelineOccupied: function(occupied) {
+            timelineOccupied = occupied;
+        },
+
+        timelineOccupied: function() {
+            return timelineOccupied;
         }
     }
 })();
@@ -202,6 +226,14 @@ $(document).ready(function() {
         accept: ".drop img",
         drop: function( event, ui) {
             videoPanel.trash(event, ui);
+        }
+    });
+
+    $('#nextARPage').on("click", function() {
+        if(videoPanel.timelineOccupied()) {
+            window.location.href = "pitotiRecord.html";
+        } else {
+            alert("No clips in timeline");
         }
     });
 

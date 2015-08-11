@@ -35,7 +35,17 @@ var videoPlayer = (function() {
                 clip = sessionStorage.getItem("timeline"+currentSlot);
                 if(clip) {
                     gotClip = true;
-                    videoIndex = parseInt(clip.charAt(clip.length-1));
+                    var number = true;
+                    var value;
+                    var index = clip.length - 1;
+                    while(number) {
+                        value = parseInt(clip.charAt(index));
+                        if(isNaN(value)) {
+                            number = false;
+                        }
+                        --index;
+                    }
+                    videoIndex = parseInt(clip.substring(index+2, clip.length));
                     if(isNaN(videoIndex)) continue;
                     vidPlayer.src = videoSources[videoIndex];
                     vidPlayer.play();
@@ -59,7 +69,17 @@ var videoPlayer = (function() {
                         } else {
                             clip = sessionStorage.getItem("timeline"+currentSlot);
                             if(clip) {
-                                videoIndex = parseInt(clip.charAt(clip.length-1));
+                                var number = true;
+                                var value;
+                                var index = clip.length - 1;
+                                while(number) {
+                                    value = parseInt(clip.charAt(index));
+                                    if(isNaN(value)) {
+                                        number = false;
+                                    }
+                                    --index;
+                                }
+                                videoIndex = parseInt(clip.substring(index+2, clip.length));
                                 if(isNaN(videoIndex)) return;
                                 vidPlayer.src = videoSources[videoIndex];
                                 vidPlayer.play();

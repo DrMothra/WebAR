@@ -333,12 +333,28 @@ PitotiAR.prototype.drop = function() {
     //$('#' + event.target.id + 'drop').hide();
 
     //Store video name
-    sessionStorage.setItem(id, "video" + this.currentMarker + ".jpg");
+    var itemId = "video" + this.currentMarker + ".jpg";
+    sessionStorage.setItem(id, itemId);
+    //DEBUG
+    console.log("marker = ", this.currentMarker);
+    console.log("id = ", itemId);
 
     ++this.currentSlot;
 
     //Hide video
     this.stopVideo();
+};
+
+PitotiAR.prototype.slotsOccupied = function() {
+    //See how many slots occupied
+    var slots = 0;
+    for(var i=0; i<NUM_CONTAINERS; ++i) {
+        if(this.occupied[i]) {
+            ++slots;
+        }
+    }
+
+    return slots;
 };
 
 PitotiAR.prototype.dropVideo = function(event, ui) {
@@ -347,6 +363,7 @@ PitotiAR.prototype.dropVideo = function(event, ui) {
     if(dragged.hasClass("imgDraggable")) {
         var id = dragged.attr('id');
         var slot = parseInt(id.charAt(id.length-1));
+
         if(!isNaN(slot)) {
             this.occupied[slot] = false;
         }
@@ -503,6 +520,14 @@ $(document).ready(function() {
 
         $('#stopClip').on("click", function() {
             app.stopVideo();
+        });
+
+        $('#nextARPage').on("click", function() {
+            if(app.slotsOccupied() > 0) {
+                window.location.href = "pitotiTimeline.html";
+            } else {
+                alert("No clips selected");
+            }
         });
 
         app.run();
