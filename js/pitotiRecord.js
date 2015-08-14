@@ -48,7 +48,17 @@ var videoPlayer = (function() {
                 clip = sessionStorage.getItem("timeline"+currentSlot);
                 if(clip) {
                     gotClip = true;
-                    videoIndex = parseInt(clip.charAt(clip.length-1));
+                    var number = true;
+                    var value;
+                    var index = clip.length - 1;
+                    while(number) {
+                        value = parseInt(clip.charAt(index));
+                        if(isNaN(value)) {
+                            number = false;
+                        }
+                        --index;
+                    }
+                    videoIndex = parseInt(clip.substring(index+2, clip.length));
                     if(isNaN(videoIndex)) continue;
                     vidPlayer.src = videoManager.getVideoSource(videoIndex);
                     vidPlayer.play();
@@ -73,7 +83,17 @@ var videoPlayer = (function() {
                         } else {
                             clip = sessionStorage.getItem("timeline"+currentSlot);
                             if(clip) {
-                                videoIndex = parseInt(clip.charAt(clip.length-1));
+                                var number = true;
+                                var value;
+                                var index = clip.length - 1;
+                                while(number) {
+                                    value = parseInt(clip.charAt(index));
+                                    if(isNaN(value)) {
+                                        number = false;
+                                    }
+                                    --index;
+                                }
+                                videoIndex = parseInt(clip.substring(index+2, clip.length));
                                 if(isNaN(videoIndex)) return;
                                 vidPlayer.src = videoManager.getVideoSource(videoIndex);
                                 vidPlayer.play();
@@ -407,7 +427,17 @@ $(document).ready(function() {
             for(var slot=0; slot<TIMELINE_SLOTS; ++slot) {
                 video = sessionStorage.getItem("timeline"+slot);
                 if(video) {
-                    index = parseInt(video.charAt(video.length-1));
+                    var number = true;
+                    var value;
+                    var index = video.length - 1;
+                    while(number) {
+                        value = parseInt(video.charAt(index));
+                        if(isNaN(value)) {
+                            number = false;
+                        }
+                        --index;
+                    }
+                    index = parseInt(video.substring(index+2, video.length));
                     //DEBUG
                     console.log("Video =", videoManager.getVideoSource(index));
 

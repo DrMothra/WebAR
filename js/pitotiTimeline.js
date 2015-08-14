@@ -79,7 +79,17 @@ var videoPanel = (function() {
             var image = document.getElementById(id);
             image.src = dragged.attr('src');
             //Get video index
-            var videoIndex = parseInt(image.src.charAt(image.src.length-5));
+            var number = true;
+            var value;
+            var index = image.src.length - 5;
+            while(number) {
+                value = parseInt(image.src.charAt(index));
+                if(isNaN(value)) {
+                    number = false;
+                }
+                --index;
+            }
+            var videoIndex = parseInt(image.src.substring(index+2, image.src.length));
             timelineSlots[slot] = true;
             ++numVideos;
             sessionStorage.setItem("numVideos", numVideos);
