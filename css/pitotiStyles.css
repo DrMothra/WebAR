@@ -65,9 +65,26 @@ body {
 }
 .previousPage {
     text-align: left;
-    margin-left: 5%;
+    margin-left: 2.5%;
+    margin-top: 2.5%;
 }
 .previousPage img {
+    width: 15%;
+}
+.nextPageColumn {
+    text-align: right;
+    margin-top: 2.5%;
+    margin-right: 2.5%;
+}
+.nextPageColumn img {
+    width: 60%;
+}
+.nextPage {
+    text-align: right;
+    margin-right: 2.5%;
+    margin-top: 2.5%;
+}
+.nextPage img {
     width: 15%;
 }
 .bubble {
@@ -78,7 +95,7 @@ body {
 }
 .contents {
     position: absolute;
-    top: 7.5%;
+    top: 4%;
     left: 50%;
     width: 100%;
     margin-left: -50%;
@@ -170,6 +187,10 @@ body {
 /* PAGES */
 
 /* Start page */
+#startImage {
+    background: url("../images/background.jpg") no-repeat center top fixed;
+    background-size: cover;
+}
 #startPage {
     margin-top: 12.5%;
     text-align: center;
@@ -240,10 +261,10 @@ body {
     width: 15%
 }
 #azirWelcome {
-
+    margin-top: 25%;
 }
 #azirWelcome img {
-    width: 50%;
+    width: 100%;
 }
 
 /* Menu page */
