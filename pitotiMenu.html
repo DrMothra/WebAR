@@ -5,21 +5,23 @@
     <title>Menu</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="js/skel.min.js"></script>
-    <script type="text/javascript" src="js/common.js?v=0.1"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div class="page">
+<div class="page container-fluid">
 
-    <div class="row 0%">
-        <div class="3u">
+    <div class="row">
+        <div class="col-md-3">
             <div class="previousPageColumn">
-                <a href="pitotiConfigure.html"><img src="images/back.png"></a>
+                <a href="pitotiWelcome.html"><img src="images/backButton.png"></a>
             </div>
         </div>
-        <div class="6u">
+        <div class="col-md-6">
             <div id="azirMenu" class="bubble">
                 <img src="images/azirSpeech.png">
                 <div class="contents">
@@ -31,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="3u">
+        <div class="col-md-3">
             <div id="menuOptions">
                 <div>
                     <a href="pitotiAbout.html"><button class="actionButton">ABOUT</button></a>

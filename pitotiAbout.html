@@ -5,40 +5,52 @@
     <title>Video</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="js/skel.min.js"></script>
-    <script type="text/javascript" src="js/common.js?v=0.1"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
 
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div class="page">
-    <div class="previousPage">
-        <a href="pitotiMenu.html"><img src="images/back.png"></a>
-    </div>
-
-    <div id="azirAbout" class="bubble">
-        <img src="images/azirSpeech.png">
-        <div class="contents">
-            <p>
-                Choose what you<br>
-                want to do by<br>
-                clicking the options
-            </p>
+<div class="page container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="previousPageColumn">
+                <a href="pitotiMenu.html"><img src="images/backButton.png"></a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="azirAbout" class="bubble">
+                <img src="images/azirSpeech.png">
+                <div class="contents">
+                    <p>
+                        Choose what you<br>
+                        want to do by<br>
+                        clicking the options
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            &nbsp;
         </div>
     </div>
 
-    <div class="row 0%">
-        <div class="3u">
+
+
+    <div id="aboutButtons" class="row">
+        <div class="col-md-3">
             <a href="pitotiOverview.html"><button class="actionButton">Overview</button></a>
         </div>
-        <div class="3u">
+        <div class="col-md-3">
             <a href="pitotiScanning.html"><button class="actionButton">Scanning</button></a>
         </div>
-        <div class="3u">
+        <div class="col-md-3">
             <a href="pitotiProcessing.html"><button class="actionButton">Processing</button></a>
         </div>
-        <div class="3u">
+        <div class="col-md-3">
             <a href="pitotiPresentation.html"><button class="actionButton">Presentation</button></a>
         </div>
     </div>
