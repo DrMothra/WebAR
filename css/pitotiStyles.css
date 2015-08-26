@@ -355,6 +355,14 @@ body {
 #seradina1 img {
     width: 90%;
 }
+#seradina1Augment {
+    position: absolute;
+    top: 9%;
+    left: 25%;
+}
+#seradina1Augment img {
+    width: 90%;
+}
 #seradina1Stories {
     margin-top: 15%;
 }
