@@ -53,6 +53,9 @@ body {
 .hide {
     display: none;
 }
+.noDisplay {
+    display: none;
+}
 .page {
     text-align: center;
 }
@@ -371,6 +374,28 @@ body {
 }
 #ploughing {
     margin: 10% 0 0 1%;
+}
+
+
+/* Seradina 1 3D page */
+#rotate img {
+    width: 40%;
+}
+#rotate button {
+    padding: 5px 0;
+    margin-bottom: 2%;
+    width: 25%;
+}
+#rotateUp,
+#rotateDown {
+    margin-left: 12.5%;
+}
+#zoom img {
+    width: 40%;
+}
+#zoom button {
+    padding: 5px 0;
+    width: 25%;
 }
 
 /* Seradina2 page */

@@ -5,7 +5,6 @@
 
 $(document).ready(function() {
     //Do any init
-    skel.init();
 
     //Play audio
     $('#story1').on("click", function() {
@@ -15,8 +14,10 @@ $(document).ready(function() {
     var elem = $('#seradina1Augment');
     $('#enhance').on("click", function() {
         if(elem.is(":visible")) {
+            console.log("Hiding");
             elem.hide();
         } else {
+            console.log("Showing");
             elem.show();
         }
     });

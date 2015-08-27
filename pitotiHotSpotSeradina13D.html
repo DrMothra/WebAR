@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Stories</title>
+
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/audioManager.js?v=0.1"></script>
+    <script type="text/javascript" src="js/detector.js"></script>
+    <script type="text/javascript" src="js/three71.js"></script>
+    <script type="text/javascript" src="js/TrackballControls.js"></script>
+
+    <script type="text/javascript" src="js/baseApp.js?v=0.3"></script>
+    <script type="text/javascript" src="js/hotSpotSeradina13D.js?v=0.1"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
+    <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
+</head>
+<body class="blank">
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="previousPageColumn">
+                <a href="pitotiHotSpotsSeradina.html"><img src="images/back.png"></a>
+            </div>
+            <p id="ploughing">
+                <b>Ploughing Scenes</b><br>
+                <i>Pitoti depictions:</i> two
+                ploughing scenes<br>
+                <i>Size</i>:app. 40 x 60 cm.<br>
+                <i>Motif variety</i>: humans: 4,
+                warriors:2, dogs:4, animals:7, other objects:2<br>
+                <i>Pecking style</i>: rough and fine<br>
+                <i>Surveying technique</i>: SLS<br>
+                <i>3d model resolution</i>: 0.1 mm
+            </p>
+        </div>
+        <div id="seradina1Web-GL" class="col-md-6">
+
+        </div>
+        <div id="seradina1Stories" class="col-md-3">
+            <div>
+                <button id="story1" class="actionButton">Story 1</button>
+                <audio id="audiostory1">
+                    <source src="audio/ploughingScene.ogg" type="audio/ogg">
+                    <source src="audio/ploughingScene.mp3" type="audio/mpeg">
+                    The browser does not support audio.
+                </audio>
+            </div>
+            <div class="hide">
+                <button class="actionButton">Story 2</button>
+            </div>
+            <div class="hide">
+                <button class="actionButton">Story 3</button>
+            </div>
+            <div id="rotate">
+                <p>Rotate</p>
+                <div>
+                    <button id="rotateUp" class="actionButton"><img src="images/upArrow.png"></button>
+                </div>
+                <div>
+                    <button id="rotateLeft" class="actionButton"><img src="images/leftArrow.png"></button>
+                    <button id="rotateRight" class="actionButton"><img src="images/rightArrow.png"></button>
+                </div>
+                <div>
+                    <button id="rotateDown" class="actionButton"><img src="images/downArrow.png"></button>
+                </div>
+            </div>
+            <div id="zoom">
+                <p>Zoom</p>
+                <button id="zoomOut" class="actionButton"><img src="images/minus.png"></button>
+                <button id="zoomIn" class="actionButton"><img src="images/plus.png"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

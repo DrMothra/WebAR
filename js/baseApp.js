@@ -10,15 +10,17 @@ function BaseApp() {
     this.controls = null;
     this.stats = null;
     this.container = null;
-    this.projector = null;
     this.objectList = [];
     this.root = null;
-    this.mouse = { startX:0, startY:0, down:false, endX:0, endY:0};
+    this.mouse = { startX:0, startY:0};
     this.pickedObjects = [];
+    this.selectedObject = null;
     this.hoverObjects = [];
     this.startTime = 0;
     this.elapsedTime = 0;
     this.clock = new THREE.Clock();
+    this.clock.start();
+    this.objectsPicked = false;
 }
 
 BaseApp.prototype.init = function(container) {
@@ -28,15 +30,15 @@ BaseApp.prototype.init = function(container) {
     console.log("BaseApp renderer =", this.renderer);
     this.createCamera();
     this.createControls();
-    this.projector = new THREE.Projector();
+    //this.raycaster = new THREE.Raycaster();
     //this.stats = initStats();
-    this.statsShowing = false;
+    this.statsShowing = true;
 
 };
 
 BaseApp.prototype.createRenderer = function() {
-    this.renderer = new THREE.WebGLRenderer( {antialias : true, alpha: true});
-    this.renderer.setClearColor(0x000000, 0);
+    this.renderer = new THREE.WebGLRenderer( {antialias : true});
+    this.renderer.setClearColor(0xffffff, 1.0);
     this.renderer.shadowMapEnabled = true;
     var isMSIE = /*@cc_on!@*/0;
 
@@ -45,7 +47,7 @@ BaseApp.prototype.createRenderer = function() {
         // do IE-specific things
         width = window.innerWidth;
     }
-    this.renderer.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
+    this.renderer.setSize(width, window.innerHeight);
     this.container.appendChild( this.renderer.domElement );
     var _this = this;
 
@@ -59,12 +61,15 @@ BaseApp.prototype.createRenderer = function() {
         _this.mouseMoved(event);
     }, false);
 
+    window.addEventListener('keydown', function(event) {
+        _this.keydown(event);
+    }, false);
+
     window.addEventListener('resize', function(event) {
         _this.windowResize(event);
     }, false);
 };
 
-/*
 BaseApp.prototype.keydown = function(event) {
     //Key press functionality
     switch(event.keyCode) {
@@ -84,27 +89,25 @@ BaseApp.prototype.keydown = function(event) {
             console.log('Look =', this.controls.getLookAt());
     }
 };
-*/
 
 BaseApp.prototype.mouseClicked = function(event) {
     //Update mouse state
+    this.pickedObjects.length = 0;
+
     if(event.type == 'mouseup') {
         this.mouse.endX = event.clientX;
         this.mouse.endY = event.clientY;
         this.mouse.down = false;
+        this.objectsPicked = false;
         return;
     }
-    this.mouse.startX = event.clientX;
-    this.mouse.startY = event.clientY;
+    this.mouse.startX = (event.clientX / window.innerWidth) * 2 - 1;
+    this.mouse.startY = (event.clientY / window.innerHeight) * 2 + 1;
     this.mouse.down = true;
 
-    var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
-    this.projector.unprojectVector(vector, this.camera);
+    //this.raycaster.setFromCamera(this.mouse, this.camera);
 
-    var raycaster = new THREE.Raycaster(this.camera.position, vector.sub(this.camera.position).normalize());
-
-    this.pickedObjects.length = 0;
-    this.pickedObjects = raycaster.intersectObjects(this.scene.children, true);
+    //this.pickedObjects = this.raycaster.intersectObjects(this.scene.children, true);
 };
 
 BaseApp.prototype.mouseMoved = function(event) {
@@ -115,11 +118,10 @@ BaseApp.prototype.mouseMoved = function(event) {
 
 BaseApp.prototype.windowResize = function(event) {
     //Handle window resize
-    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.aspect = this.container.clientWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
 
-    //this.renderer.setSize( window.innerWidth * 0.5, window.innerHeight * 0.5);
-    this.renderer.setSize(640, 480);
+    this.renderer.setSize( this.container.clientWidth, window.innerHeight);
     //console.log('Size =', )
 };
 
@@ -144,7 +146,7 @@ BaseApp.prototype.createScene = function() {
 
 
     var pointLight = new THREE.PointLight(0xffffff);
-    pointLight.position.set(200,200,200);
+    pointLight.position.set(200,200,500);
     pointLight.name = 'PointLight';
     this.scene.add(pointLight);
 
@@ -152,8 +154,8 @@ BaseApp.prototype.createScene = function() {
 
 BaseApp.prototype.createCamera = function() {
 
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 5000 );
-    this.camera.position.set(0, 0, 50 );
+    this.camera = new THREE.PerspectiveCamera(45, this.container.clientWidth / window.innerHeight, 0.1, 5000 );
+    this.camera.position.set(0, 0, 500 );
 
     console.log('dom =', this.renderer.domElement);
 };
@@ -172,7 +174,7 @@ BaseApp.prototype.createControls = function() {
 
     this.controls.keys = [ 65, 83, 68 ];
 
-    var lookAt = new THREE.Vector3(0, 10, 0);
+    var lookAt = new THREE.Vector3(0, 0, 0);
     this.controls.setLookAt(lookAt);
 };
 
@@ -182,9 +184,9 @@ BaseApp.prototype.update = function() {
 };
 
 BaseApp.prototype.run = function() {
+    this.renderer.render( this.scene, this.camera );
     var self = this;
     this.update();
-    this.renderer.render( this.scene, this.camera );
     if(this.stats) this.stats.update();
     requestAnimationFrame(function() {
         self.run();
