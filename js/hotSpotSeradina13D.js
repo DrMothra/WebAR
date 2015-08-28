@@ -5,6 +5,7 @@
 var ROT_INC = Math.PI/32;
 var MOVE_INC = 5;
 var ROT_LEFT=0, ROT_RIGHT=1, ROT_UP=2, ROT_DOWN= 3, ZOOM_IN=4, ZOOM_OUT=5;
+var MOVE_UP= 0, MOVE_DOWN= 1, MOVE_LEFT= 2, MOVE_RIGHT=3;
 
 //Init this app from base
 function RockFace() {
@@ -25,9 +26,13 @@ RockFace.prototype.init = function(container) {
 RockFace.prototype.createScene = function() {
     BaseApp.prototype.createScene.call(this);
 
-    var texture = THREE.ImageUtils.loadTexture("images/seradina1.jpg");
+    var texture = THREE.ImageUtils.loadTexture("images/seradina1Bump.jpg");
     var plane = new THREE.PlaneGeometry(256, 256);
-    var planeMat = new THREE.MeshPhongMaterial( {map: texture });
+    var planeMat = new THREE.MeshPhongMaterial( {
+        color: 0xb7b7b7,
+        bumpMap: texture,
+        bumpScale: 1.0
+    });
     var planeMesh = new THREE.Mesh(plane, planeMat);
 
     this.loadedModel = planeMesh;
@@ -90,6 +95,45 @@ RockFace.prototype.repeat = function(direction) {
     }, this.checkTime);
 };
 
+RockFace.prototype.repeatLight = function(direction) {
+    if(direction === undefined) {
+        clearInterval(this.repeatLightTimer);
+        return;
+    }
+
+    var _this = this;
+
+    switch(direction) {
+        case MOVE_UP:
+            this.xPos = 0;
+            this.yPos = MOVE_INC;
+            break;
+
+        case MOVE_DOWN:
+            this.xPos = 0;
+            this.yPos = -MOVE_INC;
+            break;
+
+        case MOVE_LEFT:
+            this.xPos = -MOVE_INC;
+            this.yPos = 0;
+            break;
+
+        case MOVE_RIGHT:
+            this.xPos = MOVE_INC;
+            this.yPos = 0;
+            break;
+
+        default:
+            break;
+    }
+
+    this.repeatLightTimer = setInterval(function() {
+        _this.pointLight.position.x += _this.xPos;
+        _this.pointLight.position.y += _this.yPos;
+    }, this.checkTime);
+};
+
 RockFace.prototype.update = function() {
     BaseApp.prototype.update.call(this);
 };
@@ -127,6 +171,31 @@ RockFace.prototype.translateObject = function(direction) {
             case ZOOM_OUT:
                 this.loadedModel.position.z -= MOVE_INC;
                 this.repeat(ZOOM_OUT);
+                break;
+            default:
+                break;
+        }
+    }
+};
+
+RockFace.prototype.moveLight = function(direction) {
+    if(this.loadedModel) {
+        switch(direction) {
+            case MOVE_UP:
+                this.pointLight.position.y += MOVE_INC;
+                this.repeatLight(MOVE_UP);
+                break;
+            case MOVE_DOWN:
+                this.pointLight.position.y -= MOVE_INC;
+                this.repeatLight(MOVE_DOWN);
+                break;
+            case MOVE_LEFT:
+                this.pointLight.position.x -= MOVE_INC;
+                this.repeatLight(MOVE_LEFT);
+                break;
+            case MOVE_RIGHT:
+                this.pointLight.position.x += MOVE_INC;
+                this.repeatLight(MOVE_RIGHT);
                 break;
             default:
                 break;
@@ -172,6 +241,22 @@ $(document).ready(function() {
     });
     $("[id^=zoom]").on("mouseup", function() {
         app.repeat();
+    });
+
+    $('#lightUp').on("mousedown", function() {
+       app.moveLight(MOVE_UP);
+    });
+    $('#lightDown').on("mousedown", function() {
+        app.moveLight(MOVE_DOWN);
+    });
+    $('#lightLeft').on("mousedown", function() {
+        app.moveLight(MOVE_LEFT);
+    });
+    $('#lightRight').on("mousedown", function() {
+        app.moveLight(MOVE_RIGHT);
+    });
+    $('[id^=light]').on("mouseup", function() {
+        app.repeatLight();
     });
 
     app.run();

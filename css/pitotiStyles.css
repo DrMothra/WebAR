@@ -378,16 +378,20 @@ body {
 
 
 /* Seradina 1 3D page */
-#rotate img {
+#rotate img,
+#lightControls img {
     width: 40%;
 }
-#rotate button {
+#rotate button,
+#lightControls button {
     padding: 5px 0;
     margin-bottom: 2%;
     width: 25%;
 }
 #rotateUp,
-#rotateDown {
+#rotateDown,
+#lightUp,
+#lightDown {
     margin-left: 12.5%;
 }
 #zoom img {
