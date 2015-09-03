@@ -5,20 +5,37 @@
     <title>Video</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
 
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div class="page">
-    <div class="previousPage">
-        <a href="pitotiAbout.html"><img src="images/back.png"></a>
+<div class="page container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="previousPageColumn">
+                <a href="pitotiAbout.html"><img src="images/backButton.png"></a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <video id="videoOverview" width="100%" controls autoplay>
+                <source src="videos/presentation.mp4" type="video/mp4">
+                Browser does not support video.
+            </video>
+        </div>
+
+        <div class="col-md-3">
+            &nbsp;
+        </div>
     </div>
 
-    <video id="videoOverview" width="60%" controls autoplay>
-        <source src="videos/presentation.mp4" type="video/mp4">
-        Browser does not support video.
-    </video>
+
+
 
 </div>
 

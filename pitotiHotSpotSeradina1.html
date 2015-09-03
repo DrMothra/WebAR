@@ -5,19 +5,22 @@
     <title>Stories</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="js/skel.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/audioManager.js?v=0.1"></script>
     <script type="text/javascript" src="js/hotSpotSeradina1.js?v=0.1"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
 
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
 <body class="blank">
 
-<div class="page">
-    <div class="row 0%">
-        <div class="3u">
+<div class="page container-fluid">
+    <div class="row">
+        <div class="col-md-3">
             <div class="previousPageColumn">
-                <a href="pitotiHotSpotsSeradina.html"><img src="images/back.png"></a>
+                <a href="pitotiHotSpotsSeradina.html"><img src="images/backButton.png"></a>
             </div>
             <p id="ploughing">
                 <b>Ploughing Scenes</b><br>
@@ -31,13 +34,13 @@
                 <i>3d model resolution</i>: 0.1 mm
             </p>
         </div>
-        <div id="seradina1" class="6u">
+        <div id="seradina1" class="col-md-6">
             <img src="images/seradina1.jpg">
         </div>
-        <div id="seradina1Augment" class="6u hide">
+        <div id="seradina1Augment" class="col-md-6 hide">
             <img src="images/seradina1Augment.png">
         </div>
-        <div id="seradina1Stories" class="3u">
+        <div id="seradina1Stories" class="col-md-3">
             <div>
                 <button id="story1" class="actionButton">Story 1</button>
                 <audio id="audiostory1">

@@ -289,6 +289,7 @@ body {
     width: 85%;
 }
 
+
 /* Overview page */
 #previousPageOverview {
     text-align: left;
@@ -298,22 +299,19 @@ body {
     width: 15%;
 }
 #videoOverview {
-    margin-top: -7%;
-}
-
-/* Hotspots menu page */
-#previousPageHotMenu {
-    text-align: left;
-    margin-left: 5%;
-}
-#previousPageHotMenu img {
-    width: 15%;
-}
-#rockChoice {
     margin-top: 5%;
 }
+
+
+/* Hotspots menu page */
+#rockChoice {
+    margin-top: 25%;
+}
+#rockChoice button {
+    width: 50%;
+}
 #rockChoice div {
-    margin-bottom: 10%;
+    margin-bottom: 20%;
 }
 
 /* Hotspots seradina page */
