@@ -21,4 +21,15 @@ $(document).ready(function() {
             elem.show();
         }
     });
+
+    var augElem = $("#seradina1Augment2");
+    $("#enhance2").on("click", function() {
+        if(augElem.is(":visible")) {
+            console.log("Hiding");
+            augElem.hide();
+        } else {
+            console.log("Showing");
+            augElem.show();
+        }
+    });
 });

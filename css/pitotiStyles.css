@@ -356,12 +356,14 @@ body {
 #seradina1 img {
     width: 90%;
 }
-#seradina1Augment {
+#seradina1Augment,
+#seradina1Augment2 {
     position: absolute;
     top: 9%;
     left: 25%;
 }
-#seradina1Augment img {
+#seradina1Augment img,
+#seradina1Augment2 img {
     width: 90%;
 }
 #seradina1Stories {
