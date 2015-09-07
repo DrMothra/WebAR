@@ -33,7 +33,16 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     font-family: 'quicksandregular';
     letter-spacing: normal;
 }
-
+@font-face {
+    font-family: 'berlin';
+    src: url("../fonts/berlin.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+.berlin {
+    font-family: 'berlin';
+    letter-spacing: normal;
+}
 /* Common page styles */
 body {
     background: url("../images/rockBackground.jpg") no-repeat center top fixed;
@@ -58,6 +67,16 @@ body {
 }
 .page {
     text-align: center;
+}
+.pitLogo {
+    position: absolute;
+    bottom: 2%;
+    right: 2%;
+}
+.home {
+    position: absolute;
+    bottom: 2%;
+    left: 2%;
 }
 .previousPageColumn {
     text-align: left;
@@ -96,16 +115,24 @@ body {
 .bubble img {
     width: 90%;
 }
-.contents {
+.contents,
+.contentsTight {
     position: absolute;
-    top: 4%;
+    top: 6%;
     left: 50%;
     width: 100%;
     margin-left: -50%;
 }
+.contentsTight {
+    top: 1%;
+}
 .contents p {
-    font-family: "Calibri", sans-serif;
-    font-size: 1.75vw;
+    font-family: "berlin", sans-serif;
+    font-size: 2vw;
+}
+.contentsTight p {
+    font-family: "berlin", sans-serif;
+    font-size: 1.9vw;
 }
 /* Animations */
 @-moz-keyframes bounce {
@@ -285,8 +312,18 @@ body {
 #azirAbout img {
     width: 100%;
 }
+#aboutButtons {
+    margin-top: 5%;
+}
+#aboutButtons div {
+    margin-bottom: 12.5%;
+}
 #aboutButtons button {
     width: 85%;
+}
+#aboutButtons img {
+    vertical-align: middle;
+    width: 25%;
 }
 
 
@@ -305,10 +342,10 @@ body {
 
 /* Hotspots menu page */
 #rockChoice {
-    margin-top: 25%;
+    margin-top: 20%;
 }
 #rockChoice button {
-    width: 50%;
+    width: 75%;
 }
 #rockChoice div {
     margin-bottom: 20%;
@@ -319,15 +356,15 @@ body {
     margin-top: 2.5%;
 }
 #hotSpotsSeradina img {
-    width: 85%;
+    width: 95%;
 }
 
 #seradinaSpot1 {
-    margin-top: -85%;
+    margin-top: -95%;
     margin-left: -20%;
 }
 #seradinaSpot2 {
-    margin-top: 12.5%;
+    margin-top: 15%;
     margin-left: -17.5%;
 }
 #rockTitle {
@@ -339,13 +376,8 @@ body {
 }
 #seradina {
     margin-top: 40%;
-    margin-left: -50%;
-    text-align: center;
 }
 #seradina img {
-    width: 100%;
-}
-#seradinaRockFace {
     width: 100%;
 }
 
@@ -377,7 +409,7 @@ body {
 }
 
 
-/* Seradina 1 3D page */
+/* Seradina 2 3D page */
 #rotate img,
 #lightControls img {
     width: 40%;
@@ -388,12 +420,6 @@ body {
     margin-bottom: 2%;
     width: 25%;
 }
-#rotateUp,
-#rotateDown,
-#lightUp,
-#lightDown {
-    margin-left: 12.5%;
-}
 #zoom img {
     width: 40%;
 }
@@ -401,23 +427,13 @@ body {
     padding: 5px 0;
     width: 25%;
 }
-
-/* Seradina2 page */
-#seradina2 {
-    margin-top: 10%;
-}
-#seradina2 img {
-    width: 110%;
-}
 #archer {
     margin: 10% 0 0 1%;
 }
 #seradina2Stories {
-    margin-top: 15%;
+    margin-top: 5%;
 }
-#seradina2Stories button {
-    margin-bottom: 10%;
-}
+
 
 /* Hotspots Foppe page */
 #hotSpotsFoppe {

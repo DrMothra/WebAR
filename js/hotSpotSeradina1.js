@@ -11,25 +11,28 @@ $(document).ready(function() {
         audioManager.playAudio(this.id);
     });
 
-    var elem = $('#seradina1Augment');
-    $('#enhance').on("click", function() {
-        if(elem.is(":visible")) {
+    var view1Image = $('#seradina1Augment');
+    var view2Image = $('#seradina1Augment2');
+
+    $('#view1').on("click", function() {
+        if(view1Image.is(":visible")) {
             console.log("Hiding");
-            elem.hide();
+            view1Image.hide();
         } else {
             console.log("Showing");
-            elem.show();
+            view1Image.show();
+            view2Image.hide();
         }
     });
 
-    var augElem = $("#seradina1Augment2");
-    $("#enhance2").on("click", function() {
-        if(augElem.is(":visible")) {
+    $("#view2").on("click", function() {
+        if(view2Image.is(":visible")) {
             console.log("Hiding");
-            augElem.hide();
+            view2Image.hide();
         } else {
             console.log("Showing");
-            augElem.show();
+            view2Image.show();
+            view1Image.hide();
         }
     });
 });
