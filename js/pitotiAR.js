@@ -200,10 +200,17 @@ PitotiAR.prototype.init = function(container) {
     this.triggerElem.width(this.videoWidth * 0.9);
     this.triggerElem.height(this.videoHeight * 0.9);
     var elem = $('#'+container);
-    var pos = elem.position();
-    var width = elem.width();
-    var defaultPadding = window.innerWidth < 1024 ? this.videoWidth * 0.1 : this.videoWidth * 0.05;
-    var triggerLeft = pos.left + defaultPadding;
+    //Need position of parent
+    var parentElem = elem.parent();
+    if(!parentElem) {
+        alert("Cannot open render window!");
+        return;
+    }
+    var pos = parentElem.position();
+    var width = parentElem.width();
+    //var defaultPadding = window.innerWidth < 1024 ? this.videoWidth * 0.1 : this.videoWidth * 0.05;
+    var padding = width - this.triggerElem.width();
+    var triggerLeft = pos.left + (padding/2) + 30;
     this.triggerElem.css("left", triggerLeft + "px");
     this.triggerElem.css("top", "5%");
     this.triggerElem.defaultLeft = triggerLeft;
@@ -472,9 +479,12 @@ PitotiAR.prototype.update = function() {
             this.triggerElem.show();
             this.triggerVideo.play();
             this.triggerVideo.playing = true;
+            //DEBUG
+            console.log("Video playing");
         } else {
             if(this.triggerVideo.ended) {
-                this.stopVideo();
+                //Keep video looping
+                this.triggerVideo.play();
             }
         }
     }
@@ -498,7 +508,6 @@ $(document).ready(function() {
         alert("WebGL not supported");
         $('#notSupported').show();
     } else {
-        skel.init();
 
         clearSlots();
 

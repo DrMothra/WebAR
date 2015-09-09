@@ -9,10 +9,12 @@
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
 
-    <script type="text/javascript" src="js/skel.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/videoManager.js"></script>
     <script type="text/javascript" src="js/pitotiTimeline.js?v=0.5"></script>
 
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 
 </head>
@@ -21,20 +23,20 @@
 <div id="log">
 
 </div>
-<div class="page">
-    <div class="row 0%">
-        <div class="3u">
+<div class="page container-fluid">
+    <div class="row">
+        <div class="col-md-3">
             <div class="previousPageColumn">
-                <a href="pitotiAR.html"><img src="images/back.png"></a>
+                <a href="pitotiAR.html"><img src="images/backButton.png"></a>
             </div>
-            <div class="row 0%">
-                <div class="6u drag">
+            <div class="row">
+                <div class="col-md-6 drag">
                     <img id="slot0" src="images/clip1.png">
                     <img id="slot1" src="images/clip2.png">
                     <img id="slot2" src="images/clip3.png">
                     <img id="slot3" src="images/clip4.png">
                 </div>
-                <div class="6u drag">
+                <div class="col-md-6 drag">
                     <img id="slot4" src="images/clip5.png">
                     <img id="slot5" src="images/clip6.png">
                     <img id="slot6" src="images/clip7.png">
@@ -45,35 +47,35 @@
                 <img src="images/delete.png">
             </div>
         </div>
-        <div class="6u ui-widget-content">
+        <div class="col-md-6 ui-widget-content">
             <div id="timeline" class="drop row 0%">
-                <div class="3u">
+                <div class="col-md-3">
                     <img id="timeline0" src="images/story0.png">
-                    <video id="timelineVideo0" class="hide">
+                    <video id="timelineVideo0" class="noDisplay">
 
                     </video>
                 </div>
-                <div class="3u">
+                <div class="col-md-3">
                     <img id="timeline1" src="images/story1.png">
-                    <video id="timelineVideo1" class="hide">
+                    <video id="timelineVideo1" class="noDisplay">
 
                     </video>
                 </div>
-                <div class="3u">
+                <div class="col-md-3">
                     <img id="timeline2" src="images/story2.png">
-                    <video id="timelineVideo2" class="hide">
+                    <video id="timelineVideo2" class="noDisplay">
 
                     </video>
                 </div>
-                <div class="3u">
+                <div class="col-md-3">
                     <img id="timeline3" src="images/story3.png">
-                    <video id="timelineVideo3" class="hide">
+                    <video id="timelineVideo3" class="noDisplay">
 
                     </video>
                 </div>
             </div>
 
-            <video id="videoPlayer" class="hide" width="100%" controls>
+            <video id="videoPlayer" class="noDisplay" width="100%" controls>
             </video>
 
             <div id="progressContainer">
@@ -85,18 +87,21 @@
             <div id="playStory">
                 <img src="images/play.png">
             </div>
+            <div id="pauseStory" class="noDisplay">
+                <img src="images/pause.png">
+            </div>
 
         </div>
-        <div class="3u">
-            <div id="nextARPage">
-                <img src="images/next.png">
+        <div class="col-md-3">
+            <div id="nextARPage" class="nextPageColumn">
+                <img src="images/nextButton.png">
             </div>
             <div id="azirTimeline" class="bubble">
-                <img src="images/azirSpeech.png">
-                <div class="contents">
+                <img src="images/azirSpeechSlim.png">
+                <div class="contentsTight">
                     <p>
-                        Drag and drop up to 4<br>
-                        clips into your story<br>
+                        Drag and drop up to<br>
+                        4 clips into your story<br>
                         and press play!
                     </p>
                 </div>

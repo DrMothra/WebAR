@@ -59,19 +59,19 @@ body {
     border-radius: 15px;
     background: #444444;
 }
-.hide {
-    display: none;
-}
 .noDisplay {
     display: none;
 }
 .page {
     text-align: center;
 }
-.pitLogo {
+.pitotiLogo {
     position: absolute;
     bottom: 2%;
     right: 2%;
+}
+.pitotiLogo img {
+    width: 50%;
 }
 .home {
     position: absolute;
@@ -289,7 +289,7 @@ body {
 
 /* Menu page */
 #menuOptions {
-    margin-top: 50%;
+    margin-top: 20%;
 }
 #menuOptions div {
     margin-bottom: 20%;
@@ -410,6 +410,13 @@ body {
 
 
 /* Seradina 2 3D page */
+#rotate,
+#lightControls {
+    margin-top: 10%;
+}
+#zoom {
+    margin-top: 5%;
+}
 #rotate img,
 #lightControls img {
     width: 40%;
@@ -431,7 +438,15 @@ body {
     margin: 10% 0 0 1%;
 }
 #seradina2Stories {
-    margin-top: 5%;
+    margin-top: 3%;
+}
+#resetControls {
+    margin-top: 3%;
+}
+#resetControls button {
+    width: 30%;
+    font-size: 1.5vw;
+    padding: 6px 5px;
 }
 
 
@@ -440,14 +455,14 @@ body {
     margin-top: 5%;
 }
 #hotSpotsFoppe img {
-    width: 90%;
+    width: 100%;
 }
 #foppeSpot1 {
-    margin-top: -72.5%;
+    margin-top: -75%;
     margin-left: -37.5%;
 }
 #foppeSpot2 {
-    margin-top: -7.5%;
+    margin-top: -12.5%;
     margin-left: -40%;
 }
 #foppeSpot3 {
@@ -456,8 +471,6 @@ body {
 }
 #foppe {
     margin-top: 40%;
-    margin-left: -45%;
-    text-align: center;
 }
 #foppe img {
     width: 100%;
@@ -504,12 +517,14 @@ body {
 
 
 /* Create page */
-#azirCreate {
-    margin-top: 5%;
+#instructions {
+    background: url("../images/instructions.jpg") no-repeat center center fixed;
+    background-size: cover;
 }
-#azirCreate div {
-    margin-bottom: 5%;
+#instructionArrows {
+    margin-top: 40%;
 }
+
 
 
 /* AR page */
@@ -520,9 +535,8 @@ body {
     width: 85%;
     margin-bottom: 7.5%;
 }
+#nextARPage {
 
-#nextARPage img {
-    width: 60%;
 }
 .trash {
     margin-top: 5%;
@@ -542,6 +556,8 @@ body {
     margin-top: 5%;
 }
 
+
+
 /* Timeline page */
 .dragVideo {
     width: 171px;
@@ -553,10 +569,12 @@ body {
     width: 85%;
     margin-bottom: 7.5%;
 }
-#playStory {
+#playStory,
+#pauseStory {
     margin-top: 5%;
 }
-#playStory img {
+#playStory img,
+#pauseStory img {
     width: 30%;
 }
 .dragging {
@@ -571,12 +589,10 @@ body {
     padding-top: 2%;
 }
 #azirTimeline {
-    overflow: hidden;
-    margin-left: -25%;
-    text-align: center;
+
 }
 #azirTimeline img {
-    width: 110%;
+    width: 100%;
 }
 .notActive {
     pointer-events: none;
@@ -590,6 +606,7 @@ body {
 }
 
 
+
 /* Record page */
 #storyControls {
     text-align: left;
@@ -600,9 +617,6 @@ body {
 #nextPageRecord {
     text-align: right;
     margin-right: 2%;
-}
-#nextPageRecord img {
-    width: 60%
 }
 #playStoryRecord {
     text-align: left;
@@ -620,12 +634,10 @@ body {
     width: 90%;
 }
 #azirRecord {
-    overflow: hidden;
-    margin-left: -25%;
-    text-align: center;
+
 }
 #azirRecord img {
-    width: 110%;
+    width: 100%;
 }
 #audioRecordings img {
     width: 7%;
@@ -647,6 +659,8 @@ body {
 #micContainer {
     margin-top: 7.5%;
 }
+
+
 
 /* Final page */
 #playStoryFinal {
@@ -703,15 +717,19 @@ body {
     font-family:Arial;
     font-size:19px;
 }
-
+input[type=file] {
+    display: none;
+}
 /* Configure page */
 #configureEntry {
     margin-top: 25%;
-    background-color: #0078e7;
+    background-color: #7892c2;
     border-radius: 15px;
 }
 #configureEntry p {
     color: white;
+    font-family: Arial;
+    font-size: 1.7vw;
     padding: 5% 0;
 }
 #enterDetails {

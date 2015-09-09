@@ -3,8 +3,6 @@
  */
 
 $(document).ready(function() {
-    //Do any init
-    skel.init();
 
     //Play audio
     $('#story1').on("click", function() {

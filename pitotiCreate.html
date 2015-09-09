@@ -5,26 +5,30 @@
     <title>Menu</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body id="instructions">
 
-<div class="page">
-
-    <div class="previousPage">
-        <a href="pitotiMenu.html"><img src="images/back.png"></a>
-    </div>
-
-    <div id="azirCreate">
-        <div>
-            <img src="images/IZIR.png">
+<div class="container-fluid">
+    <div id="instructionArrows" class="row">
+        <div class="col-md-3">
+            <div class="previousPageColumn">
+                <a href="pitotiMenu.html"><img src="images/backButton.png"></a>
+            </div>
         </div>
-        <div>
-            <a href="pitotiAR.html"><button class="actionButton">Create a story</button></a>
+        <div class="col-md-6">
+            &nbsp;
+        </div>
+        <div class="col-md-3">
+            <div class="nextPageColumn">
+                <a href="pitotiAR.html"><img src="images/nextButton.png"></a>
+            </div>
         </div>
     </div>
-
 </div>
 
 </body>

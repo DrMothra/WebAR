@@ -5,25 +5,23 @@
     <title>Thank you</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="js/skel.min.js"></script>
-    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div class="page">
-    <div class="row 0%">
-        <div class="3u">
+<div class="page container-fluid">
+    <div class="row">
+        <div class="col-md-3">
             <div class="previousPageColumn">
-                <a href="pitotiRecord.html"><img src="images/back.png"></a>
-            </div>
-            <div id="home">
-                <a href="pitoti.html"><img src="images/home.png"></a>
+                <a href="pitotiRecord.html"><img src="images/backButton.png"></a>
             </div>
         </div>
 
-        <div class="6u">
+        <div class="col-md-6">
             <div id="configureEntry">
                 <p>
                     Thank you for using the Pitoti application!<br>
@@ -33,10 +31,15 @@
             </div>
         </div>
 
-        <div class="3u">
+        <div class="col-md-3">
             &nbsp;
         </div>
     </div>
+
+    <div class="home">
+        <a href="pitoti.html"><img src="images/home.png"></a>
+    </div>
+
 </div>
 
 </body>

@@ -6,28 +6,30 @@
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/recordmp3.js?v=0.1"></script>
-    <script type="text/javascript" src="js/skel.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/videoManager.js"></script>
     <script type="text/javascript" src="js/pitotiRecord.js?v=0.12"></script>
 
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div id="recordPage" class="page">
-    <div class="row 0%">
-        <div class="3u">
+<div id="recordPage" class="page container-fluid">
+    <div class="row">
+        <div class="col-md-3">
             <div class="previousPageColumn">
-                <img src="images/back.png">
+                <img src="images/backButton.png">
             </div>
         </div>
 
-        <div class="6u">
+        <div class="col-md-6">
             <video id="videoPlayer" width="100%">
 
             </video>
-            <div id="storyControls" class="row 0%">
-                <div class="4u">
+            <div id="storyControls" class="row">
+                <div class="col-md-4">
                     <div id="playStoryRecord">
                         <img src="images/play.png">
                     </div>
@@ -35,21 +37,21 @@
                         <img src="images/record.png">
                     </div>
                 </div>
-                <div id="micContainer" class="2u">
+                <div id="micContainer" class="col-md-2">
                     <img id="audioRecord" src="images/recordOff.png">
                 </div>
-                <div id="buttonContainer" class="6u">
-                    <div id="buttons0" class="hide">
+                <div id="buttonContainer" class="col-md-6">
+                    <div id="buttons0" class="noDisplay">
                         <img id="selectButton0" src="images/redCircle.png">
                         <button id="audioButton0" class="actionButton">Play</button>
                         <button id="deleteButton0" class="actionButton">Del</button>
                     </div>
-                    <div id="buttons1" class="hide">
+                    <div id="buttons1" class="noDisplay">
                         <img id="selectButton1" src="images/redCircle.png">
                         <button id="audioButton1" class="actionButton">Play</button>
                         <button id="deleteButton1" class="actionButton">Del</button>
                     </div>
-                    <div id="buttons2" class="hide">
+                    <div id="buttons2" class="noDisplay">
                         <img id="selectButton2" src="images/redCircle.png">
                         <button id="audioButton2" class="actionButton">Play</button>
                         <button id="deleteButton2" class="actionButton">Del</button>
@@ -59,36 +61,36 @@
             <progress id="audioProgress" max="60" value="0">
 
             </progress>
-            <div id="finalControls" class="hide">
-                <div class="row 0%">
-                    <div id="playStoryFinal" class="4u">
+            <div id="finalControls" class="noDisplay">
+                <div class="row">
+                    <div id="playStoryFinal" class="col-md-4">
                         <img src="images/playStory.png">
                     </div>
-                    <div class="4u">
+                    <div class="col-md-4">
                         <a href="pitotiThanks.html"><button class="actionButton">Discard Story</button></a>
                     </div>
-                    <div class="4u">
+                    <div class="col-md-4">
                         <form id="uploadForm" method="POST">
-                            <input type="file" name="audioFile" id="fileInput" class="hide">
-                            <input type="text" name="userName" id="userName" class="hide">
-                            <input type="email" name="email" id="email" class="hide">
-                            <input type="text" name="video0" id="video0" class="hide">
-                            <input type="text" name="video1" id="video1" class="hide">
-                            <input type="text" name="video2" id="video2" class="hide">
-                            <input type="text" name="video3" id="video3" class="hide">
+                            <input type="file" name="audioFile" id="fileInput" class="noDisplay">
+                            <input type="text" name="userName" id="userName" class="noDisplay">
+                            <input type="email" name="email" id="email" class="noDisplay">
+                            <input type="text" name="video0" id="video0" class="noDisplay">
+                            <input type="text" name="video1" id="video1" class="noDisplay">
+                            <input type="text" name="video2" id="video2" class="noDisplay">
+                            <input type="text" name="video3" id="video3" class="noDisplay">
                             <button type="submit" name="submit" class="actionButton">Upload Story</button>
                         </form>
                     </div>
                 </div>
-                <div id="createFinal" class="row 0%">
-                    <div class="4u">
+                <div id="createFinal" class="row">
+                    <div class="col-md-4">
                         <a href="pitotiAR.html"><img src="images/createStory.png"></a>
                     </div>
-                    <div class="4u">
+                    <div class="col-md-4">
                         &nbsp;
                     </div>
-                    <div class="4u">
-                        <p id="uploadStatus" class="hide">
+                    <div class="col-md-4">
+                        <p id="uploadStatus" class="noDisplay">
                             Uploading...
                         </p>
                     </div>
@@ -97,12 +99,12 @@
             </div>
         </div>
 
-        <div class="3u">
-            <div id="nextPageRecord">
-                <img src="images/next.png">
+        <div class="col-md-3">
+            <div id="nextPageRecord" class="nextPageColumn">
+                <img src="images/nextButton.png">
             </div>
             <div id="azirRecord" class="bubble">
-                <img src="images/azirSpeech.png">
+                <img src="images/azirSpeechSlim.png">
                 <div class="contents">
                     <p>
                         Now record your<br>
@@ -115,5 +117,8 @@
     </div>
 </div>
 
+<div class="home">
+    <a href="pitoti.html"><img src="images/home.png"></a>
+</div>
 </body>
 </html>

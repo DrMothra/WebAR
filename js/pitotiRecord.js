@@ -266,7 +266,6 @@ function toggleRecording() {
 
 $(document).ready(function() {
     //Init
-    skel.init();
     videoPlayer.init();
     for(var i=0; i<MAX_BUFFERS; ++i) {
         audioPlayersEmpty[i] = true;

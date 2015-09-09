@@ -20,6 +20,7 @@ var videoPanel = (function() {
     var progressBar;
     var currentElapsed = 0;
     var timelineOccupied = false;
+    var currentPlayer = -1;
 
     return {
         init: function() {
@@ -42,10 +43,12 @@ var videoPanel = (function() {
             dragImage = document.createElement("img");
             dragImage.src = "images/dragTimeline.png";
             dragImage.style.width = elem.clientWidth+"px";
+            dragImage.style.zIndex = "100";
 
             dragTrashImage = document.createElement("img");
             dragTrashImage.src = "images/dragTrash.png";
             dragTrashImage.style.width = elem.clientWidth+"px";
+            dragImage.style.zIndex = "100";
 
             //Video containers
             var vidElem;
@@ -133,7 +136,6 @@ var videoPanel = (function() {
             if(!containsVideo) {
                 alert("No videos in timeline");
             } else {
-                var currentPlayer;
                 for(var i=0; i<TIMELINE_SLOTS; ++i) {
                     if(!videoPlayers[i].empty) {
                         currentPlayer = i;
@@ -172,6 +174,12 @@ var videoPanel = (function() {
             }
         },
 
+        pauseStory: function() {
+            if(currentPlayer >= 0) {
+                videoPlayers[currentPlayer].pause();
+            }
+        },
+
         trash: function(event, ui) {
             var dragged = $(ui.draggable);
             var id = dragged.attr('id');
@@ -203,8 +211,6 @@ var videoPanel = (function() {
 
 $(document).ready(function() {
     //Init
-    skel.init();
-
     videoPanel.init();
 
     var dragElem = $('.drag img');
@@ -247,7 +253,17 @@ $(document).ready(function() {
         }
     });
 
-    $('#playStory').on("click", function() {
+    var playElem = $('#playStory');
+    var pauseElem = $('#pauseStory');
+    playElem.on("click", function() {
         videoPanel.playStory();
+        playElem.hide();
+        pauseElem.show();
+    });
+
+    pauseElem.on("click", function() {
+        videoPanel.pauseStory();
+        pauseElem.hide();
+        playElem.show();
     });
 });

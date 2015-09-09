@@ -8,16 +8,18 @@
 
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="js/detector.js"></script>
     <script type="text/javascript" src="js/three68.js"></script>
     <script type="text/javascript" src="js/baseAppAR.js?v=0.3"></script>
-    <script type="text/javascript" src="js/skel.min.js"></script>
 
     <script type="text/javascript" src="js/JSARToolKit.js"></script>
     <script type="text/javascript" src="js/videoManager.js"></script>
     <script type="text/javascript" src="js/pitotiAR.js?v=0.6"></script>
 
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 
 </head>
@@ -26,20 +28,21 @@
 <div id="log">
 
 </div>
-<div class="page">
-    <div class="row 0%">
-        <div class="3u">
+
+<div class="page container-fluid">
+    <div class="row">
+        <div class="col-md-3">
             <div class="previousPageColumn">
-                <a href="pitotiCreate.html"><img src="images/back.png"></a>
+                <a href="pitotiCreate.html"><img src="images/backButton.png"></a>
             </div>
-            <div class="row 0%">
-                <div class="6u drop">
+            <div class="row">
+                <div class="col-md-6 drop">
                     <img id="slot0" src="images/clip1.png">
                     <img id="slot1" src="images/clip2.png">
                     <img id="slot2" src="images/clip3.png">
                     <img id="slot3" src="images/clip4.png">
                 </div>
-                <div class="6u drop">
+                <div class="col-md-6 drop">
                     <img id="slot4" src="images/clip5.png">
                     <img id="slot5" src="images/clip6.png">
                     <img id="slot6" src="images/clip7.png">
@@ -50,32 +53,33 @@
                 <img src="images/delete.png">
             </div>
         </div>
-        <div class="6u ui-widget-content">
+        <div class="col-md-6 ui-widget-content">
             <div id="ARoutput">
 
             </div>
-            <div id="ARbuttons" class="row 0%">
-                <div class="4u">
+            <div id="ARbuttons" class="row">
+                <div class="col-md-4">
                     <button id="stopClip" class="actionButton">Stop Clip</button>
                 </div>
-                <div class="4u">
+                <div class="col-md-4">
                     &nbsp;
                 </div>
-                <div class="4u">
+                <div class="col-md-4">
                     <button id="keepClip" class="actionButton">Keep Clip</button>
                 </div>
             </div>
         </div>
-        <div class="3u">
-            <div id="nextARPage">
-                <img src="images/next.png">
+        <div class="col-md-3">
+            <div id="nextARPage" class="nextPageColumn">
+                <img src="images/nextButton.png">
             </div>
             <div id="azirAR" class="bubble">
                 <img src="images/azirSpeech.png">
-                <div class="contents">
+                <div class="contentsTight">
                     <p>
                         Find and collect<br>
-                        Pitoti rock art clips.
+                        Pitoti rock art<br>
+                        clips.
                     </p>
                 </div>
             </div>
@@ -84,7 +88,7 @@
 </div>
 
 <!-- Trigger Video -->
-<video id="triggerVideo" class="hide">
+<video id="triggerVideo" class="noDisplay">
     <source src="videos/axeMan.mp4" type="video/mp4">
 </video>
 

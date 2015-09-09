@@ -3,7 +3,7 @@
  */
 
 var ROT_INC = Math.PI/32;
-var MOVE_INC = 5;
+var MOVE_INC = 10;
 var ROT_LEFT=0, ROT_RIGHT=1, ROT_UP=2, ROT_DOWN= 3, ZOOM_IN=4, ZOOM_OUT=5;
 var MOVE_UP= 0, MOVE_DOWN= 1, MOVE_LEFT= 2, MOVE_RIGHT=3;
 
@@ -36,6 +36,15 @@ RockFace.prototype.createScene = function() {
     this.loadedModel = planeMesh;
 
     this.scene.add(planeMesh);
+};
+
+RockFace.prototype.resetScene = function() {
+    this.loadedModel.position.x = this.loadedModel.position.y = this.loadedModel.position.z = 0;
+    this.loadedModel.rotation.x = this.loadedModel.rotation.y = this.loadedModel.rotation.z = 0;
+    var lookAt = new THREE.Vector3(0, 0, 0);
+    this.controls.setLookAt(lookAt);
+    this.camera.position.set(0, 0, 700 );
+    this.pointLight.position.set(200,200,500);
 };
 
 RockFace.prototype.repeat = function(direction) {
@@ -257,5 +266,8 @@ $(document).ready(function() {
         app.repeatLight();
     });
 
+    $('#reset').on("click", function () {
+        app.resetScene();
+    });
     app.run();
 });
