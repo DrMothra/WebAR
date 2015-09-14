@@ -67,8 +67,9 @@ body {
 }
 .pitotiLogo {
     position: absolute;
-    bottom: 2%;
+    top: 72.5%;
     right: 2%;
+    text-align: right;
 }
 .pitotiLogo img {
     width: 50%;
@@ -289,7 +290,7 @@ body {
 
 /* Menu page */
 #menuOptions {
-    margin-top: 20%;
+    margin-top: 10%;
 }
 #menuOptions div {
     margin-bottom: 20%;
