@@ -4,8 +4,6 @@
 
 
 $(document).ready(function() {
-    //Do any init
-    skel.init();
 
     //Store user details
     var form = document.getElementById("enterDetails");

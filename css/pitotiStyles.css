@@ -44,9 +44,25 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     letter-spacing: normal;
 }
 /* Common page styles */
-body {
-    background: url("../images/rockBackground.jpg") no-repeat center top fixed;
+
+html {
+    background: url("../images/rockBackground.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
+}
+
+body {
+    background-color: transparent;
+}
+#startImage {
+    background: url("../images/background.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100vh;
 }
 .italics {
     font-style: italic;
@@ -67,7 +83,7 @@ body {
 }
 .pitotiLogo {
     position: absolute;
-    top: 72.5%;
+    top: 82.5%;
     right: 2%;
     text-align: right;
 }
@@ -218,15 +234,12 @@ body {
 /* PAGES */
 
 /* Start page */
-#startImage {
-    background: url("../images/background.jpg") no-repeat center top fixed;
-    background-size: cover;
-}
+
 #startAzir {
     text-align: right;
 }
 #startAzir {
-    margin-top: 5%;
+    margin-top: 3%;
 }
 #startAzir img {
     width: 90%;
@@ -240,7 +253,7 @@ body {
 }
 #startButton {
     text-align: center;
-    margin-top: 5%;
+    margin-top: 2%;
 }
 .intro {
     -webkit-animation-name: bounce;
@@ -357,7 +370,7 @@ body {
     margin-top: 2.5%;
 }
 #hotSpotsSeradina img {
-    width: 95%;
+    width: 90%;
 }
 
 #seradinaSpot1 {
@@ -523,7 +536,7 @@ body {
     background-size: cover;
 }
 #instructionArrows {
-    margin-top: 40%;
+    margin-top: 30%;
 }
 
 

@@ -5,22 +5,24 @@
     <title>Configure</title>
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="js/skel.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/pitotiConfigure.js?v=0.2"></script>
 
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
     <link href="css/pitotiStyles.css?v=0.6" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div class="page">
-    <div class="row 0%">
-        <div class="3u">
+<div class="page container-fluid">
+    <div class="row">
+        <div class="col-md-3">
             <div class="previousPageColumn">
-                <a href="pitotiWelcome.html"><img src="images/back.png"></a>
+                <a href="pitotiCreate.html"><img src="images/backButton.png"></a>
             </div>
         </div>
 
-        <div class="6u">
+        <div class="col-md-6">
             <div id="configureEntry">
                 <p>
                     If you would like us to send you your Pitoti stories then please enter your name and e-mail address below.<br>
@@ -32,15 +34,15 @@
                     E-mail: <input id="mail" type="email" name="email"><br>
                     <button class="actionButton" type="submit" id="storeDetails">Submit</button>
                 </form>
-                <p id="entered" class="hide">
+                <p id="entered" class="noDisplay">
                     Thanks! Your information has been stored
                 </p>
             </div>
         </div>
 
-        <div class="3u">
-            <div >
-                <a href="pitotiMenu.html"><img src="images/next.png"></a>
+        <div class="col-md-3">
+            <div class="nextPageColumn">
+                <a href="pitotiAR.html"><img src="images/nextButton.png"></a>
             </div>
         </div>
     </div>
