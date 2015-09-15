@@ -43,6 +43,20 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     font-family: 'berlin';
     letter-spacing: normal;
 }
+@font-face {
+    font-family: 'montserrat';
+    src: url('../fonts/montserrat-bold-webfont.eot'),
+    url('../fonts/montserrat-bold-webfont.woff2') format('woff2'),
+    url('../fonts/montserrat-bold-webfont.woff') format('woff'),
+    url('../fonts/montserrat-bold-webfont.ttf') format('truetype'),
+    url('../fonts/montserrat-bold-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+.montserrat {
+    font-family: 'monserrat';
+    letter-spacing: normal;
+}
 /* Common page styles */
 
 html {
@@ -63,6 +77,19 @@ body {
     -o-background-size: cover;
     background-size: cover;
     height: 100vh;
+}
+#notSupported {
+    position: absolute;
+    top: 15%;
+    left: 33%;
+    width: 33%;
+}
+#notSupported p {
+    text-align: center;
+    background-color: #004681;
+    color: #ffffff;
+    border-radius: 15px;
+    padding: 5%;
 }
 .italics {
     font-style: italic;
@@ -141,15 +168,15 @@ body {
     margin-left: -50%;
 }
 .contentsTight {
-    top: 1%;
+    top: 3%;
 }
 .contents p {
-    font-family: "berlin", sans-serif;
+    font-family: "montserrat", sans-serif;
     font-size: 2vw;
 }
 .contentsTight p {
-    font-family: "berlin", sans-serif;
-    font-size: 1.9vw;
+    font-family: "montserrat", sans-serif;
+    font-size: 1.6vw;
 }
 /* Animations */
 @-moz-keyframes bounce {

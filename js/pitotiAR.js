@@ -505,7 +505,6 @@ $(document).ready(function() {
     //Initialise app
 
     if(!Detector.webgl) {
-        alert("WebGL not supported");
         $('#notSupported').show();
     } else {
 

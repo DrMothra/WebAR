@@ -4,6 +4,7 @@
 var NUM_CONTAINERS = 8;
 var TIMELINE_SLOTS = 4;
 var MAX_VIDEO_TIME = 60;
+var STOPPED=0, PLAYING=1, PAUSED=2;
 
 var videoPanel = (function() {
     //Timeline
@@ -12,7 +13,7 @@ var videoPanel = (function() {
     for(var i=0; i<TIMELINE_SLOTS; ++i) {
         timelineSlots[i] = false;
     }
-    var videosToPlay = [];
+    var videoStatus = STOPPED;
     var numVideos = 0;
     var checkInterval = 1000;
     var videoChecker;
@@ -102,6 +103,13 @@ var videoPanel = (function() {
         },
 
         playStory: function() {
+            if(videoStatus === PAUSED) {
+                if(currentPlayer >= 0) {
+                    videoPlayers[currentPlayer].play();
+                    videoStatus = PLAYING;
+                    return true;
+                }
+            }
             currentElapsed = 0;
             var slotId, containsVideo=false, videoIndex, videoId;
             for(var i=0; i<TIMELINE_SLOTS; ++i) {
@@ -135,11 +143,13 @@ var videoPanel = (function() {
             }
             if(!containsVideo) {
                 alert("No videos in timeline");
+                return false;
             } else {
                 for(var i=0; i<TIMELINE_SLOTS; ++i) {
                     if(!videoPlayers[i].empty) {
                         currentPlayer = i;
                         videoPlayers[i].play();
+                        videoStatus = PLAYING;
                         break;
                     }
                 }
@@ -164,19 +174,25 @@ var videoPanel = (function() {
                                 $('#timelineVideo'+i).hide();
                             }
                             progressBar.value = MAX_VIDEO_TIME;
+                            $('#playStory').show();
+                            $('#pauseStory').hide();
                             clearInterval(videoChecker);
                         }
                     } else {
-                        progressBar.value = ++currentElapsed;
+                        if(videoStatus != PAUSED) {
+                            progressBar.value = ++currentElapsed;
+                        }
                     }
 
                 }, checkInterval);
+                return true;
             }
         },
 
         pauseStory: function() {
             if(currentPlayer >= 0) {
                 videoPlayers[currentPlayer].pause();
+                videoStatus = PAUSED;
             }
         },
 
@@ -256,9 +272,10 @@ $(document).ready(function() {
     var playElem = $('#playStory');
     var pauseElem = $('#pauseStory');
     playElem.on("click", function() {
-        videoPanel.playStory();
-        playElem.hide();
-        pauseElem.show();
+        if(videoPanel.playStory()) {
+            playElem.hide();
+            pauseElem.show();
+        }
     });
 
     pauseElem.on("click", function() {

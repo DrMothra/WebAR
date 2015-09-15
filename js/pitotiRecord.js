@@ -223,10 +223,12 @@ function toggleRecording() {
     }
 
     var recImage = $('#audioRecord');
+    var clickImage = $('#clickImage');
     recording = !recording;
     if(recording) {
         recorder.clear();
         recImage.attr('src', 'images/recordOn.png');
+        clickImage.attr('src', 'images/clickRecordStop.png');
         recorder.record();
         audioProgress = setInterval(function() {
             $('#audioProgress').attr("value", ++elapsedTime);
@@ -259,6 +261,7 @@ function toggleRecording() {
         recorded = true;
         stopped = true;
         recImage.attr('src', 'images/recordOff.png');
+        clickImage.attr('src', 'images/clickRecordOn.png');
         //createLink();
         recorder.getBuffer(saveBuffer);
     }

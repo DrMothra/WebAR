@@ -212,62 +212,66 @@ RockFace.prototype.moveLight = function(direction) {
 
 $(document).ready(function() {
     //Do any init
-    var container = document.getElementById("seradina2Web-GL");
-    var app = new RockFace();
-    app.init(container);
-    app.createScene();
+    if(!Detector.webgl) {
+        $('#notSupported').show();
+    } else {
+        var container = document.getElementById("seradina2Web-GL");
+        var app = new RockFace();
+        app.init(container);
+        app.createScene();
 
-    //GUI callbacks
-    //Play audio
-    $('#story1').on("click", function() {
-        audioManager.playAudio(this.id);
-    });
+        //GUI callbacks
+        //Play audio
+        $('#story1').on("click", function () {
+            audioManager.playAudio(this.id);
+        });
 
-    $('#rotateLeft').on("mousedown", function() {
-        app.rotateObject(ROT_LEFT);
-    });
-    $('#rotateRight').on("mousedown", function() {
-        app.rotateObject(ROT_RIGHT);
-    });
-    $('#rotateUp').on("mousedown", function() {
-        app.rotateObject(ROT_UP);
-    });
-    $('#rotateDown').on("mousedown", function() {
-        app.rotateObject(ROT_DOWN);
-    });
-    $("[id^=rotate]").on("mouseup", function() {
-        app.repeat();
-    });
+        $('#rotateLeft').on("mousedown", function () {
+            app.rotateObject(ROT_LEFT);
+        });
+        $('#rotateRight').on("mousedown", function () {
+            app.rotateObject(ROT_RIGHT);
+        });
+        $('#rotateUp').on("mousedown", function () {
+            app.rotateObject(ROT_UP);
+        });
+        $('#rotateDown').on("mousedown", function () {
+            app.rotateObject(ROT_DOWN);
+        });
+        $("[id^=rotate]").on("mouseup", function () {
+            app.repeat();
+        });
 
-    $('#zoomOut').on("mousedown", function() {
-        app.translateObject(ZOOM_OUT);
-    });
+        $('#zoomOut').on("mousedown", function () {
+            app.translateObject(ZOOM_OUT);
+        });
 
-    $('#zoomIn').on("mousedown", function() {
-        app.translateObject(ZOOM_IN);
-    });
-    $("[id^=zoom]").on("mouseup", function() {
-        app.repeat();
-    });
+        $('#zoomIn').on("mousedown", function () {
+            app.translateObject(ZOOM_IN);
+        });
+        $("[id^=zoom]").on("mouseup", function () {
+            app.repeat();
+        });
 
-    $('#lightUp').on("mousedown", function() {
-       app.moveLight(MOVE_UP);
-    });
-    $('#lightDown').on("mousedown", function() {
-        app.moveLight(MOVE_DOWN);
-    });
-    $('#lightLeft').on("mousedown", function() {
-        app.moveLight(MOVE_LEFT);
-    });
-    $('#lightRight').on("mousedown", function() {
-        app.moveLight(MOVE_RIGHT);
-    });
-    $('[id^=light]').on("mouseup", function() {
-        app.repeatLight();
-    });
+        $('#lightUp').on("mousedown", function () {
+            app.moveLight(MOVE_UP);
+        });
+        $('#lightDown').on("mousedown", function () {
+            app.moveLight(MOVE_DOWN);
+        });
+        $('#lightLeft').on("mousedown", function () {
+            app.moveLight(MOVE_LEFT);
+        });
+        $('#lightRight').on("mousedown", function () {
+            app.moveLight(MOVE_RIGHT);
+        });
+        $('[id^=light]').on("mouseup", function () {
+            app.repeatLight();
+        });
 
-    $('#reset').on("click", function () {
-        app.resetScene();
-    });
-    app.run();
+        $('#reset').on("click", function () {
+            app.resetScene();
+        });
+        app.run();
+    }
 });
