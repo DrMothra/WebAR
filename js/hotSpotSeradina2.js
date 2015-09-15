@@ -6,6 +6,7 @@ var ROT_INC = Math.PI/32;
 var MOVE_INC = 10;
 var ROT_LEFT=0, ROT_RIGHT=1, ROT_UP=2, ROT_DOWN= 3, ZOOM_IN=4, ZOOM_OUT=5;
 var MOVE_UP= 0, MOVE_DOWN= 1, MOVE_LEFT= 2, MOVE_RIGHT=3;
+var Z_MAX = 450;
 
 //Init this app from base
 function RockFace() {
@@ -96,6 +97,7 @@ RockFace.prototype.repeat = function(direction) {
             _this.loadedModel.rotation.x += _this.xRot;
             _this.loadedModel.rotation.y += _this.yRot;
         } else {
+            if(_this.loadedModel.position.z >= Z_MAX) return;
             _this.loadedModel.position.z += _this.zTrans;
         }
 
@@ -172,6 +174,7 @@ RockFace.prototype.translateObject = function(direction) {
     if(this.loadedModel) {
         switch(direction) {
             case ZOOM_IN:
+                if(this.loadedModel.position.z >= Z_MAX) return;
                 this.loadedModel.position.z += MOVE_INC;
                 this.repeat(ZOOM_IN);
                 break;

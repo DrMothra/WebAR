@@ -9,6 +9,7 @@ var linkNumber = 0;
 var bufferNumber = 0;
 var newSource = null;
 var MAX_BUFFERS = 3;
+var STOP = -1;
 var newBuffer = new Array(MAX_BUFFERS);
 var recorded = false;
 var audioClips = [];
@@ -121,6 +122,7 @@ function startUserMedia(stream) {
 
     recorder = new Recorder(window.input);
     console.log('Recorder initialised.');
+    recorder.playing = false;
 }
 
 function sendFilesToServer() {
@@ -199,10 +201,25 @@ function saveBuffer( buffers) {
 }
 
 function playBuffer(buffer) {
-    window.source = audio_context.createBufferSource();
-    window.source.buffer = newBuffer[buffer];
-    window.source.connect(audio_context.destination);
-    window.source.start(0);
+    if(buffer <0) {
+        if(window.source) {
+            window.source.stop(0);
+            //DEBUG
+            console.log("Audio stopped");
+        }
+    } else {
+        if(recorder.playing) return;
+        window.source = audio_context.createBufferSource();
+        window.source.buffer = newBuffer[buffer];
+        window.source.connect(audio_context.destination);
+        window.source.start(0);
+        recorder.playing = true;
+        window.source.onended = function() {
+            recorder.playing = false;
+            //DEBUG
+            console.log("Audio stopped");
+        }
+    }
 }
 
 function toggleRecording() {
@@ -332,6 +349,8 @@ $(document).ready(function() {
             return;
         }
         pageStatus = PLAYING;
+        //Stop any audio playing
+        playBuffer(STOP);
         //Video back to start
         videoPlayer.rewind();
         $('#storyControls').hide();
@@ -347,6 +366,7 @@ $(document).ready(function() {
         } else {
             videoPlayer.rewind();
             pageStatus = RECORDING;
+            playBuffer(STOP);
             $('#storyControls').show();
             $('#nextPageRecord').show();
             $('#finalControls').hide();

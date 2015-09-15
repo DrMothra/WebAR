@@ -41,23 +41,31 @@ var videoPanel = (function() {
 
             //Dragged elements
             var elem = document.getElementById("slot0");
+            var imageWidth = elem ? elem.clientWidth : window.innerWidth * 0.09;
+            if(imageWidth >= 160 || imageWidth < 10) {
+                imageWidth = window.innerWidth * 0.09;
+            }
             dragImage = document.createElement("img");
             dragImage.src = "images/dragTimeline.png";
-            dragImage.style.width = elem.clientWidth+"px";
+            dragImage.style.width = imageWidth +"px";
+            //DEBUG
+            console.log("Width =", imageWidth);
             dragImage.style.zIndex = "100";
 
             dragTrashImage = document.createElement("img");
             dragTrashImage.src = "images/dragTrash.png";
-            dragTrashImage.style.width = elem.clientWidth+"px";
+            dragTrashImage.style.width = imageWidth+"px";
             dragImage.style.zIndex = "100";
 
             //Video containers
-            var vidElem;
-
-            var elem = document.getElementById("timeline0");
+            var vidElem = document.getElementById("timeline0");
+            var videoWidth = vidElem ? vidElem.clientWidth : window.innerWidth * 0.09;
+            if(videoWidth >= 160 || videoWidth < 10) {
+                videoWidth = window.innerWidth * 0.09;
+            }
             for(var i=0; i<TIMELINE_SLOTS; ++i) {
                 vidElem = document.getElementById("timelineVideo" + i);
-                vidElem.style.width = elem.clientWidth+"px";
+                vidElem.style.width = videoWidth+"px";
                 videoPlayers[i] = vidElem;
             }
 

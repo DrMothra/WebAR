@@ -78,7 +78,8 @@
 	//Mp3 conversion
     worker.onmessage = function(e){
       var blob = e.data;
-	  console.log("the blob " +  blob + " " + blob.size + " " + blob.type);
+      //DEBUG
+	  //console.log("the blob " +  blob + " " + blob.size + " " + blob.type);
 
 		if(blob.type !== "audio/wav") {
 			currCallback(blob);
