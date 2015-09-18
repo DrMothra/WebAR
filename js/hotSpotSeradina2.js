@@ -4,7 +4,7 @@
 
 var ROT_INC = Math.PI/32;
 var MOVE_INC = 10;
-var ROT_LEFT=0, ROT_RIGHT=1, ROT_UP=2, ROT_DOWN= 3, ZOOM_IN=4, ZOOM_OUT=5;
+var STOP=-1, ROT_LEFT=0, ROT_RIGHT=1, ROT_UP=2, ROT_DOWN= 3, ZOOM_IN=4, ZOOM_OUT=5;
 var MOVE_UP= 0, MOVE_DOWN= 1, MOVE_LEFT= 2, MOVE_RIGHT=3;
 var Z_MAX = 450;
 
@@ -49,8 +49,12 @@ RockFace.prototype.resetScene = function() {
 };
 
 RockFace.prototype.repeat = function(direction) {
-    if(direction === undefined) {
-        clearInterval(this.repeatTimer);
+    if(direction === STOP) {
+        if(this.repeatTimer) {
+            clearInterval(this.repeatTimer);
+            //DEBUG
+            console.log("Timer cleared");
+        }
         return;
     }
     var _this = this;
@@ -93,6 +97,8 @@ RockFace.prototype.repeat = function(direction) {
             break;
     }
     this.repeatTimer = setInterval(function() {
+        //DEBUG
+        console.log("Timer started");
         if(_this.rotating) {
             _this.loadedModel.rotation.x += _this.xRot;
             _this.loadedModel.rotation.y += _this.yRot;
@@ -229,46 +235,111 @@ $(document).ready(function() {
             audioManager.playAudio(this.id);
         });
 
-        $('#rotateLeft').on("mousedown", function () {
+        $('#rotateLeft').on("mousedown", function (event) {
+            event.preventDefault();
             app.rotateObject(ROT_LEFT);
         });
-        $('#rotateRight').on("mousedown", function () {
+        $('#rotateLeft').on("touchstart", function (event) {
+            event.preventDefault();
+            app.rotateObject(ROT_LEFT);
+        });
+        $('#rotateRight').on("mousedown", function (event) {
+            event.preventDefault();
             app.rotateObject(ROT_RIGHT);
         });
-        $('#rotateUp').on("mousedown", function () {
+        $('#rotateRight').on("touchstart", function (event) {
+            event.preventDefault();
+            app.rotateObject(ROT_RIGHT);
+        });
+        $('#rotateUp').on("mousedown", function (event) {
+            event.preventDefault();
             app.rotateObject(ROT_UP);
         });
-        $('#rotateDown').on("mousedown", function () {
+        $('#rotateUp').on("touchstart", function (event) {
+            event.preventDefault();
+            app.rotateObject(ROT_UP);
+        });
+        $('#rotateDown').on("mousedown", function (event) {
+            event.preventDefault();
             app.rotateObject(ROT_DOWN);
         });
-        $("[id^=rotate]").on("mouseup", function () {
-            app.repeat();
+        $('#rotateDown').on("touchstart", function (event) {
+            event.preventDefault();
+            app.rotateObject(ROT_DOWN);
+        });
+        $("[id^=rotate]").on("mouseup", function (event) {
+            event.preventDefault();
+            app.repeat(STOP);
+        });
+        $("[id^=rotate]").on("touchend", function (event) {
+            event.preventDefault();
+            app.repeat(STOP);
         });
 
-        $('#zoomOut').on("mousedown", function () {
+        $('#zoomOut').on("mousedown", function (event) {
+            event.preventDefault();
+            app.translateObject(ZOOM_OUT);
+        });
+        $('#zoomOut').on("touchstart", function (event) {
+            event.preventDefault();
             app.translateObject(ZOOM_OUT);
         });
 
-        $('#zoomIn').on("mousedown", function () {
+        $('#zoomIn').on("mousedown", function (event) {
+            event.preventDefault();
             app.translateObject(ZOOM_IN);
         });
-        $("[id^=zoom]").on("mouseup", function () {
-            app.repeat();
+        $('#zoomIn').on("touchstart", function (event) {
+            event.preventDefault();
+            app.translateObject(ZOOM_IN);
+        });
+        $("[id^=zoom]").on("mouseup", function (event) {
+            event.preventDefault();
+            app.repeat(STOP);
+        });
+        $("[id^=zoom]").on("touchend", function (event) {
+            event.preventDefault();
+            app.repeat(STOP);
         });
 
-        $('#lightUp').on("mousedown", function () {
+        $('#lightUp').on("mousedown", function (event) {
+            event.preventDefault();
             app.moveLight(MOVE_UP);
         });
-        $('#lightDown').on("mousedown", function () {
+        $('#lightUp').on("touchstart", function (event) {
+            event.preventDefault();
+            app.moveLight(MOVE_UP);
+        });
+        $('#lightDown').on("mousedown", function (event) {
+            event.preventDefault();
             app.moveLight(MOVE_DOWN);
         });
-        $('#lightLeft').on("mousedown", function () {
+        $('#lightDown').on("touchstart", function (event) {
+            event.preventDefault();
+            app.moveLight(MOVE_DOWN);
+        });
+        $('#lightLeft').on("mousedown", function (event) {
+            event.preventDefault();
             app.moveLight(MOVE_LEFT);
         });
-        $('#lightRight').on("mousedown", function () {
+        $('#lightLeft').on("touchstart", function (event) {
+            event.preventDefault();
+            app.moveLight(MOVE_LEFT);
+        });
+        $('#lightRight').on("mousedown", function (event) {
+            event.preventDefault();
             app.moveLight(MOVE_RIGHT);
         });
-        $('[id^=light]').on("mouseup", function () {
+        $('#lightRight').on("touchstart", function (event) {
+            event.preventDefault();
+            app.moveLight(MOVE_RIGHT);
+        });
+        $('[id^=light]').on("mouseup", function (event) {
+            event.preventDefault();
+            app.repeatLight();
+        });
+        $('[id^=light]').on("touchend", function (event) {
+            event.preventDefault();
             app.repeatLight();
         });
 

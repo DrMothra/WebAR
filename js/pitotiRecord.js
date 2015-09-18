@@ -407,6 +407,7 @@ $(document).ready(function() {
     var form = document.getElementById("uploadForm");
     form.onsubmit = function(event) {
         var status = $('#uploadStatus');
+        status.html("Uploading...");
         status.show();
 
         event.preventDefault();
