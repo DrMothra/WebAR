@@ -48,12 +48,15 @@ RockFace.prototype.resetScene = function() {
     this.pointLight.position.set(200,200,500);
 };
 
+RockFace.prototype.lightToCamera = function() {
+    //Move light to camera position
+    this.pointLight.position.set(this.camera.position.x, this.camera.position.y, this.pointLight.position.z);
+};
+
 RockFace.prototype.repeat = function(direction) {
     if(direction === STOP) {
         if(this.repeatTimer) {
             clearInterval(this.repeatTimer);
-            //DEBUG
-            console.log("Timer cleared");
         }
         return;
     }
@@ -97,8 +100,6 @@ RockFace.prototype.repeat = function(direction) {
             break;
     }
     this.repeatTimer = setInterval(function() {
-        //DEBUG
-        console.log("Timer started");
         if(_this.rotating) {
             _this.loadedModel.rotation.x += _this.xRot;
             _this.loadedModel.rotation.y += _this.yRot;
@@ -346,6 +347,10 @@ $(document).ready(function() {
         $('#reset').on("click", function () {
             app.resetScene();
         });
+        $('#lightToCam').on("click", function() {
+            app.lightToCamera();
+        });
+
         app.run();
     }
 });
