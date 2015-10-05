@@ -652,6 +652,15 @@ body {
 #storyControls {
     text-align: left;
 }
+#storyControls p {
+    color: white;
+    font-family: Arial;
+    font-size: 1.7vw;
+    padding: 3%;
+    background-color: #7892c2;
+    border-radius: 15px;
+    text-align: center;
+}
 #audioRecord {
     text-align: left;
 }

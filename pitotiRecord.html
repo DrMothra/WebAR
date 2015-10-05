@@ -30,12 +30,10 @@
             </video>
             <div id="storyControls" class="row">
                 <div class="col-md-4">
-                    <div id="playStoryRecord">
-                        <img src="images/play.png">
-                    </div>
-                    <div id="audioRecordLabel">
-                        <img id="clickImage" src="images/clickRecordOn.png">
-                    </div>
+                    <p>
+                        Click the microphone icon
+                        to record your story
+                    </p>
                 </div>
                 <div id="micContainer" class="col-md-2">
                     <img id="audioRecord" src="images/recordOff.png">
@@ -67,9 +65,6 @@
                         <img src="images/playStory.png">
                     </div>
                     <div class="col-md-4">
-                        <a href="pitotiThanks.html"><button class="actionButton">Discard Story</button></a>
-                    </div>
-                    <div class="col-md-4">
                         <form id="uploadForm" method="POST">
                             <input type="file" name="audioFile" id="fileInput" class="noDisplay">
                             <input type="text" name="userName" id="userName" class="noDisplay">
@@ -78,8 +73,10 @@
                             <input type="text" name="video1" id="video1" class="noDisplay">
                             <input type="text" name="video2" id="video2" class="noDisplay">
                             <input type="text" name="video3" id="video3" class="noDisplay">
-                            <button type="submit" name="submit" class="actionButton">Upload Story</button>
                         </form>
+                    </div>
+                    <div class="col-md-4">
+                        <button id="uploadStory" class="actionButton">Upload Story</button>
                     </div>
                 </div>
                 <div id="createFinal" class="row">
@@ -96,6 +93,21 @@
                     </div>
                 </div>
 
+            </div>
+            <div id="configureEntry" class="noDisplay">
+                <p>
+                    If you would like us to send you your Pitoti stories then please enter your name and e-mail address below.<br>
+                    If you do not wish to receive any stories then just click Next.<br>
+                    Thanks!
+                </p>
+                <form id="enterDetails">
+                    Name: <input id="name" type="text" name="name"><br>
+                    E-mail: <input id="mail" type="email" name="email"><br>
+                    <button class="actionButton" type="submit" id="storeDetails">Submit</button>
+                </form>
+                <p id="entered" class="noDisplay">
+                    Thanks! Your information has been stored
+                </p>
             </div>
         </div>
 

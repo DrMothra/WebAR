@@ -13,7 +13,7 @@ var STOP = -1;
 var newBuffer = new Array(MAX_BUFFERS);
 var recorded = false;
 var audioClips = [];
-var RECORDING = 0, PLAYING = 1;
+var RECORDING = 0, PLAYING = 1, SUBMITTING = 2;
 var started = false, stopped = false;
 var audioPlayersEmpty = new Array(3);
 var audioSelected = new Array(3);
@@ -106,9 +106,12 @@ var videoPlayer = (function() {
         },
 
         rewind: function() {
-            vidPlayer.pause();
+            if(playingVideo) {
+                vidPlayer.pause();
+            }
             playingVideo = false;
             gotClip = false;
+            currentSlot = 0;
         }
     }
 })();
@@ -284,8 +287,24 @@ function toggleRecording() {
     }
 }
 
+function getUserDetails() {
+    $('#videoPlayer').hide();
+    $('#finalControls').hide();
+    $('#audioProgress').hide();
+    $('#configureEntry').show();
+}
+
+function showUploadStatus() {
+    $('#videoPlayer').show();
+    $('#finalControls').show();
+    $('#audioProgress').show();
+    $('#configureEntry').hide();
+}
+
 $(document).ready(function() {
     //Init
+    sessionStorage.removeItem("userName");
+    sessionStorage.removeItem("userMail");
     videoPlayer.init();
     for(var i=0; i<MAX_BUFFERS; ++i) {
         audioPlayersEmpty[i] = true;
@@ -328,6 +347,9 @@ $(document).ready(function() {
                 }
             }
 
+        } else {
+            videoPlayer.rewind();
+            videoPlayer.playBack();
         }
     });
 
@@ -337,25 +359,126 @@ $(document).ready(function() {
 
     var audioPlayer = null;
     $('#nextPageRecord').on("click", function() {
-        var audio = false;
-        for(var i=0; i<MAX_BUFFERS; ++i) {
-            if(audioSelected[i]) {
-                audio = true;
+        switch(pageStatus) {
+            case RECORDING:
+                var audio = false;
+                for(var i=0; i<MAX_BUFFERS; ++i) {
+                    if(audioSelected[i]) {
+                        audio = true;
+                        break;
+                    }
+                }
+                if(!audio) {
+                    alert("No audio selected");
+                    return;
+                }
+                pageStatus = PLAYING;
+                //Stop any audio playing
+                playBuffer(STOP);
+                //Video back to start
+                videoPlayer.rewind();
+                $('#storyControls').hide();
+                $('#finalControls').show();
                 break;
-            }
+
+            case PLAYING:
+                if(sessionStorage.getItem("userName") === null) {
+                    var discard = confirm("This will discard your story!");
+                    if(discard) {
+                        window.location.href = "pitotiThanks.html";
+                    }
+                }
+                break;
+
+            case SUBMITTING:
+                if(sessionStorage.getItem("userName") === null) {
+                    window.location.href = "pitotiThanks.html";
+                } else {
+                    showUploadStatus();
+                    var status = $('#uploadStatus');
+                    status.html("Uploading...");
+                    status.show();
+
+                    var bufferIndex;
+                    for(var i=0; i<MAX_BUFFERS; ++i) {
+                        if(audioSelected[i]) {
+                            recorder.clear();
+                            recorder.setBuffer(newBuffer[i]);
+                            bufferIndex = i;
+                            break;
+                        }
+                    }
+
+                    //recorder.setBuffer(audioBuffer);
+                    recorder.exportWAV(function(blob) {
+                        var formData = new FormData();
+
+                        var userName = sessionStorage.getItem("userName");
+                        if (userName) {
+                            formData.append("userName", userName);
+                        } else {
+                            alert("No user name");
+                        }
+                        var email = sessionStorage.getItem("userMail");
+                        if (email) {
+                            formData.append("email", email);
+                        } else {
+                            alert("No e-mail");
+                        }
+
+                        var audioFilename = "story_" + userName + "_" + new Date().toUTCString() + ".mp3";
+
+
+                        formData.append("audioFile", blob, audioFilename);
+
+                        //Get videos
+                        var video, index;
+                        for (var slot = 0; slot < TIMELINE_SLOTS; ++slot) {
+                            video = sessionStorage.getItem("timeline" + slot);
+                            if (video) {
+                                var number = true;
+                                var value;
+                                var index = video.length - 1;
+                                while (number) {
+                                    value = parseInt(video.charAt(index));
+                                    if (isNaN(value)) {
+                                        number = false;
+                                    }
+                                    --index;
+                                }
+                                index = parseInt(video.substring(index + 2, video.length));
+                                //DEBUG
+                                console.log("Video =", videoManager.getVideoSource(index));
+
+                                formData.append("video" + slot, videoManager.getVideoSource(index));
+                            }
+                        }
+                        //Send data
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "uploadHandler.php", true);
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === 4) {
+                                if (xhr.status === 200) {
+                                    status.html("Story uploaded!");
+                                    console.log("Uploaded");
+                                    console.log("Response =", xhr.responseText);
+                                } else {
+                                    console.log("Error uploading");
+                                    status.html("Upload failed - try again");
+                                }
+                            }
+                        };
+
+                        //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+                        xhr.send(formData);
+                    });
+                }
+                break;
+
+            default:
+                break;
         }
-        if(!audio) {
-            alert("No audio selected");
-            return;
-        }
-        pageStatus = PLAYING;
-        //Stop any audio playing
-        playBuffer(STOP);
-        //Video back to start
-        videoPlayer.rewind();
-        $('#storyControls').hide();
-        $('#nextPageRecord').hide();
-        $('#finalControls').show();
+
         //audioPlayer = document.createElement('audio');
         //audioPlayer.src = sessionStorage.getItem('audioSelection');
     });
@@ -374,6 +497,7 @@ $(document).ready(function() {
     });
 
     $('#playStoryFinal').on("click", function() {
+        videoPlayer.rewind();
         videoPlayer.playBack();
         for(var i=0; i<MAX_BUFFERS; ++i) {
             if(audioSelected[index]) {
@@ -386,6 +510,8 @@ $(document).ready(function() {
 
     var index;
     $('[id^=audioButton]').on("click", function() {
+        videoPlayer.rewind();
+        videoPlayer.playBack();
         index = parseInt(this.id.charAt(this.id.length-1));
         playBuffer(index);
     });
@@ -403,6 +529,33 @@ $(document).ready(function() {
         $('#selectButton'+index).attr("src", "images/greenCircle.png");
         audioSelected[index] = true;
     });
+
+    $('#uploadStory').on("click", function() {
+        pageStatus = SUBMITTING;
+        getUserDetails();
+    });
+
+    //Store user details
+    var userForm = document.getElementById("enterDetails");
+    userForm.onsubmit = function(event) {
+        event.preventDefault();
+
+        var name = $('#name').val();
+        var mail = $('#mail').val();
+        if(name === "") {
+            alert("Please enter valid name");
+            return;
+        }
+        if(mail === "") {
+            alert("Please enter valid e-mail");
+            return;
+        }
+
+        sessionStorage.setItem("userName", name);
+        sessionStorage.setItem("userMail", mail);
+
+        $('#entered').show();
+    };
 
     var form = document.getElementById("uploadForm");
     form.onsubmit = function(event) {
