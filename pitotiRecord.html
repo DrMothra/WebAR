@@ -97,21 +97,23 @@
             <div id="configureEntry" class="noDisplay">
                 <p>
                     If you would like us to send you your Pitoti stories then please enter your name and e-mail address below.<br>
-                    If you do not wish to receive any stories then just click Next.<br>
+                    If you do not wish to receive any stories then just click Cancel.<br>
                     Thanks!
                 </p>
                 <form id="enterDetails">
                     Name: <input id="name" type="text" name="name"><br>
                     E-mail: <input id="mail" type="email" name="email"><br>
+                    <button class="actionButton" type="button" id="cancelDetails">Cancel</button>
                     <button class="actionButton" type="submit" id="storeDetails">Submit</button>
                 </form>
                 <p id="entered" class="noDisplay">
-                    Thanks! Your information has been stored
+                    Thanks! Your information has been stored<br>
+                    Click next to continue.
                 </p>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div id="nextControls" class="col-md-3">
             <div id="nextPageRecord" class="nextPageColumn">
                 <img src="images/nextButton.png">
             </div>

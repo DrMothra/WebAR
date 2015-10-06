@@ -782,6 +782,9 @@ input[type=file] {
     font-size: 1.7vw;
     padding: 5% 0;
 }
+#configureEntry button {
+    margin: 0 3%;
+}
 #enterDetails {
     padding: 3% 0;
     color: #ffffff;

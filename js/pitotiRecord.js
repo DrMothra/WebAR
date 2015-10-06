@@ -14,6 +14,7 @@ var newBuffer = new Array(MAX_BUFFERS);
 var recorded = false;
 var audioClips = [];
 var RECORDING = 0, PLAYING = 1, SUBMITTING = 2;
+var UPLOADED = 0, FAILED = 1;
 var started = false, stopped = false;
 var audioPlayersEmpty = new Array(3);
 var audioSelected = new Array(3);
@@ -291,6 +292,7 @@ function getUserDetails() {
     $('#videoPlayer').hide();
     $('#finalControls').hide();
     $('#audioProgress').hide();
+    $('#nextPageRecord').hide();
     $('#configureEntry').show();
 }
 
@@ -301,6 +303,87 @@ function showUploadStatus() {
     $('#configureEntry').hide();
 }
 
+function uploadStory() {
+    var status = $('#uploadStatus');
+    status.html("Uploading...");
+    status.show();
+
+    var bufferIndex;
+    for(var i=0; i<MAX_BUFFERS; ++i) {
+        if(audioSelected[i]) {
+            recorder.clear();
+            recorder.setBuffer(newBuffer[i]);
+            bufferIndex = i;
+            break;
+        }
+    }
+
+    //recorder.setBuffer(audioBuffer);
+    recorder.exportWAV(function(blob) {
+        var formData = new FormData();
+
+        var userName = sessionStorage.getItem("userName");
+        if(userName) {
+            formData.append("userName", userName);
+        } else {
+            alert("No user name");
+        }
+        var email = sessionStorage.getItem("userMail");
+        if(email) {
+            formData.append("email", email);
+        } else {
+            alert("No e-mail");
+        }
+
+        var audioFilename = "story_" + userName + "_" + new Date().toUTCString() + ".mp3";
+
+
+        formData.append("audioFile", blob, audioFilename);
+
+        //Get videos
+        var video, index;
+        for(var slot=0; slot<TIMELINE_SLOTS; ++slot) {
+            video = sessionStorage.getItem("timeline"+slot);
+            if(video) {
+                var number = true;
+                var value;
+                var index = video.length - 1;
+                while(number) {
+                    value = parseInt(video.charAt(index));
+                    if(isNaN(value)) {
+                        number = false;
+                    }
+                    --index;
+                }
+                index = parseInt(video.substring(index+2, video.length));
+                //DEBUG
+                console.log("Video =", videoManager.getVideoSource(index));
+
+                formData.append("video"+slot, videoManager.getVideoSource(index));
+            }
+        }
+        //Send data
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "uploadHandler.php", true);
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState === 4) {
+                if(xhr.status === 200) {
+                    status.html("Story uploaded!");
+                    console.log("Uploaded");
+                    console.log("Response =", xhr.responseText);
+                    return true;
+                } else {
+                    console.log("Error uploading");
+                    status.html("Upload failed - try again");
+                    return false;
+                }
+            }
+        };
+
+        //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        xhr.send(formData);
+    });
+}
 $(document).ready(function() {
     //Init
     sessionStorage.removeItem("userName");
@@ -379,6 +462,8 @@ $(document).ready(function() {
                 videoPlayer.rewind();
                 $('#storyControls').hide();
                 $('#finalControls').show();
+                $('#azirRecord').hide();
+
                 break;
 
             case PLAYING:
@@ -391,87 +476,11 @@ $(document).ready(function() {
                 break;
 
             case SUBMITTING:
-                if(sessionStorage.getItem("userName") === null) {
-                    window.location.href = "pitotiThanks.html";
-                } else {
-                    showUploadStatus();
-                    var status = $('#uploadStatus');
-                    status.html("Uploading...");
-                    status.show();
-
-                    var bufferIndex;
-                    for(var i=0; i<MAX_BUFFERS; ++i) {
-                        if(audioSelected[i]) {
-                            recorder.clear();
-                            recorder.setBuffer(newBuffer[i]);
-                            bufferIndex = i;
-                            break;
-                        }
+                if(sessionStorage.getItem("userName") === null || !uploadStatus) {
+                    var discard = confirm("This will discard your story!");
+                    if(discard) {
+                        window.location.href = "pitotiThanks.html";
                     }
-
-                    //recorder.setBuffer(audioBuffer);
-                    recorder.exportWAV(function(blob) {
-                        var formData = new FormData();
-
-                        var userName = sessionStorage.getItem("userName");
-                        if (userName) {
-                            formData.append("userName", userName);
-                        } else {
-                            alert("No user name");
-                        }
-                        var email = sessionStorage.getItem("userMail");
-                        if (email) {
-                            formData.append("email", email);
-                        } else {
-                            alert("No e-mail");
-                        }
-
-                        var audioFilename = "story_" + userName + "_" + new Date().toUTCString() + ".mp3";
-
-
-                        formData.append("audioFile", blob, audioFilename);
-
-                        //Get videos
-                        var video, index;
-                        for (var slot = 0; slot < TIMELINE_SLOTS; ++slot) {
-                            video = sessionStorage.getItem("timeline" + slot);
-                            if (video) {
-                                var number = true;
-                                var value;
-                                var index = video.length - 1;
-                                while (number) {
-                                    value = parseInt(video.charAt(index));
-                                    if (isNaN(value)) {
-                                        number = false;
-                                    }
-                                    --index;
-                                }
-                                index = parseInt(video.substring(index + 2, video.length));
-                                //DEBUG
-                                console.log("Video =", videoManager.getVideoSource(index));
-
-                                formData.append("video" + slot, videoManager.getVideoSource(index));
-                            }
-                        }
-                        //Send data
-                        var xhr = new XMLHttpRequest();
-                        xhr.open("POST", "uploadHandler.php", true);
-                        xhr.onreadystatechange = function () {
-                            if (xhr.readyState === 4) {
-                                if (xhr.status === 200) {
-                                    status.html("Story uploaded!");
-                                    console.log("Uploaded");
-                                    console.log("Response =", xhr.responseText);
-                                } else {
-                                    console.log("Error uploading");
-                                    status.html("Upload failed - try again");
-                                }
-                            }
-                        };
-
-                        //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-                        xhr.send(formData);
-                    });
                 }
                 break;
 
@@ -509,6 +518,8 @@ $(document).ready(function() {
     });
 
     var index;
+    var uploadStatus = true;
+
     $('[id^=audioButton]').on("click", function() {
         videoPlayer.rewind();
         videoPlayer.playBack();
@@ -532,7 +543,17 @@ $(document).ready(function() {
 
     $('#uploadStory').on("click", function() {
         pageStatus = SUBMITTING;
-        getUserDetails();
+        if(!uploadStatus) {
+            uploadStory();
+        } else {
+            getUserDetails();
+        }
+    });
+
+    $('#cancelDetails').on("click", function() {
+        showUploadStatus();
+        $('#nextPageRecord').show();
+        pageStatus = PLAYING;
     });
 
     //Store user details
@@ -554,90 +575,10 @@ $(document).ready(function() {
         sessionStorage.setItem("userName", name);
         sessionStorage.setItem("userMail", mail);
 
-        $('#entered').show();
+        showUploadStatus();
+        $('#nextPageRecord').show();
+
+        uploadStatus = uploadStory();
     };
 
-    var form = document.getElementById("uploadForm");
-    form.onsubmit = function(event) {
-        var status = $('#uploadStatus');
-        status.html("Uploading...");
-        status.show();
-
-        event.preventDefault();
-
-
-        var bufferIndex;
-        for(var i=0; i<MAX_BUFFERS; ++i) {
-            if(audioSelected[i]) {
-                recorder.clear();
-                recorder.setBuffer(newBuffer[i]);
-                bufferIndex = i;
-                break;
-            }
-        }
-
-        //recorder.setBuffer(audioBuffer);
-        recorder.exportWAV(function(blob) {
-            var formData = new FormData();
-
-            var userName = sessionStorage.getItem("userName");
-            if(userName) {
-                formData.append("userName", userName);
-            } else {
-                alert("No user name");
-            }
-            var email = sessionStorage.getItem("userMail");
-            if(email) {
-                formData.append("email", email);
-            } else {
-                alert("No e-mail");
-            }
-
-            var audioFilename = "story_" + userName + "_" + new Date().toUTCString() + ".mp3";
-
-
-            formData.append("audioFile", blob, audioFilename);
-
-            //Get videos
-            var video, index;
-            for(var slot=0; slot<TIMELINE_SLOTS; ++slot) {
-                video = sessionStorage.getItem("timeline"+slot);
-                if(video) {
-                    var number = true;
-                    var value;
-                    var index = video.length - 1;
-                    while(number) {
-                        value = parseInt(video.charAt(index));
-                        if(isNaN(value)) {
-                            number = false;
-                        }
-                        --index;
-                    }
-                    index = parseInt(video.substring(index+2, video.length));
-                    //DEBUG
-                    console.log("Video =", videoManager.getVideoSource(index));
-
-                    formData.append("video"+slot, videoManager.getVideoSource(index));
-                }
-            }
-            //Send data
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "uploadHandler.php", true);
-            xhr.onreadystatechange = function() {
-                if(xhr.readyState === 4) {
-                    if(xhr.status === 200) {
-                        status.html("Story uploaded!");
-                        console.log("Uploaded");
-                        console.log("Response =", xhr.responseText);
-                    } else {
-                        console.log("Error uploading");
-                        status.html("Upload failed - try again");
-                    }
-                }
-            };
-
-            //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-            xhr.send(formData);
-        })
-    }
 });
