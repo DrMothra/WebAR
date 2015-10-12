@@ -71,7 +71,7 @@ body {
     background-color: transparent;
 }
 #startImage {
-    background: url("../images/background.jpg") no-repeat center center fixed;
+    background: url("../images/startPage.png") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -280,7 +280,7 @@ body {
 }
 #startButton {
     text-align: center;
-    margin-top: 2%;
+    margin-top: 40%;
 }
 .intro {
     -webkit-animation-name: bounce;
@@ -573,11 +573,14 @@ body {
     margin-top: 5%;
 }
 .drop img {
-    width: 85%;
-    margin-bottom: 7.5%;
+    width: 100%;
+    margin: 5% 0;
 }
 #nextARPage {
 
+}
+#clipTray {
+   position: relative;
 }
 .trash {
     margin-top: 5%;
