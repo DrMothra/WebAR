@@ -583,7 +583,47 @@ body {
 
 }
 #clipTray {
-
+    position: relative;
+}
+#clipTrayImage {
+    width: 80%;
+}
+img[id^="slot"] {
+    position: absolute;
+    width: 33%;
+    border-radius: 10px;
+}
+#slot0 {
+    top: 3%;
+    left: 15%;
+}
+#slot1 {
+    top: 27%;
+    left: 15%;
+}
+#slot2 {
+    top: 51%;
+    left: 15%;
+}
+#slot3 {
+    top: 75%;
+    left: 15%;
+}
+#slot4 {
+    top: 3%;
+    left: 52.5%;
+}
+#slot5 {
+    top: 27%;
+    left: 52.5%;
+}
+#slot6 {
+    top: 51%;
+    left: 52.5%;
+}
+#slot7 {
+    top: 75%;
+    left: 52.5%;
 }
 .trash {
     margin-top: 5%;
