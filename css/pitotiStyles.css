@@ -280,7 +280,10 @@ body {
 }
 #startButton {
     text-align: center;
-    margin-top: 40%;
+    margin-top: 30%;
+}
+#startButton img {
+    width: 25%;
 }
 .intro {
     -webkit-animation-name: bounce;
@@ -580,7 +583,7 @@ body {
 
 }
 #clipTray {
-   position: relative;
+
 }
 .trash {
     margin-top: 5%;
