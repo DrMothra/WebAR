@@ -626,10 +626,11 @@ img[id^="slot"] {
     left: 52.5%;
 }
 .trash {
-    margin-top: 5%;
+    margin-top: 45%;
+    text-align: left;
 }
 .trash img {
-    width: 30%;
+    width: 50%;
 }
 #azirAR {
     overflow: hidden;
@@ -652,9 +653,16 @@ img[id^="slot"] {
 .dragTrash {
 
 }
-.drag img {
-    width: 85%;
-    margin-bottom: 7.5%;
+#vidFrame {
+    position: relative;
+}
+#vidFrame img {
+    width: 100%;
+}
+#videoPlayer {
+    position: absolute;
+    top: 15%;
+    left: 11%;
 }
 #playStory,
 #pauseStory {
@@ -668,15 +676,56 @@ img[id^="slot"] {
     font-size: 1.3vw;
     color: red;
 }
-#timeline {
-    margin-top: 20%;
-    background-color: #1e3766;
+#vidControls {
+    margin-top: -10%;
 }
-#timeline div {
-    padding-top: 2%;
+#vidControls img {
+    width: 12.5%;
+}
+#timeline {
+    position: relative;
+}
+#timeline img {
+
+}
+#frame {
+    width: 100%;
+}
+img[id^="timeline"] {
+    position: absolute;
+    width: 22.5%;
+    border-radius: 10px;
+}
+#timeline0 {
+    top: 10%;
+    left: 2%;
+}
+#timeline1 {
+    top: 10%;
+    left: 27%;
+}
+#timeline2 {
+    top: 10%;
+    left: 51.5%;
+}
+#timeline3 {
+    top: 10%;
+    left: 76%;
 }
 #azirTimeline {
 
+}
+#timeTrash {
+    margin-top: 2.5%;
+}
+#timeTrash img {
+    width: 45%;
+}
+#timeMic {
+    margin-top: 2%;
+}
+#timeMic img {
+    width: 50%;
 }
 #azirTimeline img {
     width: 100%;
@@ -686,7 +735,7 @@ img[id^="slot"] {
     cursor: default;
 }
 #progressContainer {
-    margin-top: 2.5%;
+
 }
 #progressContainer progress {
     width: 100%;

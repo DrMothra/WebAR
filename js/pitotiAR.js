@@ -375,17 +375,7 @@ PitotiAR.prototype.dropVideo = function(event, ui) {
             this.occupied[slot] = false;
         }
         ++slot;
-        dragged.attr('src', 'images/clip'+slot+'.png');
-        /*
-        var id = dragged.parent().attr('id');
-        $('#'+id+'drop').show();
-        dragged.remove();
-        sessionStorage.removeItem(id);
-        var slot = parseInt(id.charAt(id.length-1));
-        if(!isNaN(slot)) {
-            this.occupied[slot] = false;
-        }
-        */
+        dragged.attr('src', 'images/empty.png');
     }else {
         this.stopVideo();
     }

@@ -9,7 +9,7 @@ var STOPPED=0, PLAYING=1, PAUSED=2;
 var videoPanel = (function() {
     //Timeline
     var timelineSlots = new Array(TIMELINE_SLOTS);
-    var videoPlayers = new Array(TIMELINE_SLOTS);
+    var videoSources = new Array(TIMELINE_SLOTS);
     for(var i=0; i<TIMELINE_SLOTS; ++i) {
         timelineSlots[i] = false;
     }
@@ -22,6 +22,8 @@ var videoPanel = (function() {
     var currentElapsed = 0;
     var timelineOccupied = false;
     var currentPlayer = -1;
+    var videoWidth, videoHeight;
+    var videoPlayer;
 
     return {
         init: function() {
@@ -33,6 +35,10 @@ var videoPanel = (function() {
                     elem = document.getElementById("slot" + i);
                     elem.src = "images/" + src;
                 }
+            }
+            videoPlayer = document.getElementById("videoPlayer");
+            if(!videoPlayer) {
+                console.log("No video player!!");
             }
             //Clear timeline
             for(var i=0; i<NUM_CONTAINERS; ++i) {
@@ -59,15 +65,8 @@ var videoPanel = (function() {
 
             //Video containers
             var vidElem = document.getElementById("timeline0");
-            var videoWidth = vidElem ? vidElem.clientWidth : window.innerWidth * 0.09;
-            if(videoWidth >= 160 || videoWidth < 10) {
-                videoWidth = window.innerWidth * 0.09;
-            }
-            for(var i=0; i<TIMELINE_SLOTS; ++i) {
-                vidElem = document.getElementById("timelineVideo" + i);
-                vidElem.style.width = videoWidth+"px";
-                videoPlayers[i] = vidElem;
-            }
+            videoWidth = vidElem ? vidElem.clientWidth : window.innerWidth * 0.09;
+            videoHeight = vidElem ? vidElem.clientHeight : window.innerHeight * 0.09;
 
             progressBar = document.getElementById("elapsed");
         },
@@ -90,6 +89,8 @@ var videoPanel = (function() {
             var dragged = $(ui.draggable);
             var image = document.getElementById(id);
             image.src = dragged.attr('src');
+            image.style.width = videoWidth + "px";
+            image.style.height = videoHeight + "px";
             //Get video index
             var number = true;
             var value;
@@ -107,7 +108,17 @@ var videoPanel = (function() {
             sessionStorage.setItem("numVideos", numVideos);
             sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
             //Enable next again
-            videoPanel.setTimelineOccupied(true);
+            this.setTimelineOccupied(true);
+            this.setPlayerSource(videoIndex);
+        },
+
+        setPlayerSource: function(index) {
+            for(var i=0; i<TIMELINE_SLOTS; ++i) {
+                if(timelineSlots[i]) {
+                    videoPlayer.src = videoManager.getVideoSource(index);
+                    return;
+                }
+            }
         },
 
         playStory: function() {
@@ -216,7 +227,7 @@ var videoPanel = (function() {
             sessionStorage.removeItem("timeline"+slot);
             //Restore original image
             var timelineSlot = document.getElementById("timeline"+slot);
-            timelineSlot.src = "images/story"+slot+".png";
+            timelineSlot.src = "images/emptyTimeline.png";
             if(numVideos === 0) {
                 videoPanel.setTimelineOccupied(false);
             }
@@ -245,7 +256,7 @@ $(document).ready(function() {
         }
     });
 
-    var dragTimeline = $('.drop img');
+    var dragTimeline = $('.timeDrop img');
     dragTimeline.draggable( {
             revert: "invalid",
         helper: function(event) {
@@ -253,7 +264,7 @@ $(document).ready(function() {
         }
     });
 
-    var targetElem = $('.drop img');
+    var targetElem = $('img[id^=timeline]');
     targetElem.droppable( {
         accept: ".drag img",
         drop: function( event, ui) {
@@ -261,9 +272,9 @@ $(document).ready(function() {
         }
     });
 
-    var trashElem = $('.trash');
+    var trashElem = $('#timeTrash');
     trashElem.droppable( {
-        accept: ".drop img",
+        accept: ".timeDrop img",
         drop: function( event, ui) {
             videoPanel.trash(event, ui);
         }

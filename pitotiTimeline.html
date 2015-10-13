@@ -29,68 +29,50 @@
             <div class="previousPageColumn">
                 <a href="pitotiAR.html"><img src="images/backButton.png"></a>
             </div>
-            <div class="row">
-                <div class="col-md-6 drag">
-                    <img id="slot0" src="images/clip1.png">
-                    <img id="slot1" src="images/clip2.png">
-                    <img id="slot2" src="images/clip3.png">
-                    <img id="slot3" src="images/clip4.png">
-                </div>
-                <div class="col-md-6 drag">
-                    <img id="slot4" src="images/clip5.png">
-                    <img id="slot5" src="images/clip6.png">
-                    <img id="slot6" src="images/clip7.png">
-                    <img id="slot7" src="images/clip8.png">
-                </div>
-            </div>
-            <div class="trash">
-                <img src="images/delete.png">
+            <div id="clipTray" class="drag">
+                <img id="clipTrayImage" src="images/clipTray.png">
+                <img id="slot0" src="images/empty.png">
+                <img id="slot1" src="images/empty.png">
+                <img id="slot2" src="images/empty.png">
+                <img id="slot3" src="images/empty.png">
+                <img id="slot4" src="images/empty.png">
+                <img id="slot5" src="images/empty.png">
+                <img id="slot6" src="images/empty.png">
+                <img id="slot7" src="images/empty.png">
             </div>
         </div>
         <div class="col-md-6 ui-widget-content">
-            <div id="timeline" class="drop row 0%">
-                <div class="col-md-3">
-                    <img id="timeline0" src="images/story0.png">
-                    <video id="timelineVideo0" class="noDisplay">
+            <div id="vidFrame">
+                <img src="images/frame.png">
+                <video id="videoPlayer" width="78%" height="70%" controls>
 
-                    </video>
-                </div>
-                <div class="col-md-3">
-                    <img id="timeline1" src="images/story1.png">
-                    <video id="timelineVideo1" class="noDisplay">
-
-                    </video>
-                </div>
-                <div class="col-md-3">
-                    <img id="timeline2" src="images/story2.png">
-                    <video id="timelineVideo2" class="noDisplay">
-
-                    </video>
-                </div>
-                <div class="col-md-3">
-                    <img id="timeline3" src="images/story3.png">
-                    <video id="timelineVideo3" class="noDisplay">
-
-                    </video>
-                </div>
+                </video>
             </div>
 
-            <video id="videoPlayer" class="noDisplay" width="100%" controls>
-            </video>
+            <div id="timeline" class="timeDrop">
+                <img id="frame" src="images/timeLine.png">
+                <img id="timeline0" src="images/emptyTimeline.png">
+                <img id="timeline1" src="images/emptyTimeline.png">
+                <img id="timeline2" src="images/emptyTimeline.png">
+                <img id="timeline3" src="images/emptyTimeline.png">
+            </div>
 
             <div id="progressContainer">
                 <progress id="elapsed" max="60" value="0">
 
                 </progress>
             </div>
-
-            <div id="playStory">
-                <img src="images/play.png">
+            <div class="row">
+                <div id="timeTrash" class="col-md-4">
+                    <img src="images/delete.png">
+                </div>
+                <div id="timeMic" class="col-md-4">
+                    <img src="images/micOff.png">
+                </div>
+                <div class="col-md-4">
+                    &nbsp;
+                </div>
             </div>
-            <div id="pauseStory" class="noDisplay">
-                <img src="images/pause.png">
-            </div>
-
         </div>
         <div class="col-md-3">
             <div id="nextARPage" class="nextPageColumn">
