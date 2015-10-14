@@ -78,6 +78,14 @@ body {
     background-size: cover;
     height: 100vh;
 }
+.cloudBackground {
+    background: url("../images/cloudBackground.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100vh;
+}
 #notSupported {
     position: absolute;
     top: 15%;
@@ -245,7 +253,7 @@ body {
     cursor:pointer;
     color:#ffffff;
     font-family:Arial;
-    font-size:19px;
+    font-size: 1.6vw;
     padding:20px 37px;
     text-decoration:none;
     text-shadow:0px 1px 0px #283966;
@@ -661,7 +669,7 @@ img[id^="slot"] {
 }
 #videoPlayer {
     position: absolute;
-    top: 15%;
+    top: 10%;
     left: 11%;
 }
 #playStory,
@@ -794,7 +802,8 @@ img[id^="timeline"] {
     vertical-align: middle;
 }
 #buttonContainer button {
-    width: 10%;
+    width: 40%;
+    padding: 5px 0;
 }
 #audioButton {
     margin-top: 5%;
@@ -806,7 +815,7 @@ img[id^="timeline"] {
 
 /* Final page */
 #playStoryFinal {
-    text-align: left;
+
 }
 #playStoryFinal img {
     width: 75%;

@@ -28,41 +28,11 @@
             <video id="videoPlayer" width="100%">
 
             </video>
-            <div id="storyControls" class="row">
-                <div class="col-md-4">
-                    <p>
-                        Click the microphone icon
-                        to record your story
-                    </p>
-                </div>
-                <div id="micContainer" class="col-md-2">
-                    <img id="audioRecord" src="images/recordOff.png">
-                </div>
-                <div id="buttonContainer" class="col-md-6">
-                    <div id="buttons0" class="noDisplay">
-                        <img id="selectButton0" src="images/redCircle.png">
-                        <button id="audioButton0" class="actionButton">Play</button>
-                        <button id="deleteButton0" class="actionButton">Del</button>
-                    </div>
-                    <div id="buttons1" class="noDisplay">
-                        <img id="selectButton1" src="images/redCircle.png">
-                        <button id="audioButton1" class="actionButton">Play</button>
-                        <button id="deleteButton1" class="actionButton">Del</button>
-                    </div>
-                    <div id="buttons2" class="noDisplay">
-                        <img id="selectButton2" src="images/redCircle.png">
-                        <button id="audioButton2" class="actionButton">Play</button>
-                        <button id="deleteButton2" class="actionButton">Del</button>
-                    </div>
-                </div>
-            </div>
-            <progress id="audioProgress" max="60" value="0">
 
-            </progress>
-            <div id="finalControls" class="noDisplay">
+            <div id="finalControls">
                 <div class="row">
                     <div id="playStoryFinal" class="col-md-4">
-                        <img src="images/playStory.png">
+                        <button class="actionButton">Play Story</button>
                     </div>
                     <div class="col-md-4">
                         <form id="uploadForm" method="POST">
@@ -81,7 +51,7 @@
                 </div>
                 <div id="createFinal" class="row">
                     <div class="col-md-4">
-                        <a href="pitotiAR.html"><img src="images/createStory.png"></a>
+                        <a href="pitotiAR.html"><button class="actionButton">Create new story</button></a>
                     </div>
                     <div class="col-md-4">
                         &nbsp;

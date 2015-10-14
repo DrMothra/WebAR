@@ -5,7 +5,8 @@ var NUM_CONTAINERS = 8;
 var TIMELINE_SLOTS = 4;
 var MAX_VIDEO_TIME = 60;
 var STOPPED=0, PLAYING=1, PAUSED=2;
-var MAX_BUFFERS = 3;
+var MAX_BUFFERS = 2;
+var RECORDING = 0, UPLOADING = 1;
 
 var audioSystem = (function() {
     //Set up variables
@@ -491,9 +492,59 @@ var videoPlayer = (function() {
     }
 })();
 
+function showUploadPage() {
+    //Hide previous elements - show upload
+    $('#timeLineControls').hide();
+    $('#clipTray').hide();
+    $('#azirTimeline').hide();
+
+    //Upload
+    $('#vidFrame').show();
+    $('#finalControls').show();
+    $('#previousTimelinePage').show();
+    $('#nextARPage').show();
+
+    $('#configureEntry').hide();
+}
+
+function showTimelinePage() {
+    //Hide uploads - show timeline
+    $('#timeLineControls').show();
+    $('#clipTray').show();
+    $('#azirTimeline').show();
+
+    //Upload
+    $('#finalControls').hide();
+}
+
+function getUserDetails() {
+    $('#vidFrame').hide();
+    $('#finalControls').hide();
+    $('#nextPageRecord').hide();
+    $('#previousTimelinePage').hide();
+    $('#nextARPage').hide();
+
+    $('#configureEntry').show();
+}
+
+function uploadStory() {
+    var status = $('#uploadStatus');
+    status.html("Uploading...");
+    status.show();
+
+    var bufferOK = audioSystem.setRecorderBuffer();
+    if(!bufferOK) {
+        alert("No audio selected!");
+        return;
+    }
+
+    audioSystem.uploadAudio();
+}
 
 $(window).load(function() {
     //Init
+    var pageStatus = RECORDING;
+
     videoPlayer.init();
 
     //Audio
@@ -535,9 +586,32 @@ $(window).load(function() {
         }
     });
 
+    $('#previousTimelinePage').on("click", function() {
+        switch(pageStatus) {
+            case RECORDING:
+                window.location.href = "pitotiAR.html";
+                break;
+
+            case UPLOADING:
+                showTimelinePage();
+                videoPlayer.rewind();
+                pageStatus = RECORDING;
+                break;
+
+            default:
+                break;
+        }
+    });
+
     $('#nextARPage').on("click", function() {
         if(videoPlayer.timelineOccupied()) {
-            window.location.href = "pitotiRecord.html";
+            if(!audioSystem.audioSelected()) {
+                alert("No audio selected, click the mic then select the audio (red button)");
+                return;
+            }
+            showUploadPage();
+            videoPlayer.rewind();
+            pageStatus = UPLOADING;
         } else {
             alert("No clips in timeline");
         }
@@ -545,6 +619,10 @@ $(window).load(function() {
 
     //Callbacks
     $('#audioRecord').on('click', function() {
+        if(!videoPlayer.timelineOccupied()) {
+            alert("No clips in timeline!");
+            return;
+        }
         audioSystem.toggleRecording();
         if(audioSystem.isStopped()) {
             audioSystem.ready();
@@ -554,6 +632,51 @@ $(window).load(function() {
             videoPlayer.playBack();
         }
     });
+
+    $('#playStoryFinal').on("click", function() {
+        videoPlayer.rewind();
+        videoPlayer.playBack();
+        audioSystem.playNextBuffer();
+    });
+
+    var gotDetails = false;
+    $('#uploadStory').on("click", function() {
+        if(gotDetails) {
+            uploadStory();
+        } else {
+            getUserDetails();
+        }
+    });
+
+    $('#cancelDetails').on("click", function() {
+        showUploadPage();
+        gotDetails = false;
+    });
+
+    //Store user details
+    var uploadStatus = true;
+    var userForm = document.getElementById("enterDetails");
+    userForm.onsubmit = function(event) {
+        event.preventDefault();
+
+        var name = $('#name').val();
+        var mail = $('#mail').val();
+        if(name === "") {
+            alert("Please enter valid name");
+            return;
+        }
+        if(mail === "") {
+            alert("Please enter valid e-mail");
+            return;
+        }
+
+        sessionStorage.setItem("userName", name);
+        sessionStorage.setItem("userMail", mail);
+
+        showUploadPage();
+
+        uploadStatus = uploadStory();
+    };
 
     var index;
     $('[id^=audioButton]').on("click", function() {
