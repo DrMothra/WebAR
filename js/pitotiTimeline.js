@@ -13,7 +13,6 @@ var videoPanel = (function() {
     for(var i=0; i<TIMELINE_SLOTS; ++i) {
         timelineSlots[i] = false;
     }
-    var videoStatus = STOPPED;
     var numVideos = 0;
     var checkInterval = 1000;
     var videoChecker;
@@ -21,7 +20,9 @@ var videoPanel = (function() {
     var progressBar;
     var currentElapsed = 0;
     var timelineOccupied = false;
-    var currentPlayer = -1;
+    var currentTimeslot = -1;
+    var videoPlaying = false;
+    var timerRunning = false;
     var videoWidth, videoHeight;
     var videoPlayer;
 
@@ -55,7 +56,7 @@ var videoPanel = (function() {
             dragImage.src = "images/dragTimeline.png";
             dragImage.style.width = imageWidth +"px";
             //DEBUG
-            console.log("Width =", imageWidth);
+            //console.log("Width =", imageWidth);
             dragImage.style.zIndex = "100";
 
             dragTrashImage = document.createElement("img");
@@ -67,6 +68,9 @@ var videoPanel = (function() {
             var vidElem = document.getElementById("timeline0");
             videoWidth = vidElem ? vidElem.clientWidth : window.innerWidth * 0.09;
             videoHeight = vidElem ? vidElem.clientHeight : window.innerHeight * 0.09;
+
+            //DEBUG
+            //console.log("Width =", videoWidth, "Height =", videoHeight);
 
             progressBar = document.getElementById("elapsed");
         },
@@ -105,6 +109,29 @@ var videoPanel = (function() {
             var videoIndex = parseInt(image.src.substring(index+2, image.src.length));
             timelineSlots[slot] = true;
             ++numVideos;
+            if(!timerRunning) {
+                videoChecker = setInterval(function() {
+                    if(!videoPlaying) return;
+                    if(videoPlayer.ended) {
+                        //Get next video
+                        ++currentTimeslot;
+                        for(var i=currentTimeslot; i<TIMELINE_SLOTS; ++i) {
+                            if(timelineSlots[i]) {
+                                videoPlayer.src = videoManager.getVideoSource(i);
+                                videoPlayer.play();
+                                videoPlaying = true;
+                                break;
+                            }
+                        }
+                        if(!videoPlaying) {
+                            //Finished
+                            currentTimeslot = -1;
+                            clearInterval(videoChecker);
+                            return;
+                        }
+                    }
+                }, checkInterval)
+            }
             sessionStorage.setItem("numVideos", numVideos);
             sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
             //Enable next again
@@ -122,10 +149,9 @@ var videoPanel = (function() {
         },
 
         playStory: function() {
-            if(videoStatus === PAUSED) {
-                if(currentPlayer >= 0) {
-                    videoPlayers[currentPlayer].play();
-                    videoStatus = PLAYING;
+            if(videoPlayer.paused) {
+                if(videoPlayer.src) {
+                    videoPlayer.play();
                     return true;
                 }
             }
@@ -244,7 +270,7 @@ var videoPanel = (function() {
 })();
 
 
-$(document).ready(function() {
+$(window).load(function() {
     //Init
     videoPanel.init();
 
