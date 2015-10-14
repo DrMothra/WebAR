@@ -10,6 +10,7 @@
     <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
 
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/recordmp3.js?v=0.1"></script>
     <script type="text/javascript" src="js/videoManager.js"></script>
     <script type="text/javascript" src="js/pitotiTimeline.js?v=0.7"></script>
 
@@ -57,8 +58,8 @@
                 <img id="timeline3" src="images/emptyTimeline.png">
             </div>
 
-            <div id="progressContainer">
-                <progress id="elapsed" max="60" value="0">
+            <div>
+                <progress id="audioProgress" max="60" value="0">
 
                 </progress>
             </div>
@@ -66,11 +67,22 @@
                 <div id="timeTrash" class="col-md-4">
                     <img src="images/delete.png">
                 </div>
-                <div id="timeMic" class="col-md-4">
-                    <img src="images/micOff.png">
+                <div id="micContainer" class="col-md-4">
+                    <img id="audioRecord" src="images/micOff.png">
                 </div>
                 <div class="col-md-4">
-                    &nbsp;
+                    <div id="buttonContainer">
+                        <div id="buttons0" class="noDisplay">
+                            <img id="selectButton0" src="images/redCircle.png">
+                            <button id="audioButton0" class="actionButton">Play</button>
+                            <button id="deleteButton0" class="actionButton">Del</button>
+                        </div>
+                        <div id="buttons1" class="noDisplay">
+                            <img id="selectButton1" src="images/redCircle.png">
+                            <button id="audioButton1" class="actionButton">Play</button>
+                            <button id="deleteButton1" class="actionButton">Del</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,7 +96,8 @@
                     <p>
                         Drag and drop up to<br>
                         4 clips into your<br>
-                        story and press play!
+                        story then record<br>
+                        your audio!
                     </p>
                 </div>
             </div>

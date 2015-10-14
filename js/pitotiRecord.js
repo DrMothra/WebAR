@@ -448,17 +448,7 @@ $(document).ready(function() {
 
     var pageStatus = RECORDING;
 
-    //Callbacks
-    $('#audioRecord').on('click', function() {
-        audioSystem.toggleRecording();
-        if(audioSystem.isStopped()) {
-            audioSystem.ready();
-            audioSystem.updateControls();
-        } else {
-            videoPlayer.rewind();
-            videoPlayer.playBack();
-        }
-    });
+
 
     $('#playStoryRecord').on("click", function() {
         videoPlayer.playBack();

@@ -721,10 +721,10 @@ img[id^="timeline"] {
 #timeTrash img {
     width: 45%;
 }
-#timeMic {
+#micContainer {
     margin-top: 2%;
 }
-#timeMic img {
+#micContainer img {
     width: 50%;
 }
 #azirTimeline img {
@@ -755,9 +755,6 @@ img[id^="timeline"] {
     background-color: #7892c2;
     border-radius: 15px;
     text-align: center;
-}
-#audioRecord {
-    text-align: left;
 }
 #nextPageRecord {
     text-align: right;
@@ -790,10 +787,14 @@ img[id^="timeline"] {
 }
 #buttonContainer {
     margin-top: 2.5%;
+    text-align: left;
 }
 #buttonContainer img {
     width: 15%;
     vertical-align: middle;
+}
+#buttonContainer button {
+    width: 10%;
 }
 #audioButton {
     margin-top: 5%;
@@ -801,10 +802,6 @@ img[id^="timeline"] {
 #audioProgress {
     width: 100%;
 }
-#micContainer {
-    margin-top: 7.5%;
-}
-
 
 
 /* Final page */
