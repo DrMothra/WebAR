@@ -60,11 +60,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 /* Common page styles */
 
 html {
-    background: url("../images/rockBackground.jpg") no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+
 }
 
 body {
@@ -80,6 +76,14 @@ body {
 }
 .cloudBackground {
     background: url("../images/cloudBackground.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100vh;
+}
+.rockBackground {
+    background: url("../images/rockBackground.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -132,10 +136,10 @@ body {
 }
 .previousPageColumn {
     text-align: left;
-    margin: 2% 0 0 2%;
+    margin: 0;
 }
 .previousPageColumn img {
-    width: 100%;
+    width: 90%;
 }
 .previousPage {
     text-align: left;
@@ -151,7 +155,7 @@ body {
     margin-right: 2.5%;
 }
 .nextPageColumn img {
-    width: 100%;
+    width: 90%;
 }
 .nextPage {
     text-align: right;
@@ -570,7 +574,7 @@ body {
 
 /* Create page */
 #instructions {
-    background: url("../images/instructions.jpg") no-repeat center center fixed;
+    background: url("../images/markerPage.png") no-repeat center center fixed;
     background-size: cover;
 }
 #instructionArrows {
@@ -585,16 +589,16 @@ body {
 }
 .drop img {
     width: 100%;
-    margin: 5% 0;
 }
 #nextARPage {
 
 }
 #clipTray {
     position: relative;
+    top: 0px;
 }
 #clipTrayImage {
-    width: 80%;
+    width: 75%;
 }
 img[id^="slot"] {
     position: absolute;
@@ -634,7 +638,7 @@ img[id^="slot"] {
     left: 52.5%;
 }
 .trash {
-    margin-top: 45%;
+    margin-top: 25%;
     text-align: left;
 }
 .trash img {
@@ -748,7 +752,9 @@ img[id^="timeline"] {
 #progressContainer progress {
     width: 100%;
 }
-
+#finalControls button {
+    margin-bottom: 5%;
+}
 
 
 /* Record page */

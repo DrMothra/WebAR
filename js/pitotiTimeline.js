@@ -19,6 +19,7 @@ var audioSystem = (function() {
     var elapsedTime = 0;
     var checkInterval = 1000;
     var started = false, stopped = false;
+    var uploaded = false;
 
     return {
         init: function () {
@@ -202,12 +203,16 @@ var audioSystem = (function() {
                     formData.append("userName", userName);
                 } else {
                     alert("No user name");
+                    uploaded = false;
+                    return;
                 }
                 var email = sessionStorage.getItem("userMail");
                 if(email) {
                     formData.append("email", email);
                 } else {
                     alert("No e-mail");
+                    uploaded = false;
+                    return;
                 }
 
                 var audioFilename = "story_" + userName + "_" + new Date().toUTCString() + ".mp3";
@@ -247,11 +252,11 @@ var audioSystem = (function() {
                             status.html("Story uploaded!");
                             console.log("Uploaded");
                             console.log("Response =", xhr.responseText);
-                            return true;
+                            uploaded = true;
                         } else {
                             console.log("Error uploading");
                             status.html("Upload failed - try again");
-                            return false;
+                            uploaded = false;
                         }
                     }
                 };
@@ -259,6 +264,10 @@ var audioSystem = (function() {
                 //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
                 xhr.send(formData);
             });
+        },
+
+        getUploadStatus: function() {
+            return uploaded;
         }
     };
 
@@ -604,16 +613,34 @@ $(window).load(function() {
     });
 
     $('#nextARPage').on("click", function() {
-        if(videoPlayer.timelineOccupied()) {
-            if(!audioSystem.audioSelected()) {
-                alert("No audio selected, click the mic then select the audio (red button)");
-                return;
-            }
-            showUploadPage();
-            videoPlayer.rewind();
-            pageStatus = UPLOADING;
-        } else {
-            alert("No clips in timeline");
+        switch(pageStatus) {
+            case RECORDING:
+                if(videoPlayer.timelineOccupied()) {
+                    if(!audioSystem.audioSelected()) {
+                        alert("No audio selected, click the mic then select the audio (red button)");
+                        return;
+                    }
+                    showUploadPage();
+                    videoPlayer.rewind();
+                    pageStatus = UPLOADING;
+                } else {
+                    alert("No clips in timeline");
+                }
+                break;
+
+            case UPLOADING:
+                if(!audioSystem.getUploadStatus()) {
+                    var discard = confirm("This will discard your story!");
+                    if(discard) {
+                        window.location.href = "pitotiThanks.html";
+                    }
+                } else {
+                    window.location.href = "pitotiThanks.html";
+                }
+                break;
+
+            default:
+                break;
         }
     });
 
@@ -654,7 +681,7 @@ $(window).load(function() {
     });
 
     //Store user details
-    var uploadStatus = true;
+    var uploadStatus = false;
     var userForm = document.getElementById("enterDetails");
     userForm.onsubmit = function(event) {
         event.preventDefault();
@@ -675,7 +702,7 @@ $(window).load(function() {
 
         showUploadPage();
 
-        uploadStatus = uploadStory();
+        uploadStory();
     };
 
     var index;
