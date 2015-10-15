@@ -156,6 +156,9 @@ var audioSystem = (function() {
         },
 
         selectEntry: function(index) {
+            for(var i= 0, len=audioSelected.length; i<len; ++i) {
+                audioSelected[i] = false;
+            }
             audioSelected[index] = true;
         },
 
@@ -304,6 +307,7 @@ var videoPlayer = (function() {
     var videoWidth, videoHeight;
     var videoPlayer;
     var started = false;
+    var videoPlaying = false;
 
     return {
         init: function() {
@@ -401,6 +405,7 @@ var videoPlayer = (function() {
                 videoChecker = setInterval(function() {
                     if(!started && videoPlayer.currentTime != 0) {
                         started = true;
+                        videoPlaying = true;
                         return;
                     }
                     if(started && videoPlayer.ended) {
@@ -420,6 +425,7 @@ var videoPlayer = (function() {
                         }
                         if(!playing) {
                             //Finished
+                            videoPlaying = false;
                             currentTimeslot = -1;
                             timerRunning = false;
                             clearInterval(videoChecker);
@@ -432,13 +438,13 @@ var videoPlayer = (function() {
             sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
             //Enable next again
             this.setTimelineOccupied(true);
-            this.setPlayerSource(videoIndex);
+            this.setPlayerSource();
         },
 
-        setPlayerSource: function(index) {
+        setPlayerSource: function() {
             for(var i=0; i<TIMELINE_SLOTS; ++i) {
                 if(timelineSlots[i]) {
-                    videoPlayer.src = videoManager.getVideoSource(index);
+                    videoPlayer.src = videoManager.getVideoSource(videoSources[i]);
                     currentTimeslot = i;
                     return;
                 }
@@ -497,6 +503,10 @@ var videoPlayer = (function() {
 
         timelineOccupied: function() {
             return timelineOccupied;
+        },
+
+        getStatus: function() {
+            return timerRunning;
         }
     }
 })();
@@ -722,6 +732,8 @@ $(window).load(function() {
         index = parseInt(this.id.charAt(this.id.length-1));
         $('[id^=selectButton]').attr("src", "images/redCircle.png");
         $('#selectButton'+index).attr("src", "images/greenCircle.png");
+        //DEBUG
+        console.log("Selected index ", index);
         audioSystem.selectEntry(index);
     });
 
