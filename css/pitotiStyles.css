@@ -64,7 +64,7 @@ html {
 }
 
 body {
-    background-color: transparent;
+
 }
 #startImage {
     background: url("../images/startPage.png") no-repeat center center fixed;
@@ -89,6 +89,9 @@ body {
     -o-background-size: cover;
     background-size: cover;
     height: 100vh;
+}
+.blankBackground {
+    background-color: white;
 }
 #notSupported {
     position: absolute;
