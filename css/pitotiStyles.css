@@ -137,6 +137,11 @@ body {
     bottom: 2%;
     left: 2%;
 }
+.homeRight {
+    position: absolute;
+    bottom: 3%;
+    right: 5%;
+}
 .previousPageColumn {
     text-align: left;
     margin: 0;
