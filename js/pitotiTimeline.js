@@ -257,9 +257,6 @@ var audioSystem = (function() {
                     if(xhr.readyState === 4) {
                         if(xhr.status === 200) {
                             status.html("Story uploaded!");
-                            //DEBUG
-                            //var vids = JSON.parse(xhr.responseText);
-                            console.log("Response = ", xhr.responseText);
                             uploaded = true;
                         } else {
                             console.log("Error uploading");

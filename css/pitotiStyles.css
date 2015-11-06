@@ -66,6 +66,9 @@ html {
 body {
 
 }
+h1 {
+    font-size: 3vw;
+}
 #startImage {
     background: url("../images/startPage.png") no-repeat center center fixed;
     -webkit-background-size: cover;
@@ -119,6 +122,9 @@ body {
 }
 .noDisplay {
     display: none;
+}
+.centred {
+    text-align: center;
 }
 .page {
     text-align: center;
@@ -252,7 +258,8 @@ body {
     }
 }
 /* Buttons */
-.actionButton {
+.actionButton,
+.actionButtonSlim {
     -moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
     -webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
     box-shadow: 0px 0px 0px 2px #9fb4f2;
@@ -269,6 +276,9 @@ body {
     padding:20px 37px;
     text-decoration:none;
     text-shadow:0px 1px 0px #283966;
+}
+.actionButtonSlim {
+    padding: 10px 15px;
 }
 .actionButton:hover {
     background-color:#476e9e;
@@ -918,3 +928,12 @@ input[type=file] {
 }
 
 
+/* Story page */
+#storyTitle {
+    font-family: "montserrat", sans-serif;
+    text-align: center;
+    margin: 2% 0;
+}
+form button {
+    margin: 3% 0;
+}
