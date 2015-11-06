@@ -218,10 +218,10 @@ var audioSystem = (function() {
                     return;
                 }
 
-                var audioFilename = "story_" + userName + "_" + new Date().toUTCString() + ".mp3";
+                var audioFilename = userName + "_";
 
 
-                formData.append("audioFile", blob, audioFilename);
+                //formData.append("audioFile", blob, audioFilename);
 
                 //Get videos
                 var video, index;
@@ -239,12 +239,16 @@ var audioSystem = (function() {
                             --index;
                         }
                         index = parseInt(video.substring(index+2, video.length));
-                        //DEBUG
-                        console.log("Video =", videoManager.getVideoSource(index));
 
-                        formData.append("video"+slot, videoManager.getVideoSource(index));
+                        audioFilename += index.toString() + "_";
                     }
                 }
+                audioFilename += new Date().toUTCString() + ".mp3";
+                //DEBUG
+                console.log("audioFilename =", audioFilename);
+
+                formData.append("audioFile", blob, audioFilename);
+
                 //Send data
                 var status = $('#uploadStatus');
                 var xhr = new XMLHttpRequest();
@@ -253,8 +257,9 @@ var audioSystem = (function() {
                     if(xhr.readyState === 4) {
                         if(xhr.status === 200) {
                             status.html("Story uploaded!");
-                            console.log("Uploaded");
-                            console.log("Response =", xhr.responseText);
+                            //DEBUG
+                            //var vids = JSON.parse(xhr.responseText);
+                            console.log("Response = ", xhr.responseText);
                             uploaded = true;
                         } else {
                             console.log("Error uploading");
