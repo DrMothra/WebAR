@@ -937,3 +937,17 @@ input[type=file] {
 form button {
     margin: 3% 0;
 }
+#storyInfo {
+
+}
+#storyInfo p {
+    font-family: "montserrat", sans-serif;
+    text-align: center;
+    font-size: 1.8vw;
+}
+#stories {
+    margin-top: 3%;
+}
+#stories p {
+    font-size: 1.4vw;
+}

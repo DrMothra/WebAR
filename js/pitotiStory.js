@@ -6,7 +6,9 @@
 $(document).ready(function() {
 
     var userData = new FormData();
+    var userStories = [];
 
+    /*
     $('#nameEntered').on("click", function() {
         var userName = $('#username').val();
         if(!userName) {
@@ -21,6 +23,12 @@ $(document).ready(function() {
             if(xhr.readyState === 4) {
                 if(xhr.status === 200) {
                     console.log(xhr.responseText);
+                    //DEBUG
+                    var numStories = userStories.length;
+                    if(numStories === 0) {
+                        $('#noStories').show();
+                        return;
+                    }
                 } else {
                     console.log("Error uploading");
                 }
@@ -29,5 +37,13 @@ $(document).ready(function() {
 
         xhr.send(userData);
     });
+    */
 
+    $('#nameEntered').on("click", function() {
+        var numStories = userStories.length;
+        if(numStories === 0) {
+            $('#noStories').show();
+            return;
+        }
+    });
 });
