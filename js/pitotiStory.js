@@ -6,7 +6,7 @@
 $(document).ready(function() {
 
     var userData = new FormData();
-    var userStories = [];
+    var userStories = ["Tony G"];
 
     /*
     $('#nameEntered').on("click", function() {
@@ -44,6 +44,21 @@ $(document).ready(function() {
         if(numStories === 0) {
             $('#noStories').show();
             return;
+        } else {
+            var start = $('.page');
+            start.append(
+                $('<div/>')
+                    .attr("id", "row1")
+                    .addClass("row")
+            );
+            for(var i=0; i<4; ++i) {
+                $('#row1').append(
+                    $('<div/>')
+                        .addClass("col-md-3")
+                        .html("<p>Story"+i+"</p>")
+                        .append("<button class='actionButton'>PLAY</button>")
+                )
+            }
         }
     });
 });
