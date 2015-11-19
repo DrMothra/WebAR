@@ -951,3 +951,6 @@ form button {
 #stories p {
     font-size: 1.4vw;
 }
+div[id^="row"] {
+    margin-bottom: 5%;
+}
