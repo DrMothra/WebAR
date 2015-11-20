@@ -24,7 +24,12 @@ function displayStories(numStories) {
                 $('<div/>')
                     .addClass(divideClass)
                     .html("<p>Story "+currentStory+"</p>")
-                    .append("<button class='actionButton'>PLAY</button>")
+                    .append(
+                        $('<button/>')
+                            .addClass("actionButton")
+                            .attr("id", "playStory"+currentStory)
+                            .text("PLAY")
+                    )
             );
             ++currentStory;
         }
@@ -61,7 +66,15 @@ function displayStories(numStories) {
                 $('<div/>')
                     .addClass(divideClass)
                     .html("<p>Story "+currentStory+"</p>")
-                    .append("<button class='actionButton'>PLAY</button>")
+                    .append(
+                        $('<button/>')
+                            .addClass("actionButton")
+                            .attr("id", "playStory"+currentStory)
+                            .text("PLAY")
+                            .click(function() {
+                                console.log("You clicked", this.id);
+                            })
+                    )
             );
             ++currentStory;
         }
@@ -92,6 +105,8 @@ function getVideos(videoNames) {
     for(var i=0; i<videoIndices.length; ++i) {
         videoIndices[i] = videoSources[videoIndices[i]];
     }
+
+    return videoIndices;
 }
 
 $(document).ready(function() {
@@ -126,7 +141,6 @@ $(document).ready(function() {
     });
     */
 
-
     $('#nameEntered').on("click", function() {
         var numStories = userStories.length;
         if(numStories === 0) {
@@ -140,7 +154,7 @@ $(document).ready(function() {
             var videoIndex = userStories[0].indexOf(userName);
             if(videoIndex >= 0) {
                 videoNames = videoNames.substring(videoIndex+offset, videoNames.length-4);
-                getVideos(videoNames);
+                var videos = getVideos(videoNames);
             }
         }
     });
