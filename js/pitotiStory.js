@@ -2,6 +2,10 @@
  * Created by atg on 06/11/2015.
  */
 
+var userName;
+var buttonIdTag = "playStory";
+var userStories = [".\/uploads\/Tony G_0_3_12_1_Thu, 05 Nov 2015 17:26:53 GMT.mp3"];
+
 function displayStories(numStories) {
     var startPlace = $('.page');
     var startName = "row";
@@ -27,8 +31,11 @@ function displayStories(numStories) {
                     .append(
                         $('<button/>')
                             .addClass("actionButton")
-                            .attr("id", "playStory"+currentStory)
+                            .attr("id", buttonIdTag+currentStory)
                             .text("PLAY")
+                            .click(function() {
+                                console.log("You clicked", this.id);
+                            })
                     )
             );
             ++currentStory;
@@ -69,10 +76,18 @@ function displayStories(numStories) {
                     .append(
                         $('<button/>')
                             .addClass("actionButton")
-                            .attr("id", "playStory"+currentStory)
+                            .attr("id", buttonIdTag+currentStory)
                             .text("PLAY")
                             .click(function() {
-                                console.log("You clicked", this.id);
+                                var videos = getVideos(this.id);
+                                if(!videos.length) {
+                                    console.log("No videos retrieved!");
+                                    return;
+                                }
+                                for(var i= 0,length=videos.length; i<length; ++i) {
+                                    sessionStorage.setItem("videoStory"+i, videos[i]);
+                                }
+                                window.location.href = "pitotiStoryTelling.html";
                             })
                     )
             );
@@ -82,7 +97,22 @@ function displayStories(numStories) {
 
 }
 
-function getVideos(videoNames) {
+function getVideos(storyIndex) {
+    storyIndex = storyIndex.substr(buttonIdTag.length);
+    storyIndex = parseInt(storyIndex);
+    if(isNaN(storyIndex)) {
+        console.log("Invalid index!");
+        return;
+    } else {
+        --storyIndex;
+    }
+    var offset = userName.length;
+    var videoNames = userStories[storyIndex];
+    var videoIndex = userStories[storyIndex].indexOf(userName);
+    if(videoIndex >= 0) {
+        videoNames = videoNames.substring(videoIndex+offset, videoNames.length-4);
+    }
+
     var gotVideos = false;
     var currentIndex;
     var numberOffset;
@@ -98,12 +128,8 @@ function getVideos(videoNames) {
         }
     }
     //Get associated videos
-    var videoSources = ['videos/axeMan.mp4', 'videos/deers.mp4', 'videos/horseWarrior.mp4', 'videos/house.mp4', 'videos/manHorse.mp4', 'videos/manBeasts.mp4',
-        'videos/manHunt.mp4', 'videos/warrior1.mp4', 'videos/marching.mp4', 'videos/morph.mp4', 'videos/headDress.mp4', 'videos/spearHunt.mp4', 'videos/tallMorph.mp4',
-        'videos/manuel.mp4', 'videos/warrior2.mp4', 'videos/plough.mp4'];
-
     for(var i=0; i<videoIndices.length; ++i) {
-        videoIndices[i] = videoSources[videoIndices[i]];
+        videoIndices[i] = videoManager.getVideoSource(videoIndices[i], HIGH);
     }
 
     return videoIndices;
@@ -112,7 +138,7 @@ function getVideos(videoNames) {
 $(document).ready(function() {
 
     var userData = new FormData();
-    var userStories = [".\/uploads\/Tony G_0_3_12_1_Thu, 05 Nov 2015 17:26:53 GMT.mp3"];
+
 
     /*
     $('#nameEntered').on("click", function() {
@@ -148,14 +174,7 @@ $(document).ready(function() {
             return;
         } else {
             displayStories(numStories);
-            var userName = "Tony G" + "_";
-            var offset = userName.length;
-            var videoNames = userStories[0];
-            var videoIndex = userStories[0].indexOf(userName);
-            if(videoIndex >= 0) {
-                videoNames = videoNames.substring(videoIndex+offset, videoNames.length-4);
-                var videos = getVideos(videoNames);
-            }
+            userName = "Tony G" + "_";
         }
     });
 

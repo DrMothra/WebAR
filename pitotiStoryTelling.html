@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>AR Framework</title>
+
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/videoManager.js?v=0.3"></script>
+    <script type="text/javascript" src="js/pitotiStoryTelling.js?v=0.1"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
+    <link href="css/pitotiStyles.css?v=0.12" rel="stylesheet" type="text/css">
+
+</head>
+<body class="cloudBackground">
+
+<div class="page container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div id="previousTimelinePage" class="previousPageColumn">
+                <a href="pitotiStory.html"><img src="images/backButton.png"></a>
+            </div>
+        </div>
+
+        <div class="col-md-6 ui-widget-content">
+            <div id="vidFrame">
+                <img src="images/frame.png">
+                <video id="videoPlayer" width="78%" height="80%" controls>
+
+                </video>
+            </div>
+
+            <div id="playStoryFinal">
+                <button class="actionButton">Play Story</button>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            &nbsp;
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
