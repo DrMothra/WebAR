@@ -402,6 +402,45 @@ var videoPlayer = (function() {
             console.log("Video =", videoIndex);
 
             ++numVideos;
+            this.startVideoTimer();
+
+            sessionStorage.setItem("numVideos", numVideos);
+            sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
+            //Enable next again
+            this.setTimelineOccupied(true);
+            this.setPlayerSource();
+        },
+
+        setPlayerSource: function() {
+            for(var i=0; i<TIMELINE_SLOTS; ++i) {
+                if(timelineSlots[i]) {
+                    videoPlayer.src = videoManager.getVideoSource(videoSources[i]);
+                    currentTimeslot = i;
+                    return;
+                }
+            }
+        },
+
+        getFirstTimeslot: function() {
+            for(var i=0; i<TIMELINE_SLOTS; ++i) {
+                if(timelineSlots[i]) {
+                    return videoSources[i];
+                }
+            }
+            console.log("Slots empty");
+            return -1;
+        },
+
+        playBack: function() {
+            if(numVideos === 0) {
+                alert("No videos in timeline!");
+                return;
+            }
+            videoPlayer.play();
+            this.startVideoTimer();
+        },
+
+        startVideoTimer: function() {
             if(!timerRunning) {
                 timerRunning = true;
                 videoChecker = setInterval(function() {
@@ -436,39 +475,6 @@ var videoPlayer = (function() {
                     }
                 }, checkInterval)
             }
-            sessionStorage.setItem("numVideos", numVideos);
-            sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
-            //Enable next again
-            this.setTimelineOccupied(true);
-            this.setPlayerSource();
-        },
-
-        setPlayerSource: function() {
-            for(var i=0; i<TIMELINE_SLOTS; ++i) {
-                if(timelineSlots[i]) {
-                    videoPlayer.src = videoManager.getVideoSource(videoSources[i]);
-                    currentTimeslot = i;
-                    return;
-                }
-            }
-        },
-
-        getFirstTimeslot: function() {
-            for(var i=0; i<TIMELINE_SLOTS; ++i) {
-                if(timelineSlots[i]) {
-                    return videoSources[i];
-                }
-            }
-            console.log("Slots empty");
-            return -1;
-        },
-
-        playBack: function() {
-            if(numVideos === 0) {
-                alert("No videos in timeline!");
-                return;
-            }
-            videoPlayer.play();
         },
 
         rewind: function() {
