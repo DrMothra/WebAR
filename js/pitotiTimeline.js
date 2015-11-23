@@ -304,12 +304,13 @@ var videoPlayer = (function() {
     var progressBar;
     var currentElapsed = 0;
     var timelineOccupied = false;
-    var currentTimeslot = -1;
+    var currentTimeslot = 0;
     var timerRunning = false;
     var videoWidth, videoHeight;
     var videoPlayer;
     var started = false;
     var videoPlaying = false;
+    var _this = this;
 
     return {
         init: function() {
@@ -358,6 +359,7 @@ var videoPlayer = (function() {
             //console.log("Width =", videoWidth, "Height =", videoHeight);
 
             progressBar = document.getElementById("elapsed");
+            this.startVideoTimer();
         },
 
         getDragImage: function() {
@@ -402,7 +404,6 @@ var videoPlayer = (function() {
             console.log("Video =", videoIndex);
 
             ++numVideos;
-            this.startVideoTimer();
 
             sessionStorage.setItem("numVideos", numVideos);
             sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
@@ -437,44 +438,42 @@ var videoPlayer = (function() {
                 return;
             }
             videoPlayer.play();
-            this.startVideoTimer();
         },
 
         startVideoTimer: function() {
-            if(!timerRunning) {
-                timerRunning = true;
-                videoChecker = setInterval(function() {
-                    if(!started && videoPlayer.currentTime != 0) {
-                        started = true;
-                        videoPlaying = true;
-                        return;
-                    }
-                    if(started && videoPlayer.ended) {
-                        //Get next video
-                        ++currentTimeslot;
-                        var playing = false;
-                        for(var i=currentTimeslot; i<TIMELINE_SLOTS; ++i) {
-                            if(timelineSlots[i]) {
-                                videoPlayer.src = videoManager.getVideoSource(videoSources[i]);
-                                videoPlayer.play();
-                                playing = true;
-                                currentTimeslot = i;
-                                //DEBUG
-                                console.log("timeslot =", currentTimeslot);
-                                break;
-                            }
-                        }
-                        if(!playing) {
-                            //Finished
-                            videoPlaying = false;
-                            currentTimeslot = -1;
-                            timerRunning = false;
-                            clearInterval(videoChecker);
-                            return;
+            videoChecker = setInterval(function() {
+                if(videoPlayer.ended) {
+                    //Get next video
+                    if(videoPlayer.currentTime === 0) return;
+                    //DEBUG
+                    console.log("Video ended");
+                    ++currentTimeslot;
+                    console.log("Timeslot now ", currentTimeslot);
+                    var playing = false;
+                    for(var i=currentTimeslot; i<TIMELINE_SLOTS; ++i) {
+                        if(timelineSlots[i]) {
+                            //DEBUG
+                            console.log("Playing next video");
+                            videoPlayer.src = videoManager.getVideoSource(videoSources[i]);
+                            videoPlayer.play();
+                            playing = true;
+                            currentTimeslot = i;
+                            //DEBUG
+                            console.log("current timeslot =", currentTimeslot);
+                            break;
                         }
                     }
-                }, checkInterval)
-            }
+                    if(!playing) {
+                        //Finished
+                        //DEBUG
+                        console.log("Finished");
+                        videoPlaying = false;
+                        currentTimeslot = 0;
+                        videoPlayer.currentTime = 0;
+                        videoPlayer.src = videoManager.getVideoSource(videoSources[0]);
+                    }
+                }
+            }, checkInterval)
         },
 
         rewind: function() {
