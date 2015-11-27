@@ -397,7 +397,7 @@ h1 {
 }
 #aboutButtons img {
     vertical-align: middle;
-    width: 25%;
+    width: 100%;
 }
 
 
@@ -655,11 +655,11 @@ img[id^="slot"] {
     left: 52%;
 }
 .trash {
-    margin-top: 25%;
+    margin-top: 3%;
     text-align: left;
 }
 .trash img {
-    width: 50%;
+    width: 15%;
 }
 #azirAR {
     overflow: hidden;
@@ -672,7 +672,9 @@ img[id^="slot"] {
 #ARbuttons {
     margin-top: 5%;
 }
-
+#ARbuttons img {
+    width: 100%;
+}
 
 
 /* Timeline page */
