@@ -6,9 +6,10 @@ var userName;
 var buttonIdTag = "playStory";
 var userStories = [".\/uploads\/Tony G_0_3_12_1_Thu, 05 Nov 2015 17:26:53 GMT.mp3"];
 
-function displayStories(numStories) {
+function displayStories(userStories, userName) {
     var startPlace = $('.page');
     var startName = "row";
+    var numStories = userStories.length;
     var startRow = 1;
     var currentStory = 1;
     var columnsPerRow = 4;
@@ -34,7 +35,15 @@ function displayStories(numStories) {
                             .attr("id", buttonIdTag+currentStory)
                             .text("PLAY")
                             .click(function() {
-                                console.log("You clicked", this.id);
+                                var videoIndices = getVideos(userStories, this.id, userName);
+                                if(!videoIndices.length) {
+                                    console.log("No videos retrieved!");
+                                    return;
+                                }
+                                for(var i= 0,length=videoIndices.length; i<length; ++i) {
+                                    sessionStorage.setItem("videoStory"+i, videoIndices[i]);
+                                }
+                                window.location.href = "./pitotiStoryTelling.html";
                             })
                     )
             );
@@ -79,15 +88,15 @@ function displayStories(numStories) {
                             .attr("id", buttonIdTag+currentStory)
                             .text("PLAY")
                             .click(function() {
-                                var videos = getVideos(this.id);
-                                if(!videos.length) {
+                                var videoIndices = getVideos(userStories, this.id, userName);
+                                if(!videoIndices.length) {
                                     console.log("No videos retrieved!");
                                     return;
                                 }
-                                for(var i= 0,length=videos.length; i<length; ++i) {
-                                    sessionStorage.setItem("videoStory"+i, videos[i]);
+                                for(var i= 0,length=videoIndices.length; i<length; ++i) {
+                                    sessionStorage.setItem("videoStory"+i, videoIndices[i]);
                                 }
-                                window.location.href = "pitotiStoryTelling.html";
+                                window.location.href = "./pitotiStoryTelling.html";
                             })
                     )
             );
@@ -97,7 +106,7 @@ function displayStories(numStories) {
 
 }
 
-function getVideos(storyIndex) {
+function getVideos(userStories, storyIndex, userName) {
     storyIndex = storyIndex.substr(buttonIdTag.length);
     storyIndex = parseInt(storyIndex);
     if(isNaN(storyIndex)) {
@@ -107,10 +116,15 @@ function getVideos(storyIndex) {
         --storyIndex;
     }
     var offset = userName.length;
+
     var videoNames = userStories[storyIndex];
+    //DEBUG
+    console.log("Video string = ", videoNames);
     var videoIndex = userStories[storyIndex].indexOf(userName);
     if(videoIndex >= 0) {
         videoNames = videoNames.substring(videoIndex+offset, videoNames.length-4);
+        //DEBUG
+        console.log("Video name now = ", videoNames);
     }
 
     var gotVideos = false;
@@ -127,10 +141,6 @@ function getVideos(storyIndex) {
             videoNames = videoNames.substr(numberOffset, videoNames.length);
         }
     }
-    //Get associated videos
-    for(var i=0; i<videoIndices.length; ++i) {
-        videoIndices[i] = videoManager.getVideoSource(videoIndices[i], HIGH);
-    }
 
     return videoIndices;
 }
@@ -139,14 +149,13 @@ $(document).ready(function() {
 
     var userData = new FormData();
 
-
-    /*
     $('#nameEntered').on("click", function() {
         var userName = $('#username').val();
         if(!userName) {
             alert("Please enter a username!");
             return;
         }
+        userName += "_";
         userData.append("username", userName);
 
         var xhr = new XMLHttpRequest();
@@ -156,7 +165,7 @@ $(document).ready(function() {
                 if(xhr.status === 200) {
                     console.log(xhr.responseText);
                     userStories = JSON.parse(xhr.responseText);
-                    console.log("Num stories = ", userStories.length);
+                    displayStories(userStories, userName);
                 } else {
                     console.log("Error uploading");
                 }
@@ -165,8 +174,8 @@ $(document).ready(function() {
 
         xhr.send(userData);
     });
-    */
 
+    /*
     $('#nameEntered').on("click", function() {
         var numStories = userStories.length;
         if(numStories === 0) {
@@ -177,5 +186,6 @@ $(document).ready(function() {
             userName = "Tony G" + "_";
         }
     });
+    */
 
 });

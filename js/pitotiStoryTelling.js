@@ -7,7 +7,9 @@ var storyPlayer = (function() {
     //Init any vars
     var videoPlayer;
     var videoChecker;
+    var checkInterval = 500;
     var currentStory = 0;
+    var MAX_STORIES = 4;
 
     return {
         init: function() {
@@ -22,7 +24,19 @@ var storyPlayer = (function() {
             }
             videoPlayer.src = videoManager.getVideoSource(vidIndex, HIGH);
 
+            //DEBUG
+            console.log("Src = ", videoPlayer.src);
+
             this.startVideoTimer();
+        },
+
+        rewind: function() {
+            videoPlayer.pause();
+            videoPlayer.src = videoManager.getVideoSource(sessionStorage.getItem("videoStory"+0));
+        },
+
+        playBack: function() {
+            videoPlayer.play();
         },
 
         startVideoTimer: function() {
@@ -32,19 +46,17 @@ var storyPlayer = (function() {
                     if(videoPlayer.currentTime === 0) return;
                     //DEBUG
                     console.log("Video ended");
+                    var vidIndex;
                     ++currentStory;
-                    console.log("Timeslot now ", currentTimeslot);
                     var playing = false;
-                    for(var i=currentTimeslot; i<TIMELINE_SLOTS; ++i) {
-                        if(timelineSlots[i]) {
+                    for(var i=currentStory; i<MAX_STORIES; ++i) {
+                        vidIndex = sessionStorage.getItem("videoStory"+i);
+                        if(vidIndex) {
                             //DEBUG
                             console.log("Playing next video");
-                            videoPlayer.src = videoManager.getVideoSource(videoSources[i]);
+                            videoPlayer.src = videoManager.getVideoSource(vidIndex);
                             videoPlayer.play();
                             playing = true;
-                            currentTimeslot = i;
-                            //DEBUG
-                            console.log("current timeslot =", currentTimeslot);
                             break;
                         }
                     }
@@ -52,13 +64,23 @@ var storyPlayer = (function() {
                         //Finished
                         //DEBUG
                         console.log("Finished");
-                        videoPlaying = false;
-                        currentTimeslot = 0;
+                        currentStory = 0;
                         videoPlayer.currentTime = 0;
-                        videoPlayer.src = videoManager.getVideoSource(videoSources[0]);
+                        videoPlayer.src = videoManager.getVideoSource(sessionStorage.getItem("videoStory"+0));
                     }
                 }
             }, checkInterval)
         }
     }
 })();
+
+
+$(document).ready(function() {
+
+    storyPlayer.init();
+
+    $('#playStoryFinal').on("click", function() {
+        storyPlayer.rewind();
+        storyPlayer.playBack();
+    });
+});
