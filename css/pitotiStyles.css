@@ -75,7 +75,6 @@ h1 {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    height: 100vh;
 }
 .cloudBackground {
     background: url("../images/cloudBackground.jpg") no-repeat center center fixed;
@@ -83,7 +82,6 @@ h1 {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    height: 100vh;
 }
 .rockBackground {
     background: url("../images/rockBackground.jpg") no-repeat center center fixed;
@@ -91,7 +89,6 @@ h1 {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    height: 100vh;
 }
 .blankBackground {
     background-color: white;
@@ -310,10 +307,25 @@ h1 {
 }
 #startButton {
     text-align: center;
-    margin-top: 30%;
+    margin-top: 40%;
 }
 #startButton img {
     width: 25%;
+}
+@media only screen and (min-width : 320px) {
+    #startButton {
+        margin-top: 100%;
+    }
+}
+@media only screen and (min-width : 1024px) {
+    #startButton {
+        margin-top: 60%;
+    }
+}
+@media only screen and (min-width : 1270px) {
+    #startButton {
+        margin-top: 37.5%;
+    }
 }
 .intro {
     -webkit-animation-name: bounce;
@@ -613,6 +625,7 @@ h1 {
 }
 #clipTray {
     position: relative;
+    margin-top: 10%;
 }
 #clipTrayImage {
     width: 75%;
@@ -655,7 +668,7 @@ img[id^="slot"] {
     left: 52%;
 }
 .trash {
-    margin-top: 3%;
+    margin-top: 7.5%;
     text-align: left;
 }
 .trash img {
@@ -674,6 +687,9 @@ img[id^="slot"] {
 }
 #ARbuttons img {
     width: 100%;
+}
+#keepClip {
+    margin-left: 10%;
 }
 
 
@@ -694,6 +710,14 @@ img[id^="slot"] {
     position: absolute;
     top: 10%;
     left: 11%;
+}
+#playControl {
+    position: absolute;
+    top: 25%;
+    left: 35%;
+}
+#playControl img {
+    width: 100%;
 }
 #playStory,
 #pauseStory {
@@ -774,8 +798,14 @@ img[id^="timeline"] {
 #progressContainer progress {
     width: 100%;
 }
+#finalControls {
+    margin-top: 5%;
+}
 #finalControls button {
-    margin-bottom: 5%;
+    margin-bottom: 0%;
+}
+#finalControls img {
+    width: 70%;
 }
 
 
@@ -839,14 +869,14 @@ img[id^="timeline"] {
 #audioProgress {
     width: 100%;
 }
+#controlContainer {
+    margin-top: 4%;
+}
 
 
 /* Final page */
 #playStoryFinal {
 
-}
-#playStoryFinal img {
-    width: 75%;
 }
 #createFinal {
     text-align: left;

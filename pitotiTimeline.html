@@ -42,9 +42,12 @@
         <div class="col-md-6 ui-widget-content">
             <div id="vidFrame">
                 <img src="images/frame.png">
-                <video id="videoPlayer" width="78%" height="80%" controls>
+                <video id="videoPlayer" width="78%" height="80%">
 
                 </video>
+                <div id="playControl" class="noDisplay">
+                    <img src="images/playCircle.png">
+                </div>
             </div>
 
             <div id="timeLineControls">
@@ -61,7 +64,7 @@
 
                     </progress>
                 </div>
-                <div class="row">
+                <div id="controlContainer" class="row">
                     <div id="timeTrash" class="col-md-4">
                         <img src="images/delete.png">
                     </div>
@@ -69,53 +72,7 @@
                         <img id="audioRecord" src="images/micOff.png">
                     </div>
                     <div class="col-md-4">
-                        <div id="buttonContainer">
-                            <div id="buttons0" class="noDisplay">
-                                <img id="selectButton0" src="images/redCircle.png">
-                                <button id="audioButton0" class="actionButton">Play</button>
-                                <button id="deleteButton0" class="actionButton">Del</button>
-                            </div>
-                            <div id="buttons1" class="noDisplay">
-                                <img id="selectButton1" src="images/redCircle.png">
-                                <button id="audioButton1" class="actionButton">Play</button>
-                                <button id="deleteButton1" class="actionButton">Del</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="finalControls" class="noDisplay">
-                <div class="row">
-                    <div id="playStoryFinal" class="col-md-4">
-                        <button class="actionButton">Play Story</button>
-                    </div>
-                    <div class="col-md-4">
-                        <form id="uploadForm" method="POST">
-                            <input type="file" name="audioFile" id="fileInput" class="noDisplay">
-                            <input type="text" name="userName" id="userName" class="noDisplay">
-                            <input type="email" name="email" id="email" class="noDisplay">
-                            <input type="text" name="video0" id="video0" class="noDisplay">
-                            <input type="text" name="video1" id="video1" class="noDisplay">
-                            <input type="text" name="video2" id="video2" class="noDisplay">
-                            <input type="text" name="video3" id="video3" class="noDisplay">
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <button id="uploadStory" class="actionButton">Upload Story</button>
-                    </div>
-                </div>
-                <div id="createFinal" class="row">
-                    <div class="col-md-4">
-                        <a href="pitotiAR.html"><img src="images/createNewStory.png"></a>
-                    </div>
-                    <div class="col-md-4">
                         &nbsp;
-                    </div>
-                    <div class="col-md-4">
-                        <p id="uploadStatus" class="noDisplay">
-                            Uploading...
-                        </p>
                     </div>
                 </div>
             </div>
@@ -157,6 +114,23 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div id="finalControls" class="noDisplay">
+            <div class="row">
+                <div id="playStoryFinal" class="col-md-4">
+                    <img src="images/playStory.png">
+                </div>
+                <div class="col-md-4">
+                    <a href="pitotiAR.html"><img src="images/createNewStory.png"></a>
+                </div>
+                <div class="col-md-4">
+                    <img src="images/uploadStory.png" id="uploadStory">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="homeRight">
         <a href="pitoti.html"><img src="images/home.png"></a>
     </div>

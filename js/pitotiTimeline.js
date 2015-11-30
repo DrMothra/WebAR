@@ -410,6 +410,7 @@ var videoPlayer = (function() {
             //Enable next again
             this.setTimelineOccupied(true);
             this.setPlayerSource();
+            $('#playControl').show();
         },
 
         setPlayerSource: function() {
@@ -438,6 +439,11 @@ var videoPlayer = (function() {
                 return;
             }
             videoPlayer.play();
+            videoPlaying = true;
+        },
+
+        isPlaying: function() {
+            return videoPlaying;
         },
 
         startVideoTimer: function() {
@@ -471,6 +477,7 @@ var videoPlayer = (function() {
                         currentTimeslot = 0;
                         videoPlayer.currentTime = 0;
                         videoPlayer.src = videoManager.getVideoSource(videoSources[0]);
+                        $('#playControl').show();
                     }
                 }
             }, checkInterval)
@@ -678,6 +685,14 @@ $(window).load(function() {
     });
 
     $('#playStoryFinal').on("click", function() {
+        videoPlayer.rewind();
+        videoPlayer.playBack();
+        audioSystem.playNextBuffer();
+    });
+
+    $('#playControl').on("click", function() {
+        if(videoPlayer.isPlaying()) return;
+        $('#playControl').hide();
         videoPlayer.rewind();
         videoPlayer.playBack();
         audioSystem.playNextBuffer();
