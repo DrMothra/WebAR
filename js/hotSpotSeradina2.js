@@ -27,10 +27,12 @@ RockFace.prototype.init = function(container) {
 RockFace.prototype.createScene = function() {
     BaseApp.prototype.createScene.call(this);
 
-    var texture = THREE.ImageUtils.loadTexture("images/seradina2.jpg");
+    var texture = THREE.ImageUtils.loadTexture("images/seradina2.png");
     var plane = new THREE.PlaneGeometry(512, 256);
     var planeMat = new THREE.MeshPhongMaterial( {
-        map: texture
+        map: texture,
+        transparent: true,
+        opacity: 1.0
     });
     var planeMesh = new THREE.Mesh(plane, planeMat);
 
