@@ -32,7 +32,8 @@ RockFace.prototype.createScene = function() {
     var planeMat = new THREE.MeshPhongMaterial( {
         map: texture,
         transparent: true,
-        opacity: 1.0
+        opacity: 1.0,
+        side: THREE.DoubleSide
     });
     var planeMesh = new THREE.Mesh(plane, planeMat);
 
