@@ -10,8 +10,10 @@ var RECORDING = 0, UPLOADING = 1;
 
 var audioSystem = (function() {
     //Set up variables
-    var audioPlayersEmpty = [], audioSelected = [], newBuffer = new Array(MAX_BUFFERS);;
+    var audioPlayersEmpty = [], audioSelected = [], newBuffer = new Array(MAX_BUFFERS);
     var audio_context;
+    var audioRecorded = false;
+    var currentAudioBuffer = 0;
     var recorder;
     var recording = false;
     var bufferNumber = 0;
@@ -53,51 +55,33 @@ var audioSystem = (function() {
             //Start/stop recording
             if(!recorder) return;
 
-            var empty = false;
-            for(var i=0; i<MAX_BUFFERS; ++i) {
-                if(audioPlayersEmpty[i]) {
-                    empty = true;
-                    bufferNumber = i;
-                    break;
-                }
-            }
-            if(!empty) {
-                alert("Max recordings reached");
-                return;
-            }
-
             var recImage = $('#audioRecord');
             recording = !recording;
             if(recording) {
                 recorder.clear();
                 recImage.attr('src', 'images/micOn.png');
+                var progress = $('#audioProgress');
                 recorder.record();
                 var _this = this;
                 audioProgress = setInterval(function() {
-                    $('#audioProgress').attr("value", ++elapsedTime);
+                    progress.attr("value", ++elapsedTime);
                     if(elapsedTime >= 60) {
                         elapsedTime = 0;
-                        $('#audioProgress').attr("value", 0);
+                        progress.attr("value", 0);
                         recorder.stop();
                         clearInterval(audioProgress);
                         recorded = true;
                         stopped = false;
                         recImage.attr('src', 'images/micOff.png');
+                        audioRecorded = true;
                         recorder.getBuffer(_this.saveBuffer);
-                        for(var i=0; i<MAX_BUFFERS; ++i) {
-                            if(audioPlayersEmpty[i]) {
-                                $('#buttons'+i).show();
-                                $('#selectButton'+i).attr("src", "images/redCircle.png");
-                                audioPlayersEmpty[i] = false;
-                                break;
-                            }
-                        }
                     }
                 }, checkInterval);
                 started = true;
 
             } else {
                 recorder.stop();
+                audioRecorded = true;
                 elapsedTime = 0;
                 clearInterval(audioProgress);
                 $('#audioProgress').attr("value", 0);
@@ -128,11 +112,8 @@ var audioSystem = (function() {
         },
 
         playNextBuffer: function () {
-            for(var i=0; i<MAX_BUFFERS; ++i) {
-                if(audioSelected[i]) {
-                    this.playBuffer(i);
-                    break;
-                }
+            if(audioRecorded) {
+                this.playBuffer(currentAudioBuffer);
             }
         },
 
@@ -188,13 +169,8 @@ var audioSystem = (function() {
             }
         },
 
-        audioSelected: function() {
-            for(var i=0; i<MAX_BUFFERS; ++i) {
-                if(audioSelected[i]) {
-                    return true;
-                }
-            }
-            return false;
+        audioRecorded: function() {
+            return audioRecorded;
         },
 
         uploadAudio: function() {
@@ -490,6 +466,12 @@ var videoPlayer = (function() {
             }
             videoPlayer.pause();
             videoPlayer.src = videoManager.getVideoSource(this.getFirstTimeslot());
+            videoPlaying = false;
+        },
+
+        pausePlayback: function() {
+            videoPlayer.pause();
+            videoPlaying = false;
         },
 
         trash: function(event, ui) {
@@ -637,12 +619,15 @@ $(window).load(function() {
     });
 
     $('#nextARPage').on("click", function() {
+        var discard;
         switch(pageStatus) {
             case RECORDING:
                 if(videoPlayer.timelineOccupied()) {
-                    if(!audioSystem.audioSelected()) {
-                        alert("No audio selected, click the mic then select the audio (red button)");
-                        return;
+                    if(!audioSystem.audioRecorded()) {
+                        discard = confirm("No audio recorded! Do you want to continue?");
+                        if(!discard) {
+                            return;
+                        }
                     }
                     showUploadPage();
                     videoPlayer.rewind();
@@ -654,7 +639,7 @@ $(window).load(function() {
 
             case UPLOADING:
                 if(!audioSystem.getUploadStatus()) {
-                    var discard = confirm("This will discard your story!");
+                    discard = confirm("This will discard your story!");
                     if(discard) {
                         window.location.href = "pitotiThanks.html";
                     }
@@ -676,9 +661,12 @@ $(window).load(function() {
         }
         audioSystem.toggleRecording();
         if(audioSystem.isStopped()) {
+            $('#playControl').show();
             audioSystem.ready();
             audioSystem.updateControls();
+            videoPlayer.rewind();
         } else {
+            $('#playControl').hide();
             videoPlayer.rewind();
             videoPlayer.playBack();
         }
@@ -696,6 +684,15 @@ $(window).load(function() {
         videoPlayer.rewind();
         videoPlayer.playBack();
         audioSystem.playNextBuffer();
+    });
+
+    $('#videoPlayer').on("click", function() {
+        if(videoPlayer.isPlaying()) {
+            $('#playControl').show();
+            videoPlayer.pausePlayback();
+        } else {
+            videoPlayer.playBack();
+        }
     });
 
     var gotDetails = false;
@@ -737,11 +734,10 @@ $(window).load(function() {
         uploadStory();
     };
 
-    var index;
+    var index = 0;
     $('[id^=audioButton]').on("click", function() {
         videoPlayer.rewind();
         videoPlayer.playBack();
-        index = parseInt(this.id.charAt(this.id.length-1));
         audioSystem.playBuffer(index);
     });
 

@@ -726,13 +726,15 @@ img[id^="slot"] {
     top: 10%;
     left: 11%;
 }
-#playControl {
+#playControl,
+#pauseControl {
     position: absolute;
-    top: 25%;
-    left: 35%;
-}
-#playControl img {
-    width: 100%;
+    top: 50%;
+    left: 50%;
+    width: 128px;
+    height: 128px;
+    margin-top: -64px;
+    margin-left: -64px;
 }
 #playStory,
 #pauseStory {
