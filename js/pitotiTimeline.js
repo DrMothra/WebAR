@@ -14,11 +14,13 @@ var audioSystem = (function() {
     var audio_context;
     var audioRecorded = false;
     var currentAudioBuffer = 0;
+    var startTime = 0;
     var recorder;
     var recording = false;
     var bufferNumber = 0;
     var audioProgress;
     var elapsedTime = 0;
+    var elapsedPlayTime = 0;
     var checkInterval = 1000;
     var started = false, stopped = false;
     var uploaded = false;
@@ -59,6 +61,7 @@ var audioSystem = (function() {
             recording = !recording;
             if(recording) {
                 recorder.clear();
+                elapsedTime = 0;
                 recImage.attr('src', 'images/micOn.png');
                 var progress = $('#audioProgress');
                 recorder.record();
@@ -81,8 +84,9 @@ var audioSystem = (function() {
 
             } else {
                 recorder.stop();
+                //DEBUG
+                console.log("Recording time = ", elapsedTime);
                 audioRecorded = true;
-                elapsedTime = 0;
                 clearInterval(audioProgress);
                 $('#audioProgress').attr("value", 0);
                 recorded = true;
@@ -102,12 +106,15 @@ var audioSystem = (function() {
             window.source = audio_context.createBufferSource();
             window.source.buffer = newBuffer[buffer];
             window.source.connect(audio_context.destination);
-            window.source.start(0);
+            if(elapsedPlayTime === 0) {
+                startTime = new Date().getTime();
+                //DEBUG
+                console.log("Start =", startTime);
+            }
+            window.source.start(0, elapsedPlayTime / 1000);
             recorder.playing = true;
             window.source.onended = function() {
                 recorder.playing = false;
-                //DEBUG
-                console.log("Audio stopped");
             }
         },
 
@@ -115,6 +122,20 @@ var audioSystem = (function() {
             if(audioRecorded) {
                 this.playBuffer(currentAudioBuffer);
             }
+        },
+
+        pausePlayback: function() {
+            if(audioRecorded) {
+                elapsedPlayTime = new Date().getTime() - startTime;
+                //DEBUG
+                console.log("Audio paused time = ", elapsedPlayTime);
+                window.source.stop(0);
+                recorder.playing = false;
+            }
+        },
+
+        setMaxTime: function(time) {
+            maxElapsedTime = time;
         },
 
         stopBuffer: function() {
@@ -156,6 +177,10 @@ var audioSystem = (function() {
         ready: function() {
             stopped = false;
             started = false;
+        },
+
+        reset: function() {
+            elapsedPlayTime = 0;
         },
 
         updateControls: function() {
@@ -284,8 +309,11 @@ var videoPlayer = (function() {
     var timerRunning = false;
     var videoWidth, videoHeight;
     var videoPlayer;
+    var TIME_PER_VDEO = 15;
+    var videoTimeLength = 0;
     var started = false;
     var videoPlaying = false;
+    var videoEnded = false;
     var _this = this;
 
     return {
@@ -354,7 +382,7 @@ var videoPlayer = (function() {
             if(timelineSlots[slot]) return;
 
             //DEBUG
-            console.log("Slot =", slot);
+            //console.log("Slot =", slot);
 
             var dragged = $(ui.draggable);
             var image = document.getElementById(id);
@@ -377,9 +405,11 @@ var videoPlayer = (function() {
             videoSources[slot] = videoIndex;
 
             //DEBUG
-            console.log("Video =", videoIndex);
+            //console.log("Video =", videoIndex);
 
             ++numVideos;
+
+            videoTimeLength = numVideos * TIME_PER_VDEO;
 
             sessionStorage.setItem("numVideos", numVideos);
             sessionStorage.setItem("timeline"+slot, "video"+videoIndex);
@@ -416,6 +446,7 @@ var videoPlayer = (function() {
             }
             videoPlayer.play();
             videoPlaying = true;
+            videoEnded = false;
         },
 
         isPlaying: function() {
@@ -428,7 +459,7 @@ var videoPlayer = (function() {
                     //Get next video
                     if(videoPlayer.currentTime === 0) return;
                     //DEBUG
-                    console.log("Video ended");
+                    //console.log("Video ended");
                     ++currentTimeslot;
                     console.log("Timeslot now ", currentTimeslot);
                     var playing = false;
@@ -439,6 +470,7 @@ var videoPlayer = (function() {
                             videoPlayer.src = videoManager.getVideoSource(videoSources[i]);
                             videoPlayer.play();
                             playing = true;
+                            videoEnded = false;
                             currentTimeslot = i;
                             //DEBUG
                             console.log("current timeslot =", currentTimeslot);
@@ -450,6 +482,7 @@ var videoPlayer = (function() {
                         //DEBUG
                         console.log("Finished");
                         videoPlaying = false;
+                        videoEnded = true;
                         currentTimeslot = 0;
                         videoPlayer.currentTime = 0;
                         videoPlayer.src = videoManager.getVideoSource(videoSources[0]);
@@ -482,6 +515,7 @@ var videoPlayer = (function() {
 
             timelineSlots[slot] = false;
             --numVideos;
+            videoTimeLength = numVideos * TIME_PER_VDEO;
             sessionStorage.setItem("numVideos", numVideos);
             sessionStorage.removeItem("timeline"+slot);
             //Restore original image
@@ -499,6 +533,14 @@ var videoPlayer = (function() {
 
         timelineOccupied: function() {
             return timelineOccupied;
+        },
+
+        videoEnded: function() {
+            return videoEnded;
+        },
+
+        getVideoLength: function() {
+            return videoTimeLength;
         },
 
         getStatus: function() {
@@ -556,6 +598,23 @@ function uploadStory() {
     audioSystem.uploadAudio();
 }
 
+function playPauseVideo() {
+    if(videoPlayer.isPlaying()) {
+        $('#playControl').show();
+        videoPlayer.pausePlayback();
+        audioSystem.pausePlayback();
+    } else {
+        $('#playControl').hide();
+        if(videoPlayer.videoEnded()) {
+            //DEBUG
+            console.log("Video ended, audio reset");
+            audioSystem.reset();
+        }
+        videoPlayer.playBack();
+        audioSystem.playNextBuffer();
+    }
+}
+
 $(window).load(function() {
     //Init
     var pageStatus = RECORDING;
@@ -609,6 +668,7 @@ $(window).load(function() {
 
             case UPLOADING:
                 showTimelinePage();
+                $('#playControl').show();
                 videoPlayer.rewind();
                 pageStatus = RECORDING;
                 break;
@@ -630,6 +690,7 @@ $(window).load(function() {
                         }
                     }
                     showUploadPage();
+                    $('#playControl').hide();
                     videoPlayer.rewind();
                     pageStatus = UPLOADING;
                 } else {
@@ -679,20 +740,12 @@ $(window).load(function() {
     });
 
     $('#playControl').on("click", function() {
-        if(videoPlayer.isPlaying()) return;
-        $('#playControl').hide();
-        videoPlayer.rewind();
-        videoPlayer.playBack();
-        audioSystem.playNextBuffer();
+        playPauseVideo();
     });
 
     $('#videoPlayer').on("click", function() {
-        if(videoPlayer.isPlaying()) {
-            $('#playControl').show();
-            videoPlayer.pausePlayback();
-        } else {
-            videoPlayer.playBack();
-        }
+        if(pageStatus === UPLOADING) return;
+        playPauseVideo();
     });
 
     var gotDetails = false;
