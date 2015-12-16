@@ -175,8 +175,16 @@ PitotiAR.prototype.init = function(container) {
     //sessionStorage.clear();
     sessionStorage.setItem('numVideos', this.numVideos);
     this.occupied = new Array(NUM_CONTAINERS);
-    for(var i=0; i<NUM_CONTAINERS; ++i) {
+    var i;
+    for(i=0; i<NUM_CONTAINERS; ++i) {
         this.occupied[i] = false;
+    }
+    var videoSrc;
+    for(i=0; i<NUM_CONTAINERS; ++i) {
+        videoSrc = sessionStorage.getItem("slot"+i);
+        if(videoSrc != "undefined") {
+            this.simulateDrop(videoSrc);
+        }
     }
 
     //Video clips
@@ -352,6 +360,48 @@ PitotiAR.prototype.drop = function() {
     this.stopVideo();
 };
 
+PitotiAR.prototype.simulateDrop = function(imageSrc) {
+    //Get next available slot
+    this.currentSlot = -1;
+    for(var i=0; i<NUM_CONTAINERS; ++i) {
+        if(!this.occupied[i]) {
+            this.currentSlot = i;
+            break;
+        }
+    }
+    if(this.currentSlot < 0) {
+        alert("All slots full");
+        this.stopVideo();
+        return;
+    }
+    var id = "slot" + this.currentSlot;
+
+    var _this = this;
+    var image = document.getElementById(id);
+    image.className = "imgDraggable";
+
+    $(image).draggable( {
+        revert: "invalid",
+        helper: function(event) {
+            return _this.dragTrashImage;
+        }
+    });
+
+    image.src = "images/"+imageSrc;
+
+    image.style.width = id.clientWidth + 'px';
+    image.style.height = id.clientHeight + 'px';
+
+    this.occupied[this.currentSlot] = true;
+
+    //$('#' + event.target.id + 'drop').hide();
+
+    //Store video name
+    sessionStorage.setItem(id, imageSrc);
+
+    ++this.currentSlot;
+};
+
 PitotiAR.prototype.slotsOccupied = function() {
     //See how many slots occupied
     var slots = 0;
@@ -485,20 +535,12 @@ PitotiAR.prototype.update = function() {
     BaseApp.prototype.update.call(this);
 };
 
-function clearSlots() {
-    for(var i=0; i<NUM_CONTAINERS; ++i) {
-        sessionStorage.removeItem("slot"+i);
-    }
-}
-
 $(document).ready(function() {
     //Initialise app
 
     if(!Detector.webgl) {
         $('#notSupported').show();
     } else {
-
-        clearSlots();
 
         var app = new PitotiAR();
         app.init('ARoutput');

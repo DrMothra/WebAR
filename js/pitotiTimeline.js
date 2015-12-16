@@ -615,6 +615,12 @@ function playPauseVideo() {
     }
 }
 
+function clearSlots() {
+    for(var i=0; i<NUM_CONTAINERS; ++i) {
+        sessionStorage.removeItem("slot"+i);
+    }
+}
+
 $(window).load(function() {
     //Init
     var pageStatus = RECORDING;
@@ -737,6 +743,11 @@ $(window).load(function() {
         videoPlayer.rewind();
         videoPlayer.playBack();
         audioSystem.playNextBuffer();
+    });
+
+    $('#createNewStory').on("click", function() {
+        clearSlots();
+        window.location.href = "pitotiAR.html";
     });
 
     $('#playControl').on("click", function() {

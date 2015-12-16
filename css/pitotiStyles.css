@@ -690,12 +690,10 @@ img[id^="slot"] {
     width: 15%;
 }
 #azirAR {
-    overflow: hidden;
-    margin-left: -25%;
-    text-align: center;
+
 }
 #azirAR img {
-    width: 110%;
+    width: 100%;
 }
 #ARbuttons {
     margin-top: 5%;
