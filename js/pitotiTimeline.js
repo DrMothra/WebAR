@@ -124,6 +124,10 @@ var audioSystem = (function() {
             }
         },
 
+        rewind: function() {
+            elapsedPlayTime = 0;
+        },
+
         pausePlayback: function() {
             if(audioRecorded) {
                 elapsedPlayTime = new Date().getTime() - startTime;
@@ -147,14 +151,9 @@ var audioSystem = (function() {
         },
 
         setRecorderBuffer: function() {
-            for(var i=0; i<MAX_BUFFERS; ++i) {
-                if(audioSelected[i]) {
-                    recorder.clear();
-                    recorder.setBuffer(newBuffer[i]);
-                    return true;
-                }
-            }
-            return false;
+            recorder.clear();
+            recorder.setBuffer(newBuffer[0]);
+            return true;
         },
 
         selectEntry: function(index) {
@@ -251,17 +250,17 @@ var audioSystem = (function() {
                 formData.append("audioFile", blob, audioFilename);
 
                 //Send data
-                var status = $('#uploadStatus');
+                var status = $('#uploadStory');
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "uploadHandler.php", true);
                 xhr.onreadystatechange = function() {
                     if(xhr.readyState === 4) {
                         if(xhr.status === 200) {
-                            status.html("Story uploaded!");
+                            status.attr("src", "images/uploadStoryUploaded.png");
                             uploaded = true;
                         } else {
                             console.log("Error uploading");
-                            status.html("Upload failed - try again");
+                            status.attr("src", "images/uploadStoryFailed.png");
                             uploaded = false;
                         }
                     }
@@ -322,7 +321,7 @@ var videoPlayer = (function() {
             var i, src, elem;
             for(i=0; i<NUM_CONTAINERS; ++i) {
                 src = sessionStorage.getItem("slot" + i);
-                if(src) {
+                if(src != "null" && src != null) {
                     elem = document.getElementById("slot" + i);
                     elem.src = "images/" + src;
                 }
@@ -500,6 +499,7 @@ var videoPlayer = (function() {
             videoPlayer.pause();
             videoPlayer.src = videoManager.getVideoSource(this.getFirstTimeslot());
             videoPlaying = false;
+            currentTimeslot = 0;
         },
 
         pausePlayback: function() {
@@ -560,7 +560,7 @@ function showUploadPage() {
     $('#finalControls').show();
     $('#previousTimelinePage').show();
     $('#nextARPage').show();
-
+    $('#uploadStory').attr("src", "images/uploadStory.png");
     $('#configureEntry').hide();
 }
 
@@ -589,12 +589,13 @@ function uploadStory() {
     status.html("Uploading...");
     status.show();
 
-    var bufferOK = audioSystem.setRecorderBuffer();
-    if(!bufferOK) {
-        alert("No audio selected!");
-        return;
+    if(audioSystem.audioRecorded()) {
+        var bufferOK = audioSystem.setRecorderBuffer();
+        if(!bufferOK) {
+            alert("No audio selected!");
+            return;
+        }
     }
-
     audioSystem.uploadAudio();
 }
 
@@ -740,8 +741,10 @@ $(window).load(function() {
     });
 
     $('#playStoryFinal').on("click", function() {
+        $('#playControl').hide();
         videoPlayer.rewind();
         videoPlayer.playBack();
+        audioSystem.rewind();
         audioSystem.playNextBuffer();
     });
 

@@ -182,8 +182,10 @@ PitotiAR.prototype.init = function(container) {
     var videoSrc;
     for(i=0; i<NUM_CONTAINERS; ++i) {
         videoSrc = sessionStorage.getItem("slot"+i);
-        if(videoSrc != "undefined") {
-            this.simulateDrop(videoSrc);
+        //DEBUG
+        //console.log("Src = ", videoSrc);
+        if(videoSrc != "null" && videoSrc != null) {
+            this.fillSlot(videoSrc);
         }
     }
 
@@ -360,7 +362,7 @@ PitotiAR.prototype.drop = function() {
     this.stopVideo();
 };
 
-PitotiAR.prototype.simulateDrop = function(imageSrc) {
+PitotiAR.prototype.fillSlot = function(imageSrc) {
     //Get next available slot
     this.currentSlot = -1;
     for(var i=0; i<NUM_CONTAINERS; ++i) {
@@ -424,6 +426,7 @@ PitotiAR.prototype.dropVideo = function(event, ui) {
         if(!isNaN(slot)) {
             this.occupied[slot] = false;
         }
+        sessionStorage.removeItem("slot"+slot);
         ++slot;
         dragged.attr('src', 'images/empty.png');
     }else {

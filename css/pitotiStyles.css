@@ -333,12 +333,12 @@ h1 {
 }
 @media only screen and (min-width : 1024px) {
     #startButton {
-        margin-top: 60%;
+        margin-top: 40%;
     }
 }
 @media only screen and (min-width : 1270px) {
     #startButton {
-        margin-top: 37.5%;
+        margin-top: 35%;
     }
 }
 .intro {
