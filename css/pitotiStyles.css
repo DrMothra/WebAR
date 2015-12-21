@@ -585,10 +585,10 @@ h1 {
 #foppe1 img {
     width: 100%;
 }
-#foppe1Stories {
+.foppeStories {
     margin-top: 15%;
 }
-#foppe1Stories button {
+.foppeStories button{
     margin-bottom: 10%;
 }
 

@@ -6,6 +6,8 @@
 
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/audioManager.js?v=0.1"></script>
+    <script type="text/javascript" src="js/hotSpotFoppe2.js?v=0.1"></script>
 
     <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
@@ -32,15 +34,13 @@
         <div id="foppe2" class="col-md-6">
             <img src="images/letters.png">
         </div>
-        <div id="foppe1Stories" class="col-md-3 noDisplay">
+        <div class="col-md-3 foppeStories">
             <div>
-                <button class="actionButton">Story 1</button>
-            </div>
-            <div>
-                <button class="actionButton">Story 2</button>
-            </div>
-            <div>
-                <button class="actionButton">Story 3</button>
+                <button id="foppe2Story1" class="actionButton">Story 1</button>
+                <audio id="audiofoppe2Story1">
+                    <source src="audio/comeToLife.ogg" type="audio/ogg">
+                    <source src="audio/comeToLife.mp3" type="audio/mpeg">
+                </audio>
             </div>
         </div>
     </div>
