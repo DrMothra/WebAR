@@ -5,7 +5,7 @@
 
 var storyPlayer = (function() {
     //Init any vars
-    var videoPlayer;
+    var videoPlayer, audioPlayer;
     var videoChecker;
     var checkInterval = 500;
     var currentStory = 0;
@@ -23,6 +23,11 @@ var storyPlayer = (function() {
                 return;
             }
             videoPlayer.src = videoManager.getVideoSource(vidIndex, HIGH);
+            audioPlayer = document.getElementById("audioPlayer");
+            if(!audioPlayer) {
+                console.log("No audio player!!");
+            }
+
 
             //DEBUG
             console.log("Src = ", videoPlayer.src);
@@ -82,5 +87,7 @@ $(document).ready(function() {
     $('#playStoryFinal').on("click", function() {
         storyPlayer.rewind();
         storyPlayer.playBack();
+        var audioPlayer = document.getElementById("audioPlayer");
+        audioPlayer.play();
     });
 });

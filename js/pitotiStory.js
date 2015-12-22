@@ -42,6 +42,9 @@ function displayStories(userStories, userName) {
                                 }
                                 for(var i= 0,length=videoIndices.length; i<length; ++i) {
                                     sessionStorage.setItem("videoStory"+i, videoIndices[i]);
+                                    sessionStorage.setItem("audioStory", userStories[this.id]);
+                                    //DEBUG
+                                    console.log("Audio = ", userStories[this.id]);
                                 }
                                 window.location.href = "./pitotiStoryTelling.html";
                             })
@@ -95,6 +98,7 @@ function displayStories(userStories, userName) {
                                 }
                                 for(var i= 0,length=videoIndices.length; i<length; ++i) {
                                     sessionStorage.setItem("videoStory"+i, videoIndices[i]);
+                                    sessionStorage.setItem("audioStory", userStories[this.id]);
                                 }
                                 window.location.href = "./pitotiStoryTelling.html";
                             })
