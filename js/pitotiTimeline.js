@@ -339,7 +339,7 @@ var videoPlayer = (function() {
             var elem = document.getElementById("slot0");
             var imageWidth = elem ? elem.clientWidth : window.innerWidth * 0.09;
             if(imageWidth >= 160 || imageWidth < 10) {
-                imageWidth = window.innerWidth * 0.09;
+                imageWidth = 70;
             }
             dragImage = document.createElement("img");
             dragImage.src = "images/dragTimeline.png";
@@ -356,7 +356,7 @@ var videoPlayer = (function() {
             //Video containers
             var vidElem = document.getElementById("timeline0");
             videoWidth = vidElem ? vidElem.clientWidth : window.innerWidth * 0.09;
-            videoHeight = vidElem ? vidElem.clientHeight : window.innerHeight * 0.09;
+            videoHeight = videoWidth * 0.7;
 
             //DEBUG
             //console.log("Width =", videoWidth, "Height =", videoHeight);
@@ -625,6 +625,8 @@ function clearSlots() {
 $(window).load(function() {
     //Init
     var pageStatus = RECORDING;
+
+    //DEBUG
 
     videoPlayer.init();
 
