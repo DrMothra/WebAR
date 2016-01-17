@@ -505,6 +505,9 @@ h1 {
 #seradina1Stories button {
     margin-bottom: 10%;
 }
+#seradina1Stories img {
+    width: 60%;
+}
 #ploughing {
     margin: 10% 0 0 1%;
 }
@@ -541,13 +544,14 @@ h1 {
 #seradina2Stories {
     margin-top: 3%;
 }
+#story1 {
+    width: 50%;
+}
 #resetControls {
     margin-top: 3%;
 }
-#resetControls button {
-    width: 30%;
-    font-size: 1.5vw;
-    padding: 6px 5px;
+#resetControls img {
+    width: 25%;
 }
 
 
@@ -591,7 +595,9 @@ h1 {
 .foppeStories button{
     margin-bottom: 10%;
 }
-
+.foppeStories img {
+    width: 50%;
+}
 /* Foppe2 page */
 #foppe2 {
     margin-top: 5%;
